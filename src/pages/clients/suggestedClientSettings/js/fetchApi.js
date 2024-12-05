@@ -3,11 +3,11 @@ import { decData } from "../../../../helpers/decData";
 import { getJobSearchPosition } from "../../../../services/clients/jobsApi";
 import { getAllJobsCategories } from "../../../../services/clients/jobsCategoriesApi";
 import { getSkillList } from "../../../../services/clients/skillApi";
-import { getCityApiDuong } from "../../../../services/clients/user-userApi";
+import { getCityApi } from "../../../../services/clients/user-userApi";
 
 export const fetchApi = async (setCity, setSkill, setJobCategories) => {
   const [city, skill, jobCategory] = await Promise.all([
-    getCityApiDuong(),
+    getCityApi(),
     getSkillList(),
     getAllJobsCategories(),
   ]);

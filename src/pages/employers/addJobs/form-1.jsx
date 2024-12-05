@@ -31,6 +31,7 @@ import { loadCityFull } from "./js/loadCity";
 function FormOne({ setForm_one, next, form_one }) {
   const [optionsSelectTreeJobCategories, setOptionsSelectTree] = useState([]);
   const [fullAddressCompany, setfullAddressCompany] = useState([]);
+  const [objectAddress, setObjectAddress] = useState();
   const [loadingSelect, setLoadingSelect] = useState(false);
   const [textFullAddress, setTextFullAddress] = useState("");
   const [valueDebounceFullAddress] = useDebounce(textFullAddress, 300);
@@ -49,13 +50,12 @@ function FormOne({ setForm_one, next, form_one }) {
   }, []);
   useEffect(() => {
     const fetchApi = async () => {
-      //Laays danh sách danh mục công việc
       const recordJobsCategory = await getAllJobsCategories();
 
       const recordCity = await getCity();
-      //Lấy danh mục công việc
+
       if (recordJobsCategory.code === 200) {
-        const convertData = decData(recordJobsCategory.data).map((item) => {
+        const convertData = recordJobsCategory.data.map((item) => {
           return {
             value: item._id,
             label: item.title,
@@ -63,13 +63,17 @@ function FormOne({ setForm_one, next, form_one }) {
         });
         setOptionsSelectTree(convertData);
       }
+
       if (recordCity.code === 200) {
+        console.log("🚀 ~ fetchApi ~ recordCity:", recordCity);
         const options = recordCity.data.map((item) => {
           return {
             value: `${parseInt(item.code)}&${item.slug}&${item.name}`,
             label: item.name,
           };
         });
+
+        console.log("🚀 ~ options ~ options:", options);
 
         setCity(options);
       }
@@ -189,9 +193,17 @@ function FormOne({ setForm_one, next, form_one }) {
 
   //Check xem debaunce address có thay đổi không để lấy thông tin chi tiết địa  chỉ
   useEffect(() => {
-    loadCityFull(setfullAddressCompany, valueDebounceFullAddress);
+    loadCityFull(
+      objectAddress,
+      setfullAddressCompany,
+      valueDebounceFullAddress
+    );
     setLoadingSelect(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valueDebounceFullAddress]);
+
+  console.log("🚀 ~ FormOne ~ fullAddressCompany:", fullAddressCompany);
+
   return (
     <Form
       form={form}
@@ -300,6 +312,7 @@ function FormOne({ setForm_one, next, form_one }) {
             <>
               <span>Nơi Làm Việc</span>
               <MemoizedModelMapAddress
+                setObjectAddress={setObjectAddress}
                 top={70}
                 color={"#fda4c8"}
                 setLocation={setLocation}
@@ -340,17 +353,30 @@ function FormOne({ setForm_one, next, form_one }) {
             onSearch={(input) => changeValueAddress(input)}
             dropdownRender={(menu) => {
               return (
-                <> 
-                  {!loadingSelect && (
+                <>
+                  <div className="search-custom-info-company">
+                    <span className="item">{menu}</span>
+                  </div>
+                  {/* {!loadingSelect && (
                     <div className="search-custom-info-company">
                       <span className="item">{menu}</span>
                     </div>
                   )}
                   {loadingSelect && (
-                    <div style={{display:'flex',justifyContent:"center",alignItems:"center"}} className="search-custom-info-company">
-                      <img style={{width:"150px"}} src="https://img.pikbest.com/png-images/20190918/cartoon-snail-loading-loading-gif-animation_2734139.png!bw700"/>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      className="search-custom-info-company"
+                    >
+                      <img
+                        style={{ width: "150px" }}
+                        src="https://img.pikbest.com/png-images/20190918/cartoon-snail-loading-loading-gif-animation_2734139.png!bw700"
+                      />
                     </div>
-                  )}
+                  )} */}
                 </>
               );
             }}

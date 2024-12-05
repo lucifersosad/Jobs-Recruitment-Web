@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import DropMenu from "./dropMenu";
-import { getCityApiDuong } from "../../../services/clients/user-userApi";
+import { getCityApi } from "../../../services/clients/user-userApi";
 import { searchCv, searchJob } from "./js/options";
 
 function Header() {
@@ -22,7 +22,7 @@ function Header() {
   const [city, setCity] = useState([]);
   useEffect(() => {
     const fetchApi = async () => {
-      const recordCity = await getCityApiDuong();
+      const recordCity = await getCityApi();
       if (recordCity.code === 200) {
         const convertCity = recordCity.data.map((dataMap) => ({
           label: dataMap.name,
@@ -31,7 +31,7 @@ function Header() {
         setCity(convertCity);
       }
     };
-    // fetchApi();
+    fetchApi();
   }, []);
 
   

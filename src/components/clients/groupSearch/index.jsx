@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import MemoizedSearchCustomVip from "../searchCustomVip";
 import { useEffect, useRef, useState } from "react";
-import { getCityApiDuong } from "../../../services/clients/user-userApi";
+import { getCityApi } from "../../../services/clients/user-userApi";
 function GroupSearch({ onValueChange,valueCity="",valueKeyword="" }) {
   const [options, setOptions] = useState([]);
   const keywordRef = useRef("");
@@ -38,7 +38,7 @@ function GroupSearch({ onValueChange,valueCity="",valueKeyword="" }) {
   };
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await getCityApiDuong();
+      const result = await getCityApi();
       if (result?.code === 200) {
         const convertData = result?.data.map((item) => {
           return {

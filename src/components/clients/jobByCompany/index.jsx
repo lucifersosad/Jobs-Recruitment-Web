@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, ConfigProvider, Form, Input, Select } from "antd";
 import "./jobByCompany.scss";
 import { memo, useEffect, useState } from "react";
-import { getCityApiDuong } from "../../../services/clients/user-userApi";
+import { getCityApi } from "../../../services/clients/user-userApi";
 import { jobByCompany } from "../../../services/clients/jobsApi";
 import MemoizedItemBoxNews from "../itemBoxNews";
 import { removeAccents } from "../../../helpers/removeAccents";
@@ -16,7 +16,7 @@ function JobByCompany({ slug }) {
   const [city_select, setCitySelect] = useState("");
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await getCityApiDuong();
+      const result = await getCityApi();
 
       if (result.code === 200) {
         const convertData = result.data.map((item) => ({

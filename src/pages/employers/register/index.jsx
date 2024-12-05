@@ -12,8 +12,8 @@ import "./register.scss";
 import banner from "./images/banner.png";
 import { Link } from "react-router-dom";
 import {
-  getCityApiDuong,
-  getDistrictApiDuong,
+  getCityApi,
+  getDistrictApi,
 } from "../../../services/clients/user-userApi";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -73,7 +73,7 @@ function RegisterEmployers() {
     }
   };
   const fetchApi = async () => {
-    const cityResult = await getCityApiDuong();
+    const cityResult = await getCityApi();
     if (cityResult.code === 200) {
       const convertDatCity = cityResult.data.map((item) => ({
         label: item.name,
@@ -88,7 +88,7 @@ function RegisterEmployers() {
   }, []);
   const hanleChangeCity = async (value) => {
     const code = value.split("/")[0];
-    const result = await getDistrictApiDuong(code);
+    const result = await getDistrictApi(code);
     if (result.code === 200) {
       const convertDataDistrict = result.data.map((item) => ({
         label: item.name,

@@ -12,8 +12,8 @@ import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeInfoUser,
-  getCityApiDuong,
-  getDistrictApiDuong,
+  getCityApi,
+  getDistrictApi
 } from "../../../services/clients/user-userApi";
 import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updateDataClient";
 import { removeAccents } from "../../../helpers/removeAccents";
@@ -33,7 +33,7 @@ function InfoUserClient() {
     (status) => status.authenticationReducerClient
   );
   const fetchApi = async () => {
-    const cityResult = await getCityApiDuong();
+    const cityResult = await getCityApi();
     if (cityResult.code === 200) {
       const convertDatCity = cityResult.data.map((item) => ({
         label: item.name,
@@ -91,7 +91,7 @@ function InfoUserClient() {
   const hanleChangeCity = useCallback(
     async (value, setForm = true) => {
       const code = value.split("/")[0];
-      const result = await getDistrictApiDuong(code);
+      const result = await getDistrictApi(code);
       if (result.code === 200) {
         const convertDataDistrict = result.data.map((item) => ({
           label: item.name,

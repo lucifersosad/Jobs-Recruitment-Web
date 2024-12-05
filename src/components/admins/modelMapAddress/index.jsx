@@ -2,7 +2,11 @@ import { memo, useCallback, useEffect, useState } from "react";
 import { handleCancel, handleShowModal } from "../../../helpers/modelHelper";
 import { Card, Form, Modal, Select, notification } from "antd";
 
-import { getCity, getCitySearch } from "../../../services/admins/headerApi";
+import {
+  getCity,
+  getCitySearch,
+  getDistrictSearch,
+} from "../../../services/admins/headerApi";
 import "./modelMapAddress.scss";
 
 import {
@@ -13,7 +17,7 @@ import MapView from "../mapView/mapView";
 import { removeAccents } from "../../../helpers/removeAccents";
 
 function ModelMapAddress(props) {
-  const { setLocation,color="#5dcaf9",top=20 } = props;
+  const { setObjectAddress, setLocation, color = "#5dcaf9", top = 20 } = props;
   const [isModal, setIsModalOpen] = useState(false);
   //Lưu tọa độ
   //longitudeAndLatitude[0] là longitude
@@ -22,7 +26,9 @@ function ModelMapAddress(props) {
 
   const [city, setCity] = useState([]);
   const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
   const [valueDistricts, setValueDistricts] = useState([]);
+  const [valueWards, setValueWards] = useState([]);
   const [coordinates, setCoordinates] = useState([]);
   const [api, contextHolder] = notification.useNotification();
 
@@ -41,26 +47,47 @@ function ModelMapAddress(props) {
     };
     fetchApi();
   }, []);
+
   //Khi người dùng select tỉnh thành thì sẽ lấy ra các quận huyện
   const handleSelectCity = useCallback(async (value) => {
-
     const dataCitySearch = await getCitySearch(value);
     if (dataCitySearch.code === 200) {
       const options = dataCitySearch.data.map((item) => {
+        console.log("🚀 ~ options ~ item:", item)
         return {
           value: item.code,
-          label: item.name,
+          label: item.name_with_type,
         };
       });
       setDistricts(options);
 
       setValueDistricts(options[0].value);
-    }
 
-  
+      setWards([]);
+
+      setValueWards([]);
+    }
   }, []);
+
   const handleSelectDistricts = useCallback(async (value) => {
     setValueDistricts(value);
+
+    const dataDistrictSearch = await getDistrictSearch(value);
+    if (dataDistrictSearch.code === 200) {
+      const options = dataDistrictSearch.data.map((item) => {
+        return {
+          value: item.code,
+          label: item.name_with_type,
+        };
+      });
+      setWards(options);
+
+      setValueWards(options[0].value);
+    }
+  }, []);
+
+  const handleSelectWards = useCallback((value) => {
+    setValueWards(value);
   }, []);
 
   //Khi người dùng select tỉnh thành thì sẽ lấy ra các quận huyện
@@ -71,10 +98,21 @@ function ModelMapAddress(props) {
     const selectedDistrictsItem = districts.find(
       (item) => item.value === valueDistricts
     );
+
+    const selectedWardsItem = wards.find((item) => item.value === valueWards);
     //Nếu không có tỉnh thành hoặc quận huyện thì sẽ không thực hiện gì cả
     if (!selectedCityItem || !selectedDistrictsItem) {
       return;
     }
+
+    const objectAddress = {
+      city: selectedCityItem.label,
+      district: selectedDistrictsItem.label,
+      ward: selectedWardsItem.label,
+    };
+
+    setObjectAddress(objectAddress);
+
     //Nếu có tỉnh thành và quận huyện thì sẽ lấy ra địa chỉ
     const searchValue = `${selectedDistrictsItem.label}, ${selectedCityItem.label}`;
     //Lấy ra place_id của địa chỉ
@@ -136,7 +174,7 @@ function ModelMapAddress(props) {
         style={{
           top: top,
         }}
-        width={600}
+        width={800}
         title="Thêm Vị Trí Map"
         open={isModal}
         onCancel={() => handleCancel("", setIsModalOpen)}
@@ -150,7 +188,7 @@ function ModelMapAddress(props) {
             className="row align-items-center justify-content-center"
           >
             <Form.Item
-              className="col-4"
+              className="col-3"
               label="Tỉnh/Thành Phố"
               name="location" // This is important
               rules={[
@@ -161,8 +199,8 @@ function ModelMapAddress(props) {
               ]}
             >
               <Select
-              showSearch
-                 filterOption={(input, option) =>
+                showSearch
+                filterOption={(input, option) =>
                   removeAccents(option.label)
                     .toLowerCase()
                     .includes(removeAccents(input).toLowerCase()) ||
@@ -179,8 +217,9 @@ function ModelMapAddress(props) {
                 options={city}
               />
             </Form.Item>
+
             <Form.Item
-              className="col-4"
+              className="col-3"
               label="Quận/Huyện"
               rules={[
                 {
@@ -190,15 +229,15 @@ function ModelMapAddress(props) {
               ]}
             >
               <Select
-              showSearch
-              filterOption={(input, option) =>
-               removeAccents(option.label)
-                 .toLowerCase()
-                 .includes(removeAccents(input).toLowerCase()) ||
-               removeAccents(option.value)
-                 .toLowerCase()
-                 .includes(removeAccents(input).toLowerCase())
-             }
+                showSearch
+                filterOption={(input, option) =>
+                  removeAccents(option.label)
+                    .toLowerCase()
+                    .includes(removeAccents(input).toLowerCase()) ||
+                  removeAccents(option.value)
+                    .toLowerCase()
+                    .includes(removeAccents(input).toLowerCase())
+                }
                 value={valueDistricts}
                 onChange={handleSelectDistricts}
                 style={{
@@ -209,7 +248,37 @@ function ModelMapAddress(props) {
               />
             </Form.Item>
 
-            <Form.Item label="Tìm Kiếm Ngay" className="col-4">
+            <Form.Item
+              className="col-3"
+              label="Phường/Xã"
+              rules={[
+                {
+                  required: true,
+                  message: "Không Được Để Trống!",
+                },
+              ]}
+            >
+              <Select
+                showSearch
+                filterOption={(input, option) =>
+                  removeAccents(option.label)
+                    .toLowerCase()
+                    .includes(removeAccents(input).toLowerCase()) ||
+                  removeAccents(option.value)
+                    .toLowerCase()
+                    .includes(removeAccents(input).toLowerCase())
+                }
+                value={valueWards}
+                onChange={handleSelectWards}
+                style={{
+                  width: "100%",
+                }}
+                disabled={wards.length === 0 ? true : false}
+                options={wards}
+              />
+            </Form.Item>
+
+            <Form.Item label="Tìm Kiếm Ngay" className="col-3">
               <button className="button-submit-admin-one" type="submit">
                 Tìm Kiếm
               </button>

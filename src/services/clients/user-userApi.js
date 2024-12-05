@@ -58,12 +58,12 @@ export const authenClient = async (valueForm)=>{
     return result;
 }
 
-export const getCityApiDuong = async ()=>{
-    const result = await Get("",{},"https://duongshop.id.vn/api/v1/duongits/city");
+export const getCityApi = async ()=>{
+    const result = await Get("",{},"https://vn-locations-api.vercel.app/city");
     return result;
 }
-export const getDistrictApiDuong = async (value)=>{
-    const result = await Get("",{},`https://duongshop.id.vn/api/v1/duongits/district/${value}`);
+export const getDistrictApi = async (value)=>{
+    const result = await Get("",{},`https://vn-locations-api.vercel.app/city/${value}`);
     return result;
 }
 export const recruitmentJob = async (valueForm)=>{
