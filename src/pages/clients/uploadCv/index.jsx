@@ -200,7 +200,7 @@ function UploadCv() {
               <div className="title">Theo dõi số liệu, tối ưu CV</div>
               <div className="sub-title">
                 Theo dõi số lượt xem CV và nhận thông tin chính xác về các nhà
-                tuyển dụng đang quan tâm đến hồ sơ của bạn trên GNOUD.
+                tuyển dụng đang quan tâm đến hồ sơ của bạn trên UTEM.
               </div>
             </div>
 

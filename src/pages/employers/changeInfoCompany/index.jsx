@@ -26,7 +26,7 @@ function ChangeInfoCompany() {
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
   const [imageLogo, setImageLogo] = useState(
-    "https://res.cloudinary.com/dmmz10szo/image/upload/v1710149283/GNOUD_2_pxldrg.png"
+    "https://www.topcv.vn/v4/image/normal-company/logo_default.png"
   );
 
   //Đây là khai báo state địa chỉ phường/xã, quận/huyện, tỉnh/thành phố

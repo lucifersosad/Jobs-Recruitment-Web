@@ -158,7 +158,7 @@ function Register() {
                         <span style={{ color: "#25a6dd" }}>
                           Chính sách bảo mật
                         </span>{" "}
-                        của GNOUD
+                        của UTEM
                       </Checkbox>
                     </Form.Item>
                     <Form.Item>

@@ -12,7 +12,7 @@ function FooterMain() {
             <Footer className='footer'>
                 <div className='container footer__main'>
                     <div className="footer__logo col-2">
-                        <NavLink className="mr-1 emplo" to={"/"}>GNOUD</NavLink>
+                        <NavLink className="mr-1 emplo" to={"/"}>UTEM</NavLink>
                     </div>
                     <div className='row footer__main-body'>
                         <div className='col-2'>
@@ -22,7 +22,7 @@ function FooterMain() {
                                     <li>Việc Làm Mới Nhất</li>
                                     <li>Cv Hay</li>
                                     <li>Cẩm Nang</li>
-                                    <li>GNOUD</li>
+                                    <li>UTEM</li>
                                     <li>It Blogs</li>
                                     <li>Sơ Đồ Trang Web</li>
                                 </ul>
@@ -44,7 +44,7 @@ function FooterMain() {
                             <div className='footer__link'>
                                 <h2>TRUNG TÂM HỖ TRỢ</h2>
                                 <ul style={{listStyle:"none",padding:"0"}}>
-                                    <li>Về GNOUD</li>
+                                    <li>Về UTEM</li>
                                     <li>Chính Sách Bảo Vệ Thông Tin</li>
                                     <li>Quy Chế Sàn Giao Dịch</li>
                                     <li>Điều Khoản Sử Dụng</li>
@@ -58,11 +58,6 @@ function FooterMain() {
                             <div className='footer__link'>
                                 <h2>WEBSITE ĐỐI TÁC</h2>
                                 <ul style={{listStyle:"none",padding:"0"}}>
-                                    <li>DuongShop.xyz</li>
-                                    <li>DuongCompany.xyz</li>
-                                    <li>DuongCompanyTree.xyz</li>
-                                    <li>ItDuongHoc.com</li>
-                                    <li>DuongIt.com</li>
                                     <li>Liên Hệ</li>
                                 </ul>
                             </div>
@@ -97,25 +92,6 @@ function FooterMain() {
                             </div>
                         </div>
                     </div>
-
-                    <hr></hr>
-                    <div className='footer__end'>
-                        <div className='row'>
-                            <div className='col-10 '>
-                                <div className='box-title'>
-                                    <p>Trụ sở chính: Tầng 3, Tòa Nhà An Dương House, 68 An Đồng, An Dương, TP.Hải Phòng - Tel: (+84)879279678</p>
-                                    <p>Văn phòng Kiến An: Tòa nhà 3, 102 Kiến An, TP.Hải Phòng - Tel: (+84)879279678</p>
-                                    <p>Email: dokhacduong3@gmail.com</p>
-                                    <p>Copyright © GNOUD Vietnam</p>
-                                </div>
-                            </div>
-                            <div className='col-2 text-right'>
-                                <img src={dk} alt='dk.jpg'></img>
-                            </div>
-                        </div>
-
-                    </div>
-
                 </div>
 
             </Footer>

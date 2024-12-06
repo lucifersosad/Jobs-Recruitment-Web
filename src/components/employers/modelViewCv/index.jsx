@@ -183,7 +183,7 @@ function ModelViewCv({ record, dataFull,fetchApi }) {
           </div>
           <div className="info-user">
             <div className="head">
-              <div className="logo">GNOUD</div>
+              <div className="logo">UTEM</div>
             </div>
             <div className="body-user">
               <div className="info  mb-2">

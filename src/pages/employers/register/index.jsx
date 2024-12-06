@@ -381,7 +381,7 @@ function RegisterEmployers() {
                       <span style={{ color: "rgb(233 98 152)" }}>
                         Chính sách bảo mật
                       </span>{" "}
-                      của GNOUD
+                      của UTEM
                     </Checkbox>
                   </Form.Item>
                   <Form.Item>

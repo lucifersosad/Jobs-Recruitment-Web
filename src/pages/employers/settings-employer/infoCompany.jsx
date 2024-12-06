@@ -14,7 +14,7 @@ function InfoCompany() {
   const [infoUserEmployer, setInfoUserEmployer] = useState({});
   const [changeInfo, setChangeInfo] = useState(false);
   const [imageLogo, setImageLogo] = useState(
-    "https://res.cloudinary.com/dmmz10szo/image/upload/v1710149283/GNOUD_2_pxldrg.png"
+    "https://www.topcv.vn/v4/image/normal-company/logo_default.png"
   );
   const authenMainEmployer = useSelector(
     (status) => status.authenticationReducerEmployer

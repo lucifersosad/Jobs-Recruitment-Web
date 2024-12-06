@@ -33,7 +33,7 @@ function ChatBoxClient() {
       socketClient?.disconnect();
     }
     setSocketClient(
-      io("https://project-duong-vip-api.vercel.app", {
+      io("http://localhost:8083", {
         auth: {
           token: checkTokenClient,
           role: "client",

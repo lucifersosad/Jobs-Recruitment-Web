@@ -68,7 +68,7 @@ export const dataDegree  = [
         label:"Cao Đẳng"
     },
     {
-        value:"iniversity",
+        value:"university",
         label:"Đại Học"
     },
     {

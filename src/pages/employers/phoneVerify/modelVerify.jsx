@@ -164,8 +164,8 @@ function ModelVerify({ openModel, phone, setOpen }) {
                   trợ:
                 </div>
                 <ul>
-                  <li>Hotline CSKH: (0879) 279 678 | (0936) 944 075</li>
-                  <li>Email: dokhacduong3@gmail.com</li>
+                  <li>Hotline CSKH: 0933758487</li>
+                  <li>Email: luciferxhnh@gmail.com</li>
                 </ul>
               </div>
             </div>
@@ -250,8 +250,8 @@ function ModelVerify({ openModel, phone, setOpen }) {
                 Mọi thắc mắc xin liên hệ Phòng Vận hành Dịch vụ để được hỗ trợ:
               </div>
               <ul>
-                <li>Hotline CSKH: (0879) 279 678 | (0936) 944 075</li>
-                <li>Email: dokhacduong3@gmail.com</li>
+                <li>Hotline CSKH: 0933758487</li>
+                <li>Email: luciferxhnh@gmail.com</li>
               </ul>
             </div>
           </div>

@@ -118,7 +118,7 @@ function BoxSettings() {
                   <ul>
                     <li>
                       <FontAwesomeIcon icon={faCheck} />
-                      Nhắn tin trực tiếp trên GNOUD
+                      Nhắn tin trực tiếp trên UTEM
                     </li>
                     <li>
                       <FontAwesomeIcon icon={faCheck} />

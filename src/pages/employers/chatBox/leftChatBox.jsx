@@ -49,7 +49,7 @@ function LeftChatBox({ historyChat, idUser }) {
       <div className="left-chat__feedback mb-3">
         <div className="send-feedback p-3 mx-1 mt-2 mb-3">
           <span className="content-feed">
-            <strong>Bạn đánh giá trải nghiệp của mình với GNOUD thế nào</strong>{" "}
+            <strong>Bạn đánh giá trải nghiệp của mình với UTEM thế nào</strong>{" "}
             Chia sẻ ngay với đội ngũ phát triển để chúng tôi cải thiện trải
             nghiệm của tính năng cho phù hợp.
           </span>

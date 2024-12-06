@@ -8,7 +8,7 @@ export const  emailCheckOne = [
         value:"thong-bao-ntd-da-xem"
     },
     {
-        label:"Thông báo tính năng & mẫu CV mới từ GNOUD",
+        label:"Thông báo tính năng & mẫu CV mới từ UTEM",
         value:"thong-bao-tinh-nang"
     },
     {
@@ -20,7 +20,7 @@ export const  emailCheckOne = [
 
 export const  emailCheckTwo = [
     {
-        label:"Thông báo việc làm phù hợp từ GNOUD",
+        label:"Thông báo việc làm phù hợp từ UTEM",
         value:"thong-bao-viec-lam-phu-hop"
        
     },

@@ -65,15 +65,12 @@ function FormOne({ setForm_one, next, form_one }) {
       }
 
       if (recordCity.code === 200) {
-        console.log("🚀 ~ fetchApi ~ recordCity:", recordCity);
         const options = recordCity.data.map((item) => {
           return {
             value: `${parseInt(item.code)}&${item.slug}&${item.name}`,
             label: item.name,
           };
         });
-
-        console.log("🚀 ~ options ~ options:", options);
 
         setCity(options);
       }
@@ -201,8 +198,6 @@ function FormOne({ setForm_one, next, form_one }) {
     setLoadingSelect(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valueDebounceFullAddress]);
-
-  console.log("🚀 ~ FormOne ~ fullAddressCompany:", fullAddressCompany);
 
   return (
     <Form

@@ -54,7 +54,7 @@ function HomeEmployers() {
               >
                 <div className="items col-6">
                   <div className="big-update">BIG UPDATE</div>
-                  <h2 className="heading">GNOUD Leading Platform</h2>
+                  <h2 className="heading">UTEM Leading Platform</h2>
                   <p className="description">
                     Nền tảng hàng đầu về xin việc của chúng tôi kết hợp
                     Marketing Tuyển dụng và công nghệ hiện đại để cung cấp các
@@ -123,13 +123,13 @@ function HomeEmployers() {
               <section className="section-4 padding-convert">
                 <div className="headers box-content">
                   <div className="text-pink">
-                    CORE FUNCTIONS OF GNOUD SMART RECRUITMENT PLATFORM
+                    CORE FUNCTIONS OF UTEM SMART RECRUITMENT PLATFORM
                   </div>
                   <h2 className="hedings">
-                    Các tính năng mới cập nhật trên GNOUD Recruitment Platform
+                    Các tính năng mới cập nhật trên UTEM Recruitment Platform
                   </h2>
                   <p className="description">
-                    Với sự tiên tiến của công nghệ, nền tảng GNOUD Smart
+                    Với sự tiên tiến của công nghệ, nền tảng UTEM Smart
                     Recruitment đã trải qua một quá trình nâng cấp toàn diện và
                     cung cấp một trải nghiệm đầy độc đáo và tiện ích, giúp doanh
                     nghiệp khai thác mọi tiềm năng từ các phương tiện số trong
@@ -142,12 +142,12 @@ function HomeEmployers() {
                     <div className="col-4">
                       <div className="items">
                         <div className="item-box">
-                          <h3 className="headings-h3">Đề xuất bởi GNOUD</h3>
+                          <h3 className="headings-h3">Đề xuất bởi UTEM</h3>
                           <div className="images">
                             <img src={item6} alt="" />
                           </div>
                           <p className="description">
-                            GNOUD sẽ tiến hành phân tích dữ liệu doanh nghiệp,
+                            UTEM sẽ tiến hành phân tích dữ liệu doanh nghiệp,
                             nhu cầu tuyển dụng và hành vi tìm việc của ứng viên
                             để đề xuất những hoạt động, giải pháp tuyển dụng
                             giúp nhà tuyển dụng gia tăng hiệu quả tuyển dụng.
@@ -228,7 +228,7 @@ function HomeEmployers() {
                             <img src={item6} alt="" />
                           </div>
                           <p className="description">
-                            Với nền tảng GNOUD Smart Recruitment Platform giúp
+                            Với nền tảng UTEM Smart Recruitment Platform giúp
                             nhà tuyển dụng đánh giá ứng viên toàn diện và khách
                             quan thông qua bài test online, từ đó tối ưu tỷ lệ
                             chuyển đổi, tìm kiếm ứng viên tài năng từ nguồn CV
@@ -256,7 +256,7 @@ function HomeEmployers() {
                             năng. Với các phương pháp tìm nguồn ứng viên thông
                             minh, hiệu quả, nhà tuyển dụng sẽ dễ dàng tìm kiếm
                             ứng viên cho Chiến dịch tuyển dụng của mình khi sử
-                            dụng GNOUD Smart Recruitment Platform.
+                            dụng UTEM Smart Recruitment Platform.
                           </p>
                           <div className="preview mt-3">
                             <a href="#!">Tìm hiểu thêm</a>
@@ -371,7 +371,7 @@ function HomeEmployers() {
                 <div className="box-content text-center">
                   <div className="text-pink">FIGURES</div>
                   <h2 className="hedings">
-                    Những con số của trang tuyển dụng GNOUD
+                    Những con số của trang tuyển dụng UTEM
                   </h2>
                 </div>
                 <div className="row gy-4 gx-4 content-check row justify-content-center align-items-center ">
@@ -443,7 +443,7 @@ function HomeEmployers() {
                   </div>
                   <p className="description">
                     Hãy để lại thông tin và các chuyên viên tư vấn tuyển dụng
-                    của GNOUD sẽ liên hệ ngay với bạn
+                    của UTEM sẽ liên hệ ngay với bạn
                   </p>
                 </div>
                 <div className="box-body">
@@ -460,7 +460,7 @@ function HomeEmployers() {
                 <div className="box-content text-center">
                   <div className="text-pink">VALUES</div>
                   <h2 className="hedings">
-                    Giá trị khi sử dụng GNOUD Smart Recruitment Platform
+                    Giá trị khi sử dụng UTEM Smart Recruitment Platform
                   </h2>
                 </div>
                 <div className="bodys content-check row ">
@@ -574,13 +574,13 @@ function HomeEmployers() {
                 <div className="col-8 convert-col">
                   <div className="content">
                     <p>
-                      GNOUD là một nền tảng mới nổi trong lĩnh vực công nghệ
+                      UTEM là một nền tảng mới nổi trong lĩnh vực công nghệ
                       tuyển dụng dành cho sinh viên tại Việt Nam, tập trung vào
                       việc kết nối sinh viên với cơ hội việc làm phù hợp với hệ
                       sinh thái đa dạng.
                     </p>
                     <p>
-                      Với ứng dụng GNOUD, sinh viên có thể tìm kiếm và ứng tuyển
+                      Với ứng dụng UTEM, sinh viên có thể tìm kiếm và ứng tuyển
                       vào các vị trí thực tập và việc làm phù hợp với nhu cầu và
                       kỹ năng của mình. Nền tảng cung cấp công cụ để sinh viên
                       thiết lập và đánh giá năng lực cá nhân, từ đó giúp họ tăng
@@ -588,7 +588,7 @@ function HomeEmployers() {
                     </p>
                     <p>
                       Với sứ mệnh tạo ra cơ hội việc làm cho sinh viên và đồng
-                      thời hỗ trợ doanh nghiệp tìm kiếm nhân tài trẻ, GNOUD đã
+                      thời hỗ trợ doanh nghiệp tìm kiếm nhân tài trẻ, UTEM đã
                       kết nối thành công hàng ngàn sinh viên với các cơ hội việc
                       làm phù hợp mỗi năm.
                     </p>
@@ -615,10 +615,10 @@ function HomeEmployers() {
                 <div className="content-check">
                   <div className="items text-left">
                     <h2 className="heading">
-                      GNOUD Việt Nam mong muốn được hợp tác cùng Doanh nghiệp
+                      UTEM Việt Nam mong muốn được hợp tác cùng Doanh nghiệp
                     </h2>
                     <p className="description">
-                      Đội ngũ hỗ trợ của GNOUD luôn sẵn sàng để tư vấn giải pháp
+                      Đội ngũ hỗ trợ của UTEM luôn sẵn sàng để tư vấn giải pháp
                       tuyển dụng và đồng hành cùng các Quý nhà tuyển dụng
                     </p>
                   </div>
@@ -634,8 +634,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                       <div className="box-hotline">
@@ -643,8 +643,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                       <div className="box-hotline">
@@ -652,8 +652,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                       <div className="box-hotline">
@@ -661,8 +661,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                       <div className="box-hotline">
@@ -670,8 +670,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                     </div>
@@ -687,8 +687,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                       <div className="box-hotline">
@@ -696,8 +696,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                       <div className="box-hotline">
@@ -705,8 +705,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                       <div className="box-hotline">
@@ -714,8 +714,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                       <div className="box-hotline">
@@ -723,8 +723,8 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content">
-                          <a href="tel:0879279678">0879 279 678</a>
-                          <p>Đỗ Khắc Dương</p>
+                          <a href="tel:0879279678">0933758487</a>
+                          <p>Đặng Tiến Phát</p>
                         </div>
                       </div>
                     </div>
@@ -740,7 +740,7 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content warning-content">
-                          <a href="tel:0879279678">0879 279 678</a>
+                          <a href="tel:0879279678">0933758487</a>
                           <p>Admin</p>
                         </div>
                       </div>
@@ -749,7 +749,7 @@ function HomeEmployers() {
                           <FontAwesomeIcon icon={faPhone} />
                         </div>
                         <div className="content warning-content">
-                          <a href="tel:0879279678">0879 279 678</a>
+                          <a href="tel:0879279678">0933758487</a>
                           <p>Admin</p>
                         </div>
                       </div>

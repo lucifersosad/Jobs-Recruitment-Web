@@ -136,25 +136,25 @@ const [data, setData] = useState([])
             >
               <a href="#!" className="slick-box col-6">
                 <img
-                  src="https://res.cloudinary.com/dmmz10szo/image/upload/v1709372324/Gia_t%C4%83ng_hi%E1%BB%87u_qu%E1%BA%A3_tuy%E1%BB%83n_d%E1%BB%A5ng_v%C3%A0_gi%E1%BB%AF_ch%C3%A2n_nh%C3%A2n_t%C3%A0i_rmdfuq.png"
+                  src="https://res.cloudinary.com/dt10idnhk/image/upload/v1733476645/xzcikhm78pduzjzelgq1.png"
                   alt=""
                 />
               </a>
               <a href="#!" className="slick-box col-6">
                 <img
-                  src="https://res.cloudinary.com/dmmz10szo/image/upload/v1709372796/Timmerman_Industries_h2t75p.png"
+                  src="https://res.cloudinary.com/dt10idnhk/image/upload/v1733476737/mpnqrgiavucjiwazucrw.png"
                   alt=""
                 />
               </a>
               <a href="#!" className="slick-box col-6">
                 <img
-                  src="https://res.cloudinary.com/dmmz10szo/image/upload/v1709372796/Timmerman_Industries_h2t75p.png"
+                  src="https://res.cloudinary.com/dt10idnhk/image/upload/v1733476737/mpnqrgiavucjiwazucrw.png"
                   alt=""
                 />
               </a>
               <a href="#!" className="slick-box col-6">
                 <img
-                  src="https://res.cloudinary.com/dmmz10szo/image/upload/v1709372324/Gia_t%C4%83ng_hi%E1%BB%87u_qu%E1%BA%A3_tuy%E1%BB%83n_d%E1%BB%A5ng_v%C3%A0_gi%E1%BB%AF_ch%C3%A2n_nh%C3%A2n_t%C3%A0i_rmdfuq.png"
+                  src="https://res.cloudinary.com/dt10idnhk/image/upload/v1733476645/xzcikhm78pduzjzelgq1.png"
                   alt=""
                 />
               </a>
@@ -334,7 +334,7 @@ const [data, setData] = useState([])
                     </div>
                     <div className="box-info-footer mt-2">
                       <div className="title text-center">
-                        <div className="dest">Số Lượng GNOUD POINT (GP)</div>
+                        <div className="dest">Số Lượng GP</div>
                         <div className="set-role">
                           <div className="point-item">
                             <span>Xét hạng:</span>

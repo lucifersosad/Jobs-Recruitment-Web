@@ -109,7 +109,7 @@ function PhoneVerify() {
                     <img src={vari} width="48px" alt="" className="img-fluid" />
                   </div>{" "}
                   <div className="text-des">
-                    Được đội ngũ GNOUD hỗ trợ nhanh chóng qua số điện thoại đã
+                    Được đội ngũ UTEM hỗ trợ nhanh chóng qua số điện thoại đã
                     xác thực <br /> khi có vấn đề phát sinh, rút ngắn tối đa
                     thời gian xử lý thắc mắc, khiếu nại.
                   </div>
