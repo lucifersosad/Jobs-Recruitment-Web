@@ -31,7 +31,7 @@ function FormEdit(props) {
     const fetchApi = async () => {
         const record = await getTreeCategories();
         if (record.code === 200) {
-            setOptionsSelectTree(SelectTree(decData(record.data)))
+            setOptionsSelectTree(SelectTree(record.data))
         }
     }
     useEffect(() => {

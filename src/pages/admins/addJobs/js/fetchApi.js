@@ -11,7 +11,7 @@ export const fetchApi = async (setOptionsSelectTree, setOptionsEmployers, setOpt
   const recordCity = await getCity();
   //Lấy danh mục công việc
   if (recordJobsCategory.code === 200) {
-    setOptionsSelectTree(SelectTree(decData(recordJobsCategory.data)));
+    setOptionsSelectTree(SelectTree(recordJobsCategory.data));
   }
   //Lấy thông tin công ty
   if (recordEmployers.code === 200) {

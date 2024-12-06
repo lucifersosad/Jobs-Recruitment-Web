@@ -77,7 +77,6 @@ export const dataReceiveEmail  = [
    
 ]
 
-
 export const dataDegree  = [
     {
         value:"high-school",

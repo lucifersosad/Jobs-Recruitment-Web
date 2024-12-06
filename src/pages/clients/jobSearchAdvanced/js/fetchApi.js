@@ -11,7 +11,7 @@ export const fetchApi = async (setOptionCategories, setRecordItem, page, limit, 
     ]);
   
     if (resultgetAllJobsCategories.code === 200) {
-      const convertData = decData(resultgetAllJobsCategories.data).map((item) => {
+      const convertData = resultgetAllJobsCategories.data.map((item) => {
         return {
           value: item._id,
           label: item.title,

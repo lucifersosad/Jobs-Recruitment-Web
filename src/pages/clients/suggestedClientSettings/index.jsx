@@ -92,16 +92,29 @@ function SuggestedClientSettings() {
     }
   };
 
-  const changeValue = useCallback(async (input) => {
+  const changeValue = useCallback((input) => {
     if (input.length > 1) {
-      setText(input);
+      setContentSelect("Đang tìm kiếm...");
+      setText(input); // Cập nhật giá trị để debounce
     } else {
-      //Nếu input nhỏ hơn 2 ký tự thì set lại giá trị rỗng
       setText("");
-      //Nếu input nhỏ hơn 2 ký tự thì set lại giá trị rỗng
       setContentSelect("Vui lòng nhập tối thiểu 2 ký tự để tìm kiếm!");
     }
   }, []);
+  
+  useEffect(() => {
+    if (valueDebounce) {
+      setContentSelect("Đang tìm kiếm...");
+      loadApi(setJobPosition, valueDebounce)
+        .then(() => {
+          setContentSelect("Không tìm thấy kết quả phù hợp");
+        })
+        .catch(() => {
+          setContentSelect("Lỗi khi tải dữ liệu");
+        });
+    }
+  }, [valueDebounce]);
+  
 
   return (
     <div className="col-8 ">

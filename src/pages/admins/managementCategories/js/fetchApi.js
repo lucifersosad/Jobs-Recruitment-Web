@@ -8,7 +8,7 @@ export const fetchApiCategorieManage = async (setJobsCategories, valueStatus = "
     const records = await getAllJobsCategories(valueStatus, keyword, sortKey, sortValue,tree);
    
     if (records.code === 200) {
-        const convertData = decData(records.data).map((dataMap, index) => ({
+        const convertData = records.data.map((dataMap, index) => ({
             ...dataMap,
             key: index
         }))

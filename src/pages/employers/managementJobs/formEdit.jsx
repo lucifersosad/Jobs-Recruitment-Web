@@ -94,7 +94,7 @@ function FormEdit(props) {
       ]);
       //Lấy danh mục công việc
       if (recordJobsCategory.code === 200) {
-        const convertData = decData(recordJobsCategory.data).map((item) => ({
+        const convertData = recordJobsCategory.data.map((item) => ({
           value: item._id,
           label: item.title,
         }));

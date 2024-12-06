@@ -4,7 +4,7 @@ import { getAllJobsCategories } from "../../../../services/employers/jobsCategor
 export const fetchApi = async (setJobCategories) => {
   const resultJobCategories = await getAllJobsCategories();
   if (resultJobCategories.code === 200) {
-    const convertData = decData(resultJobCategories.data).map((item) => {
+    const convertData = resultJobCategories.data.map((item) => {
       return {
         label: item.title,
         value: item._id,

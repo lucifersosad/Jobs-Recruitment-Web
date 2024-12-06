@@ -30,7 +30,7 @@ export const optionsSalary = [
     },
     {
         label: "Trên 50 triệu",
-        value: "tren_50_trieu ",
+        value: "tren_50_trieu",
     },
     {
         label: "Thỏa thuận",
