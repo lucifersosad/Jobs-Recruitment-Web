@@ -23,12 +23,12 @@ function LeftChatBox({ historyChat, idUser }) {
     <div className="left-chat-client px-1 pt-2">
       <div className="left-chat-client__header mb-3">
         <div className="logo">
-          <img src={logo} alt="" />
+          {/* <img src={logo} alt="" /> */}
         </div>
-        <div className="settings">
+        {/* <div className="settings">
           <Link to={"/"}>Về trang chủ</Link>
           <FontAwesomeIcon icon={faGear} />
-        </div>
+        </div> */}
       </div>
       <div className="left-chat-client__search mb-3">
         <div className="search p-1 mx-1">

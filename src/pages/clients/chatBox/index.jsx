@@ -33,7 +33,7 @@ function ChatBoxClient() {
       socketClient?.disconnect();
     }
     setSocketClient(
-      io("http://localhost:8083", {
+      io("http://localhost:8386", {
         auth: {
           token: checkTokenClient,
           role: "client",
