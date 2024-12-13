@@ -93,7 +93,7 @@ function ManagementJobsEmployer() {
                   <div className="id">#{data?._id}</div>
                   <div className="title mb-1">{data?.title}</div>
                   <div className="cv ">
-                    <div className="box-text">Chưa có CV nào</div>
+                    {/* <div className="box-text">Chưa có CV nào</div> */}
                     {/* <div className="box-text mb-1">Đã có 3 CV</div>
                     <div className="box-image">
                       <img src="https://i.imgur.com/izYKFLd.jpeg" alt="" />

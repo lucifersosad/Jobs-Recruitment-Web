@@ -30,6 +30,7 @@ function CompanyOutstanding() {
                         className="img-box"
                         src={item?.logoCompany}
                         alt={item?.companyName}
+                        style={{objectFit:"contain"}}
                       />
                     </a>
                   </div>

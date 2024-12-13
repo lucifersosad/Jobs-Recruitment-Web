@@ -24,6 +24,7 @@ function ListJobAppy() {
       setData(decData(result.data));
       setCountPagination(result.countCvs);
     }
+      console.log("🚀 ~ fetchApi ~ result.data:", decData(result.data))
   };
 
   useEffect(() => {
@@ -55,9 +56,7 @@ function ListJobAppy() {
   const handleChangeSelect = (value) => {
     fetchApi(value);
   };
-  const handleChangePagination = (value) => {
-
-  };
+  const handleChangePagination = (value) => {};
   return (
     <>
       <div className="col-8 ">
@@ -91,7 +90,11 @@ function ListJobAppy() {
                   data.map((item, index) => (
                     <div key={index} className="item-job mb-4">
                       <div className="logo-company">
-                        <img src={item?.employerId?.logoCompany} alt="logo" />
+                        <img
+                          src={item?.employerId?.logoCompany}
+                          alt="logo"
+                          style={{ objectFit: "contain" }}
+                        />
                       </div>
                       <div className="info">
                         <div className="box-content">
@@ -106,7 +109,7 @@ function ListJobAppy() {
                             triệu
                           </div>
                         </div>
-                        <div className="name-company">{item?.title}</div>
+                        <div className="name-company">{item?.employerId?.companyName}</div>
                         <div className="time-apply">
                           Thời gian ứng tuyển:{" "}
                           {moment(item?.createdAtApplyJob).format(

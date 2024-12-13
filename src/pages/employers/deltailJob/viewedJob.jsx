@@ -33,6 +33,7 @@ function ViewedJob({ record }) {
     };
     const result = await userPreviewJob(objectNew);
     if (result.code === 200) {
+      console.log("🚀 ~ fetchApi ~ result?.data:", result?.data);
       setData(result?.data);
       //   setData(result.data);
     }
@@ -90,7 +91,6 @@ function ViewedJob({ record }) {
 
   const saveProfileUser = async (idUser) => {
     try {
-
       const objectNew = {
         idProfile: idUser,
         idJob: record?._id,

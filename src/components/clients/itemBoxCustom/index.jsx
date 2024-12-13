@@ -107,6 +107,7 @@ function ItemBoxCustom() {
                   src={item?.logoCompany}
                   alt={item?.companyName}
                   title={item.title}
+                  style={{objectFit:"contain"}}
                 />
               </Link>
             </div>

@@ -65,7 +65,7 @@ function InfoCompany() {
                   </div>
                 </div>
                 <div className="item-2">
-                  <a href="#!">
+                  <a href={"../account/phone-verify"}>
                     <FontAwesomeIcon icon={faShieldHalved} />
                     <span>Xác thực ngay</span>
                   </a>

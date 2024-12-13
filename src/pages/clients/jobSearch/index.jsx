@@ -175,7 +175,7 @@ function JobSearch() {
                                       className="lazy-bg"
                                       src={item.employerId.logoCompany}
                                       alt={item.employerId.companyName}
-                                      style={{}}
+                                      style={{objectFit:"contain"}}
                                     />
                                   </span>
                                 </div>

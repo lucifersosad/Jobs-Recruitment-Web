@@ -33,7 +33,7 @@ export const fetchApi = async (setCity, setSkill, setJobCategories) => {
   }
 
   if (jobCategory.code === 200) {
-    const convertData = decData(jobCategory.data).map((item) => {
+    const convertData = jobCategory?.data?.map((item) => {
       return {
         value: item._id,
         label: item.title,

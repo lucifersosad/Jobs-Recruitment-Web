@@ -2,7 +2,10 @@ import { Button, Input, Modal, Popover, Spin, Tag } from "antd";
 import { useEffect, useRef, useState } from "react";
 
 import "./modelViewCv.scss";
-import { coutViewCv, getPdfToDriver } from "../../../services/employers/jobsApi";
+import {
+  coutViewCv,
+  getPdfToDriver,
+} from "../../../services/employers/jobsApi";
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
@@ -29,7 +32,7 @@ import {
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import { memo } from "react";
 import { convertFileCvDriverToUrl } from "../../../helpers/convertFileCvDriverToUrl";
-function ModelViewCv({ record, dataFull,fetchApi }) {
+function ModelViewCv({ record, dataFull, fetchApi }) {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [linkPdf, setLinkPdf] = useState("");
@@ -44,19 +47,16 @@ function ModelViewCv({ record, dataFull,fetchApi }) {
       email,
     };
     setIsModalOpen(true);
-    if(email){
+    if (email) {
       const result = await coutViewCv(objectNew);
-
-  }
+    }
     if (id_File) {
       const result = await getPdfToDriver({ id_file: id_File });
       if (result.code === 200) {
-       const url = convertFileCvDriverToUrl(result.data);
+        const url = convertFileCvDriverToUrl(result.data);
         setLinkPdf(url);
       }
     }
-   
-   
   };
 
   const handleCancel = () => {
@@ -66,6 +66,7 @@ function ModelViewCv({ record, dataFull,fetchApi }) {
 
   useEffect(() => {
     if (Object.keys(record).length > 0) {
+      console.log("🚀 ~ useEffect ~ record:", record);
       setData(record);
     }
   }, [record]);
@@ -222,7 +223,7 @@ function ModelViewCv({ record, dataFull,fetchApi }) {
                             Đã từ chối
                           </Tag>
                         )}
-                        {data?.status === "success" && (
+                        {data?.status === "accept" && (
                           <Tag icon={<CheckCircleOutlined />} color="success">
                             Đã phê duyệt
                           </Tag>
@@ -243,9 +244,9 @@ function ModelViewCv({ record, dataFull,fetchApi }) {
               </div>
               <hr />
               <div className="box-button">
-                <div className="change-status mb-2">
+                {/* <div className="change-status mb-2">
                   <button>Đổi trạng thái CV</button>
-                </div>
+                </div> */}
                 <div className="box-cv">
                   <Popover
                     content={content}
@@ -259,7 +260,7 @@ function ModelViewCv({ record, dataFull,fetchApi }) {
                     {" "}
                     <a
                       href={linkPdf}
-                      download={`CV-${data?.fullName}-${data?.email}.pdf`}
+                      download={`CV-${data?.idUser?.fullName}-${data?.email}.pdf`}
                     >
                       Tải CV PDF
                     </a>

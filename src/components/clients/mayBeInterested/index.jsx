@@ -61,7 +61,7 @@ function MayBeInterested() {
                 <div className="header_box">
                   <div className="image">
                     <a href="#!">
-                      <img src={recordItem?.logoCompany} alt="" />
+                      <img src={recordItem?.logoCompany} alt="" style={{objectFit:"contain"}}/>
                     </a>
                   </div>
                   <div className="title">

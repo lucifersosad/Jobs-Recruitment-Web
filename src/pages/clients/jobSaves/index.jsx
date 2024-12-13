@@ -109,16 +109,19 @@ function JobSaves() {
                   dataJob.map((item, index) => (
                     <div key={index} className="item">
                       <div className="image-company">
-                        <Link  to={`/tim-viec-lam/${item?.slug}`}>
+                        <Link to={`/tim-viec-lam/${item?.slug}`}>
                           <img
                             src={item?.employerId?.logoCompany}
                             alt="company"
+                            style={{ objectFit: "contain" }}
                           />
                         </Link>
                       </div>
                       <div className="content">
                         <div className="title-job mb-2">
-                          <Link to={`/tim-viec-lam/${item?.slug}`}>{item?.title}</Link>
+                          <Link to={`/tim-viec-lam/${item?.slug}`}>
+                            {item?.title}
+                          </Link>
                           <span>
                             {formatSalaryNoVND2(
                               item?.salaryMin,

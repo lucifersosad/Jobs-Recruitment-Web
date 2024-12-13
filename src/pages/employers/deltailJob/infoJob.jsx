@@ -37,7 +37,7 @@ function InfoJobEmployer(props) {
     if (record?.jobType) {
       const jobType = dataJobType
         .filter((item) => record.jobType.includes(item.value))
-        .map((dataMap) => dataMap.label)
+        .map((dataMap) => dataMap?.label)
         .join(",");
       setJobType(jobType);
 
@@ -47,26 +47,26 @@ function InfoJobEmployer(props) {
       //Lấy kinh nghiệm làm việc
       const work_Experience = dataExperience
         .filter((item) => item.value === record.workExperience)
-        .map((dataMap) => dataMap.label)
+        .map((dataMap) => dataMap?.label)
         .join(",");
       setWorkExperience(work_Experience);
 
       //Lấy cấp bậc
       const level_Job = dataLevel
         .filter((item) => item.value === record.level)
-        .map((dataMap) => dataMap.label)
+        .map((dataMap) => dataMap?.label)
         .join(",");
       setLevel(level_Job);
 
       //Lấy danh sách phúc lợi
       const walare = dataWelfare
         .filter((item) => record.welfare.includes(item.value))
-        .map((dataMap) => dataMap.label);
+        .map((dataMap) => dataMap?.label);
       setListWalare(walare);
 
       const educational_Level = dataDegree.find(
         (item) => item.value === record.educationalLevel
-      ).label;
+      )?.label;
       setEducationalLevel(educational_Level);
     }
   }, [record]);

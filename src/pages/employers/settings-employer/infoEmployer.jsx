@@ -119,14 +119,14 @@ function InfoEmployer() {
                   </div>
                 </div>
               </div>
-              <div className="demo-employer__footer">
+              {/* <div className="demo-employer__footer">
                 <button className="button-left  button-all">
                   Cập nhật thông tin xác thực
                 </button>
                 <button className="button-right button-all">
                   Tìm hiểu thêm
                 </button>
-              </div>
+              </div> */}
             </div>
             <div className="info-employer card-setting-form-employer card-body-employer">
               <div className="title-settings mb-3">
