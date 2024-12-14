@@ -151,7 +151,7 @@ function NewJob() {
       <div className="container">
         <div className="news__job">
           <MemoizedNewsJobHeader
-            listTag={listTag}
+            // listTag={listTag}
             title={"Việc làm mới nhất"}
             description={
               "Nâng tầm sự nghiệp với các cơ hội việc làm mới nhất tại các công ty hàng đầu. Thu nhập xứng tầm, đãi ngộ hấp dẫn, trải nghiệm đáng giá, khám phá ngay!"

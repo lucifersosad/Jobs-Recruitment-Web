@@ -59,25 +59,25 @@ export const searchJob = [
   {
     type: "divider",
   },
-  {
-    label: (
-      <a
-        className="item-ok"
-        target="_blank"
-        rel="noopener noreferrer"
-        href="#!"
-      >
-        <div className="item-flex">
-          <FontAwesomeIcon icon={faLocationDot} />
-          <span>Ngành nghề / Địa điểm</span>
-        </div>
-        <div className="item-arrow">
-          <FontAwesomeIcon icon={faArrowRight} />
-        </div>
-      </a>
-    ),
-    key: "1",
-  },
+  // {
+  //   label: (
+  //     <a
+  //       className="item-ok"
+  //       target="_blank"
+  //       rel="noopener noreferrer"
+  //       href="#!"
+  //     >
+  //       <div className="item-flex">
+  //         <FontAwesomeIcon icon={faLocationDot} />
+  //         <span>Ngành nghề / Địa điểm</span>
+  //       </div>
+  //       <div className="item-arrow">
+  //         <FontAwesomeIcon icon={faArrowRight} />
+  //       </div>
+  //     </a>
+  //   ),
+  //   key: "1",
+  // },
   
   {
     label: (
@@ -118,75 +118,75 @@ export const searchJob = [
     key: "/viec-lam/viec-lam-da-ung-tuyen",
   },
 
-  {
-    type: "divider",
-  },
-  {
-    label: (
-      <a
-        className="item-ok"
-        target="_blank"
-        rel="noopener noreferrer"
-        href="#!"
-      >
-        <div className="item-flex">
-          <FontAwesomeIcon icon={faSquareCheck} />
-          <span>Việc làm phù hợp</span>
-          <div className="item-ok-hot">
-            HOT
-          </div>
-        </div>
-        <div className="item-arrow">
-          <FontAwesomeIcon icon={faArrowRight} />
-        </div>
-      </a>
-    ),
-    key: "4",
-  },
-  {
-    label: (
-      <a
-        className="item-ok"
-        target="_blank"
-        rel="noopener noreferrer"
-        href="#!"
-      >
-        <div className="item-flex">
-          <FontAwesomeIcon icon={faDisplay} />
-          <span>Việc làm IT</span>
-          <div className="item-ok-new">
-            MỚI
-          </div>
-        </div>
-        <div className="item-arrow">
-          <FontAwesomeIcon icon={faArrowRight} />
-        </div>
-      </a>
-    ),
-    key: "5",
-  },
-  {
-    label: (
-      <a
-        className="item-ok"
-        target="_blank"
-        rel="noopener noreferrer"
-        href="#!"
-      >
-        <div className="item-flex">
-          <FontAwesomeIcon icon={faAddressCard} />
-          <span>Thực tập sinh</span>
-          <div className="item-ok-new">
-            MỚI
-          </div>
-        </div>
-        <div className="item-arrow">
-          <FontAwesomeIcon icon={faArrowRight} />
-        </div>
-      </a>
-    ),
-    key: "6",
-  },
+  // {
+  //   type: "divider",
+  // },
+  // {
+  //   label: (
+  //     <a
+  //       className="item-ok"
+  //       target="_blank"
+  //       rel="noopener noreferrer"
+  //       href="#!"
+  //     >
+  //       <div className="item-flex">
+  //         <FontAwesomeIcon icon={faSquareCheck} />
+  //         <span>Việc làm phù hợp</span>
+  //         <div className="item-ok-hot">
+  //           HOT
+  //         </div>
+  //       </div>
+  //       <div className="item-arrow">
+  //         <FontAwesomeIcon icon={faArrowRight} />
+  //       </div>
+  //     </a>
+  //   ),
+  //   key: "4",
+  // },
+  // {
+  //   label: (
+  //     <a
+  //       className="item-ok"
+  //       target="_blank"
+  //       rel="noopener noreferrer"
+  //       href="#!"
+  //     >
+  //       <div className="item-flex">
+  //         <FontAwesomeIcon icon={faDisplay} />
+  //         <span>Việc làm IT</span>
+  //         <div className="item-ok-new">
+  //           MỚI
+  //         </div>
+  //       </div>
+  //       <div className="item-arrow">
+  //         <FontAwesomeIcon icon={faArrowRight} />
+  //       </div>
+  //     </a>
+  //   ),
+  //   key: "5",
+  // },
+  // {
+  //   label: (
+  //     <a
+  //       className="item-ok"
+  //       target="_blank"
+  //       rel="noopener noreferrer"
+  //       href="#!"
+  //     >
+  //       <div className="item-flex">
+  //         <FontAwesomeIcon icon={faAddressCard} />
+  //         <span>Thực tập sinh</span>
+  //         <div className="item-ok-new">
+  //           MỚI
+  //         </div>
+  //       </div>
+  //       <div className="item-arrow">
+  //         <FontAwesomeIcon icon={faArrowRight} />
+  //       </div>
+  //     </a>
+  //   ),
+  //   key: "6",
+  // },
 ];
 
 export const searchCv = [

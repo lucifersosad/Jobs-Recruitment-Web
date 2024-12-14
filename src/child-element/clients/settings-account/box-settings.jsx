@@ -47,30 +47,30 @@ function BoxSettings() {
                 src={avatar}
                 alt="avatar"
               />
-              <span className="vip-badge">VERIFIED</span>
+              {/* <span className="vip-badge">VERIFIED</span> */}
 
               <ModelChangeImage avatar={avatar}/>
             </div>
             <div className="profile-info col-8">
               <p className="title">Chào mừng bạn</p>
               <h4 className="name">{name}</h4>
-              <div className="account-vip">
+              {/* <div className="account-vip">
                 <span>Tài khoản đã xác thực</span>
-              </div>
-              <div className="upgrade-account">
+              </div> */}
+              {/* <div className="upgrade-account">
                 <a href="#!">
                   <span>
                     <FontAwesomeIcon icon={faArrowUp} />
                   </span>
                   <span>Nâng cấp tài khoản</span>
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
 
           <hr />
 
-          <div className="box-setting-account__body">
+          {/* <div className="box-setting-account__body">
             <div className="job-waiting">
               <div className="col-12 switch-setting">
                 <Switch
@@ -159,9 +159,9 @@ function BoxSettings() {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div
+        {/* <div
           className="text-left box-siderbar"
           style={{ margin: "20px 0 0 0" }}
         >
@@ -188,7 +188,7 @@ function BoxSettings() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
