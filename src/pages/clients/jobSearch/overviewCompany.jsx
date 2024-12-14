@@ -27,7 +27,7 @@ function OverviewCompany({ record }) {
           <h3 className="mb-3  title-all">{infoCompany?.companyName}</h3>
           <div className="box-flex">
             <div className="image-company">
-              <img src={infoCompany?.logoCompany} alt="" />
+              <img src={infoCompany?.logoCompany} alt="" style={{objectFit: "contain"}}/>
             </div>
             <div className="content">
               <div className="address mb-2">
