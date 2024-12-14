@@ -38,22 +38,22 @@ function Header({ setIsCollapsed, isCollapsed }) {
 
           <div className="headerEmployer__navbar">
             <ul className="navbar__ul">
-              <li className="navbar__item main">
+              {/* <li className="navbar__item main">
                 <FontAwesomeIcon icon={faChartLine} />
                 <span>Báo cáo thị trường tuyển dụng</span>
-              </li>
+              </li> */}
               <li className="navbar__item check">
                 <Link to={"./add-jobs-employer"}>
                   <FontAwesomeIcon icon={faPen} />
                   <span to={"./add-jobs-employer"}>Đăng tin</span>
                 </Link>
               </li>
-              <li className="navbar__item check">
+              {/* <li className="navbar__item check">
                 <Link>
                   <FontAwesomeIcon icon={faPen} />
                   <span>Tìm CV</span>
                 </Link>
-              </li>
+              </li> */}
               <li className="navbar__item check">
                 <Link to={"./chat-box"}>
                   <FontAwesomeIcon icon={faFacebookMessenger} />
@@ -66,14 +66,14 @@ function Header({ setIsCollapsed, isCollapsed }) {
                   <span>Trợ giúp</span>
                 </Link>
               </li>
-              <li className="navbar__item no-check">
+              {/* <li className="navbar__item no-check">
                 <Badge count={1}>
                   <Avatar
                     shape="square"
                     icon={<FontAwesomeIcon icon={faBell} />}
                   />
                 </Badge>
-              </li>
+              </li> */}
               <li className="navbar__item check" onClick={handleLogout}>
                 <span>Đăng xuất</span>
               </li>
