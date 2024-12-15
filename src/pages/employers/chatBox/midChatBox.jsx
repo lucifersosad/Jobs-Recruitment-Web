@@ -74,10 +74,10 @@ function MidChatBox({ socket, userData, contentChat, loadMore }) {
         idCheck: idCheck,
       });
 
-      if (idEmployer !== idCheck) {
-        const audio = new Audio(audioMp3);
-        audio.play();
-      }
+      // if (idEmployer !== idCheck) {
+      //   const audio = new Audio(audioMp3);
+      //   audio.play();
+      // }
       loadMore();
     });
     socket.on("SERVER_RETURN_TYPING", () => {

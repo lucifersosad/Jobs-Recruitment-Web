@@ -27,7 +27,6 @@ function Login() {
       const result = await loginUser(valueForm);
      
       if (result.code === 200) {
-        console.log("🚀 ~ handleForm ~ result:", result)
         
         Cookies.set("token-user", result.token, { expires: 3 }); // expires: số ngày cookie sẽ hết hạn
       

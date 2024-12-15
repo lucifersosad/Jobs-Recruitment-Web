@@ -12,10 +12,8 @@ export const loadCityFull = async (objectAddress, setAddress, keyword) => {
     district,
     city,
   };
-  console.log("🚀 ~ loadCityFull ~ objectNew:", objectNew);
   // Gọi hàm
   const resultCity = await getDetailedAddress(objectNew);
-  console.log("🚀 ~ loadCityFull ~ resultCity:", resultCity);
 
   // Nếu mã trả về từ hàm getDetailedAddress là 200
   if (resultCity.code === 200) {
@@ -30,7 +28,6 @@ export const loadCityFull = async (objectAddress, setAddress, keyword) => {
     if (keyword !== "") {
       convertData = [{ value: keyword, label: keyword }, ...convertData];
     }
-    console.log("🚀 ~ loadCityFull ~ convertData:", convertData);
     // Gọi hàm setAddress với convertData
     setAddress(convertData);
   }

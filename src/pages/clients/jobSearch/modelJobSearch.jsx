@@ -105,8 +105,6 @@ function ModelJobSearch({ record, infoUser, showModel }) {
         valueForm.employerId = record.employerId;
       }
 
-      console.log("🚀 ~ handleFormSubmit ~ valueForm:", valueForm);
-
       const result = await recruitmentJob(valueForm);
       if (result.code === 201) {
         form.resetFields();

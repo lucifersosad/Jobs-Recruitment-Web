@@ -24,7 +24,6 @@ function ListJobAppy() {
       setData(decData(result.data));
       setCountPagination(result.countCvs);
     }
-      console.log("🚀 ~ fetchApi ~ result.data:", decData(result.data))
   };
 
   useEffect(() => {

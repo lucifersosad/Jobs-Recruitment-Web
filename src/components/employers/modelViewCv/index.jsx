@@ -66,7 +66,6 @@ function ModelViewCv({ record, dataFull, fetchApi }) {
 
   useEffect(() => {
     if (Object.keys(record).length > 0) {
-      console.log("🚀 ~ useEffect ~ record:", record);
       setData(record);
     }
   }, [record]);

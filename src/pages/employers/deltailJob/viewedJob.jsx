@@ -33,7 +33,6 @@ function ViewedJob({ record }) {
     };
     const result = await userPreviewJob(objectNew);
     if (result.code === 200) {
-      console.log("🚀 ~ fetchApi ~ result?.data:", result?.data);
       setData(result?.data);
       //   setData(result.data);
     }
