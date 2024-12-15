@@ -81,10 +81,10 @@ function MidChatBox({
         idUser: idUser,
         idCheck: idCheck,
       });
-      if (idClient !== idCheck &&  arrayChat.length > 0) {
-        const audio = new Audio(audioMp3);
-        audio.play();
-      }
+      // if (idClient !== idCheck &&  arrayChat.length > 0) {
+      //   const audio = new Audio(audioMp3);
+      //   audio.play();
+      // }
       loadMore();
     });
     //Chức năng typing
@@ -140,7 +140,7 @@ function MidChatBox({
       <div className="mid-chat-client__header p-3">
         <div className="box-info">
           <div className="image">
-            <img src={userData?.logoCompany} alt="avatar" />
+            <img src={userData?.logoCompany} alt="avatar" style={{objectFit: "contain"}} />
           </div>
           <div className="info">
             <div className="name">{userData?.fullName}</div>

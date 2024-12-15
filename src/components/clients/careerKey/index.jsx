@@ -21,7 +21,6 @@ function CareerKey() {
   const fetchApi = async () => {
     const record = await getCountJobToOccupation();
     if (record.code === 200) {
-      console.log("🚀 ~ fetchApi ~ record.data: 1", record);
       setCareerKey(record.data);
     }
   };
