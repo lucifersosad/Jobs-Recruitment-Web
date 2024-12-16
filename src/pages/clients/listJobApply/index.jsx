@@ -108,7 +108,9 @@ function ListJobAppy() {
                             triệu
                           </div>
                         </div>
-                        <div className="name-company">{item?.employerId?.companyName}</div>
+                        <div className="name-company">
+                          {item?.employerId?.companyName}
+                        </div>
                         <div className="time-apply">
                           Thời gian ứng tuyển:{" "}
                           {moment(item?.createdAtApplyJob).format(
@@ -132,15 +134,18 @@ function ListJobAppy() {
                             </a>
                           </div>
                           <div className="box-icon">
-                            <a
-                              target="_blank"
-                              rel="noreferrer"
-                              href={`/chat-box/t/${item?.employerId?._id}`}
-                              className="icons"
-                            >
-                              <FontAwesomeIcon icon={faMessage} />
-                              Nhắn tin
-                            </a>
+                            {item?.statusApplyJob === "accept" && (
+                              <a
+                                target="_blank"
+                                rel="noreferrer"
+                                href={`/chat-box/t/${item?.employerId?._id}`}
+                                className="icons"
+                              >
+                                <FontAwesomeIcon icon={faMessage} />
+                                Nhắn tin
+                              </a>
+                            )}
+
                             <a
                               target="_blank"
                               rel="noreferrer"

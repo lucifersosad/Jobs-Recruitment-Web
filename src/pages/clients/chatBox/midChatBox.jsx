@@ -70,6 +70,7 @@ function MidChatBox({
     });
     //Hàm này nhận tin nhắn từ server
     socket.on("SERVER_RETURN_MESSAGE", (data) => {
+      console.log("🚀 ~ socket.on ~ data:", data)
       setArrayChat((prev) => [...prev, data]);
     });
     //Hàm này load thêm tin nhắn khi có tin nhắn mới tin nhắn mới nhất

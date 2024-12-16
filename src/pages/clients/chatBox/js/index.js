@@ -27,6 +27,7 @@ export const fetchApi = async (setUserData,setContentChat, setHistoryChat,setTyp
 
 export const loadMore = async (setHistoryChat) => {
     const result = await getHistoryChatClient();
+    console.log("🚀 ~ loadMore ~ result:", result)
     if (result.code === 200) {
         setHistoryChat(result.data);
     }
