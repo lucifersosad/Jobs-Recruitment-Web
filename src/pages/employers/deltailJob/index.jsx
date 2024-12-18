@@ -71,7 +71,7 @@ function DetailJob() {
       icon: <FontAwesomeIcon icon={faEye} />,
     },
     {
-      label: <Link to={"./?active_tab=followed_cv"}>CV đang theo dõi</Link>,
+      label: <Link to={"./?active_tab=followed_cv"}>Hồ sơ đang theo dõi</Link>,
       key: "followed_cv",
       icon: <FontAwesomeIcon icon={faPlus} />,
     },
