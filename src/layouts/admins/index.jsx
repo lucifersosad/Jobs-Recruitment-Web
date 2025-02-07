@@ -2,7 +2,7 @@
 import { Layout } from "antd";
 import Header from "./header";
 import { Outlet} from "react-router-dom";
-// import FooterMain from "./footer";
+import FooterMain from "./footer";
 import Sider from "antd/es/layout/Sider";
 import SliderHome from "./SliderHome";
 import { useSelector } from "react-redux";

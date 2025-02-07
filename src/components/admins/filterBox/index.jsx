@@ -30,7 +30,7 @@ function FilterBox(props) {
                     <div className="card-search col-4">
                         <Search
                             onSearch={handleSearch}
-                            placeholder="Vui lòng nhập từ khóa..."
+                            placeholder="Tìm kiếm theo họ tên..."
                             allowClear
                         />
                     </div>

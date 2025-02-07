@@ -227,9 +227,16 @@ strong {
   font-weight: bold;
 }
 
-td,
-td img {
-  vertical-align: top;
+// td,
+// td img {
+//   vertical-align: top;
+// }
+
+.ant-table-body {
+  scrollbar-width: thin;
+  scrollbar-color: #eaeaea transparent;
+  scrollbar-gutter: stable;
+  overflow-y: auto !important;
 }
 
 /* Make sure sup and sub don't mess with your line-heights https://gist.github.com/413930 */
