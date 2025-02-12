@@ -175,14 +175,18 @@ function SliderHome(props) {
 
   return (
     <>
+      <div className="layout_slider-header">
+        <span className=" layout_slider-logo">{collapsed ? "AD" : "ADMIN"}</span>
+      </div>
       <Menu
-        className="layout__slider-menu-admin"
+        className="layout_slider-menu-admin"
         selectedKeys={[location.pathname]}
         openKeys={openKeys}
         onOpenChange={handleOpenChange}
         mode="inline"
         items={items}
         theme="light"
+        style={{border: 0}}
       />
       {collapsed ? (
         <span onClick={clickCollapsed} className="layout_slider-collab">
