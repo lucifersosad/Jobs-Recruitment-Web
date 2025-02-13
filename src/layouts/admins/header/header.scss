@@ -15,14 +15,34 @@
   &__avatar {
     padding: 10px;
     border-radius: 4px;
+    cursor: pointer;
 
     &:hover {
-      background-color: #ECECEC;
+      background-color: #ececec;
+    }
+  }
+
+  &__avatar-content {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__avatar-content-item {
+    padding-left: 10px !important;
+    cursor: pointer;
+    &:hover {
+      background-color: #e6f4ff;
+      span {
+        color: #1677ff;
+      }
     }
   }
 }
 
-.button-collapse {
+.button-collapse,
+.button-logout {
   padding: 10px;
   background-color: #fff;
   display: inline-flex;
@@ -30,7 +50,7 @@
   cursor: pointer;
   border-radius: 4px;
 
-  &:hover{ 
-    background-color: #ECECEC;
+  &:hover {
+    background-color: #ececec;
   }
 }

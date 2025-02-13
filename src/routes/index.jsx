@@ -59,6 +59,7 @@ import InfoCompany from "../pages/clients/infoCompany";
 import JobSearchAdvanced from "../pages/clients/jobSearchAdvanced";
 import AddAccounts from "../pages/admins/addAccounts";
 import ManagementAccounts from "../pages/admins/managementAccounts";
+import LayoutMainAdminNoHeaderAndNoFooter from "../layouts/admins/layout-login";
 
 export const routes = [
   //client
@@ -205,7 +206,7 @@ export const routes = [
   //admin
   {
     path: "admin",
-    element: <LayoutMainAdmin />,
+    element: <LayoutMainAdminNoHeaderAndNoFooter />,
     children: [
       {
         element: <CheckRoutes />,
@@ -216,7 +217,12 @@ export const routes = [
           },
         ],
       },
-
+    ]
+  },
+  {
+    path: "admin",
+    element: <LayoutMainAdmin />,
+    children: [
       {
         element: <PrivateRoutes />,
         children: [
