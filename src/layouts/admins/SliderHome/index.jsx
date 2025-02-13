@@ -63,12 +63,11 @@ function SliderHome(props) {
   }
   const items = [
     getItem(
-      "/dashboard",
-      <span className="layout__slider-item">Trang Chủ</span>,
+      "/admin",
+      <Link to="/admin">Trang chủ</Link>,
       <span className="layout__slider-item">
         <HomeOutlined />
-      </span>,
-      [getItem("/admin/", <Link to="/admin/">Go Home</Link>, null)]
+      </span>
     ),
     //nếu user có quyền xem thì mới hiển thị danh mục công việc
     permissions.includes("job-categories-view") &&
@@ -176,7 +175,7 @@ function SliderHome(props) {
   return (
     <>
       <div className="layout_slider-header">
-        <span className=" layout_slider-logo">{collapsed ? "AD" : "ADMIN"}</span>
+        <Link to={"/admin"} className=" layout_slider-logo">{collapsed ? "AD" : "ADMIN"}</Link>
       </div>
       <Menu
         className="layout_slider-menu-admin"

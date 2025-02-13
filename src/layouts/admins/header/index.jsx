@@ -1,10 +1,15 @@
-import { Avatar, Flex, Popover, Typography } from "antd";
+import { Avatar, Flex, Popover, Skeleton, Space, Typography } from "antd";
 import "./header.scss";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import AvatarContent from "./avatarContent";
+import { useSelector } from "react-redux";
 
 function Header(props) {
   const { collapsed, setCollapsed } = props;
+
+  const infoUser = useSelector(
+    (data) => data.authenticationReducerAdmin.infoUser
+  );
 
   const { Text } = Typography;
 
@@ -20,12 +25,27 @@ function Header(props) {
           </div>
           <div style={{ marginLeft: "auto" }}>
             <Flex>
-              <Popover trigger="click" arrow={false} content={<AvatarContent />}>
-                <Flex align="center" gap={10} className="header-admin__avatar">
-                  <Avatar src="https://cdn-icons-png.flaticon.com/512/9703/9703596.png" />
-                  <Text strong>Admin</Text>
-                </Flex>
-              </Popover>
+              {infoUser ? (
+                <Popover
+                  trigger="click"
+                  arrow={false}
+                  content={<AvatarContent infoUser={infoUser}/>}
+                >
+                  <Flex
+                    align="center"
+                    gap={10}
+                    className="header-admin__avatar"
+                  >
+                    <Avatar src={infoUser.avatar} alt={infoUser.fullName} />
+                    <Text strong>{infoUser.fullName}</Text>
+                  </Flex>
+                </Popover>
+              ) : (
+                <Space style={{padding: "10px"}}>
+                  <Skeleton.Avatar active={true} shape="circle" />
+                  <Skeleton.Input active={true} size="small" />
+                </Space>
+              )}
             </Flex>
           </div>
         </div>

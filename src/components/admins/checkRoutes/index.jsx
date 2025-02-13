@@ -14,7 +14,7 @@ function CheckRoutes() {
      useEffect(() => {
          const checkAuthen = async () => {
             const CheckAuth = await CheckAuthAdmin()
-             //if check token đúng thì gán lại token không rỗng
+             //if check token đúng thì gán lại token không rỗngf
              if (CheckAuth.status) {
                 //nếu đúng thì sẽ dispath thành true và thêm infoUser vào trong store
                  dispatch(authenticationAdmin(true,CheckAuth.infoUser));
