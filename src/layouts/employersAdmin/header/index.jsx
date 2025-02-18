@@ -20,6 +20,7 @@ function Header({ setIsCollapsed, isCollapsed }) {
     Cookies.remove("token-employer");
     window.location.href = "/nha-tuyen-dung/login";
   };
+  
   return (
     <>
       <nav className="headerEmployer text-left">
@@ -66,14 +67,14 @@ function Header({ setIsCollapsed, isCollapsed }) {
                   <span>Trợ giúp</span>
                 </Link>
               </li>
-              {/* <li className="navbar__item no-check">
+              <li className="navbar__item no-check">
                 <Badge count={1}>
                   <Avatar
                     shape="square"
                     icon={<FontAwesomeIcon icon={faBell} />}
                   />
                 </Badge>
-              </li> */}
+              </li>
               <li className="navbar__item check" onClick={handleLogout}>
                 <span>Đăng xuất</span>
               </li>
