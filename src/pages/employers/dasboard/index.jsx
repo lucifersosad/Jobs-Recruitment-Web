@@ -116,14 +116,6 @@ function DashboardEmployer() {
     fetchApi();
   }, [infoUserEmployer]);
 
-  useEffect(() => {
-    requestForToken();
-  }, []);
-
-  onMessageListener((payload) => {
-    console.log("🚀 ~ Message received:", payload);
-  });
-
   return (
     <>
       {authenMainEmployer?.status === true && (

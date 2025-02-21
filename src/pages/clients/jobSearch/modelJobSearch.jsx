@@ -103,6 +103,7 @@ function ModelJobSearch({ record, infoUser, showModel }) {
       if (record) {
         valueForm.idJob = record._id;
         valueForm.employerId = record.employerId;
+        valueForm.title = record.title
       }
 
       const result = await recruitmentJob(valueForm);
