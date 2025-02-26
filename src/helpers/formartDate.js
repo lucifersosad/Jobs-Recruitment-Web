@@ -1,4 +1,8 @@
 import { format } from "date-fns";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/vi";
+
 export function formatDate(dateTimeString) {
   const dateObject = new Date(dateTimeString);
 
@@ -76,5 +80,17 @@ export function addWorkingDates(fromDate, days) {
   }
   return fromDate;
 }
+
+export const formatNotificationTime = (date) => {
+  dayjs.extend(relativeTime);
+  dayjs.locale("vi");
+
+  const now = dayjs();
+  const diffDays = now.diff(date, "day");
+
+  if (diffDays < 1) return `Hôm nay`;
+  if (diffDays < 30) return `${diffDays} ngày trước`;
+  return dayjs(date).format("DD/MM/YYYY");
+};
 
 //   addWorkingDates(new Date(),5)
