@@ -16,11 +16,12 @@ const NotificationEmployer = () => {
   const [api, contextHolder] = notification.useNotification();
 
   const [notifications, setNotifications] = useState([]);
+  const [isRemaining, setIsRemaining] = useState(true)
 
   const getData = async () => {
     const res = await getAllNotificationsEmployer();
-    console.log("🚀 ~ getData ~ res.data:", res.data);
     setNotifications(res.data);
+    setIsRemaining(res.metadata.remaining_items > 0)
   };
 
   const handleReadAll = async () => {
@@ -29,7 +30,6 @@ const NotificationEmployer = () => {
         ...item,
         is_seen: true
       }))
-      console.log("🚀 ~ updatedNotification ~ updatedNotification:", updatedNotifications)
       setNotifications(updatedNotifications)
       await readAllNotifications();
       // getData();
@@ -44,7 +44,6 @@ const NotificationEmployer = () => {
       const updatedNotifications = notifications.map((item) =>
         item._id === id ? { ...item, is_seen: true } : item
       );
-      console.log("🚀 ~ updatedNotification ~ updatedNotification:", updatedNotifications)
       setNotifications(updatedNotifications)
       await readNotification(id);
     } catch (error) {
@@ -69,7 +68,6 @@ const NotificationEmployer = () => {
   }, []);
 
   onMessageListener(async (payload) => {
-    console.log("🚀 ~ Message received:", payload);
     api.info({
       message: payload.notification.title,
       description: (
@@ -89,6 +87,8 @@ const NotificationEmployer = () => {
   const listNotification = useMemo(
     () => (
       <ListNotification
+        isRemaining={isRemaining}
+        setIsRemaining={setIsRemaining}
         hide={hide}
         notifications={notifications}
         setNotifications={setNotifications}

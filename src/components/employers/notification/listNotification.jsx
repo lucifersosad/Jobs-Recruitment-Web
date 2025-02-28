@@ -9,6 +9,8 @@ import { formatDateTime, formatNotificationTime } from "../../../helpers/formart
 import { CheckCircleFilled, LoadingOutlined, UserOutlined } from "@ant-design/icons";
 
 const ListNotification = ({
+  isRemaining,
+  setIsRemaining,
   hide,
   notifications,
   setNotifications,
@@ -40,15 +42,15 @@ const ListNotification = ({
         }))
       )
     );
-    const res = await getAllNotificationsEmployer();
+    const res = await getAllNotificationsEmployer(notifications[notifications.length - 1]?._id, 3);
     const newNotifications = notifications.concat(res.data);
     setNotifications(newNotifications);
-    // setList(newData);
+    setIsRemaining(res.metadata.remaining_items > 0)
     setLoading(false);
   };
 
   const loadMore =
-    !initLoading && !loading ? (
+    isRemaining && !initLoading && !loading ? (
       <div
         style={{
           textAlign: "center",
