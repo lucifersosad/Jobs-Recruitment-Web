@@ -90,10 +90,10 @@ const ListNotification = ({
             }
             className="list-notification__item"
             onClick={() => {
-              handleRead(item?._id);
               navigate(
                 `/nha-tuyen-dung/app/detail-jobs/${item?.extra?.job_id}/?active_tab=apply_cv`
               );
+              handleRead(item?._id);
               hide();
             }}
           >

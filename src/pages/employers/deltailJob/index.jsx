@@ -26,10 +26,13 @@ function DetailJob() {
   const [data, setData] = useState({});
   const [cv_open_contact, setCvOpenContact] = useState(0);
   const [countViewCv, setCountViewCv] = useState(0);
+  const [loading, setLoading] = useState(false)
 
   const fetchApi = async (status="") => {
+    setLoading(true)
     const result = await infoJobsEmployer(param.id,status);
     if (result.code === 200) {
+      setLoading(false)
       setData(decData(result.data));
     }
       
@@ -134,7 +137,7 @@ function DetailJob() {
           <div className="item-box">
             {queryGet === "job" && <MemoizedInfoJobEmployer record={data} />}
             {queryGet === "apply_cv" && (
-              <ApplyCv record={data} fetchApi={fetchApi} />
+              <ApplyCv record={data} fetchApi={fetchApi} loading={loading}/>
             )}
             {queryGet === "viewed_job" && <ViewedJob record={data} />}
             {queryGet === "followed_cv" && <FollowedCv record={data} />}

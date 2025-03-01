@@ -17,3 +17,8 @@ export const readNotification = async (id) => {
     const result = await AuthPost(`/notifications/read/${id}`,{}, checkToken);
     return result;
 }
+
+export const countUnreadNotifications = async () => {
+    const result = await AuthGet(`/notifications/count-unread`, checkToken);
+    return result;
+}

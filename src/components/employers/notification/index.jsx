@@ -7,6 +7,7 @@ import { onMessageListener, requestForToken } from "../../../helpers/firebase";
 import ListNotification from "./listNotification";
 import "./notification.scss";
 import {
+  countUnreadNotifications,
   getAllNotificationsEmployer,
   readAllNotifications,
   readNotification,
@@ -14,9 +15,23 @@ import {
 
 const NotificationEmployer = () => {
   const [api, contextHolder] = notification.useNotification();
-
+  const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [isRemaining, setIsRemaining] = useState(true)
+  const [unread, setUnread] = useState(0)
+
+  useEffect(() => {
+    countUnread();
+  }, [notifications])
+
+  const countUnread = async () => {
+    try {
+      const res = await countUnreadNotifications();
+      setUnread(res.data);
+    } catch (error) {
+      console.log("🚀 ~ handleReadAll ~ error:", error);
+    }
+  };
 
   const getData = async () => {
     const res = await getAllNotificationsEmployer();
@@ -26,34 +41,32 @@ const NotificationEmployer = () => {
 
   const handleReadAll = async () => {
     try {
+      await readAllNotifications();
       const updatedNotifications = notifications.map((item) => ({
         ...item,
         is_seen: true
       }))
       setNotifications(updatedNotifications)
-      await readAllNotifications();
-      // getData();
+      // countUnread()
     } catch (error) {
       console.log("🚀 ~ handleReadAll ~ error:", error);
     }
   };
 
   const handleRead = async(id) => {
-    try {
-      
+    try {    
+      await readNotification(id);
       const updatedNotifications = notifications.map((item) =>
         item._id === id ? { ...item, is_seen: true } : item
       );
       setNotifications(updatedNotifications)
-      await readNotification(id);
+      // countUnread()
     } catch (error) {
       console.log("🚀 ~ handleRead ~ error:", error)
     }
   }
 
-  const { Text, Title, Link } = Typography;
-
-  const [open, setOpen] = useState(false);
+  const { Title, Link } = Typography;
 
   const hide = () => {
     setOpen(false);
@@ -104,7 +117,6 @@ const NotificationEmployer = () => {
     <>
       {contextHolder}
       <Popover
-      
         open={open}
         onOpenChange={handleOpenChange}
         trigger={["click", "focus"]}
@@ -121,17 +133,11 @@ const NotificationEmployer = () => {
             <Title level={5} style={{ marginBottom: 0 }}>
               Thông báo
             </Title>
-            {/* <Avatar
-              size={35}
-              // style={{ background: "#fff", color: "green" }}
-              shape="square"
-              icon={<CheckCircleOutlined />}
-            /> */}
             <Link onClick={handleReadAll}>Đã xem tất cả</Link>
           </Flex>
         }
       >
-        <Badge count={1}>
+        <Badge count={unread}>
           <Avatar shape="square" icon={<FontAwesomeIcon icon={faBell} />} />
         </Badge>
       </Popover>
