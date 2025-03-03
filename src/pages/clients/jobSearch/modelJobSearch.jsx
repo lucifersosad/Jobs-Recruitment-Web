@@ -244,6 +244,8 @@ function ModelJobSearch({ record, infoUser, showModel }) {
                     name="phone"
                     rules={[
                       {
+                        required: true,
+                        type: "number",
                         validator: async (_, value) => {
                           await phoneCheck(value);
                         },

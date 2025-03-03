@@ -44,11 +44,8 @@ function SuggestedClientSettings() {
     //Lấy ra trạng thái của authenMainClient false là chưa đăng nhập true là đã đăng nhập
     const { infoUser } = authenMainClient;
     //Nếu đã đăng nhập thì sẽ set giá trị mặc định cho form
-    setJobPosition(infoUser?.job_position);
-
     const objectVlue = {
-      ...infoUser,
-      job_position: infoUser?.job_position.map((item) => item.value),
+      ...infoUser
     };
     if(infoUser?.dateOfBirth){
       objectVlue.dateOfBirth = moment(infoUser?.dateOfBirth);
@@ -194,38 +191,7 @@ function SuggestedClientSettings() {
                 <h2>Nhu cầu công việc</h2>
               </div>
               <Form.Item
-                label="Vị trí công việc"
-                name="job_position"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng nhập vị trí công việc",
-                  },
-                ]}
-              >
-                <Select
-                  maxTagCount={3}
-                  maxTagTextLength={10}
-                  maxCount={MAX_COUNT}
-                  mode="multiple"
-                  showSearch
-                  onSearch={(input) => changeValue(input)}
-                  filterOption={(input, option) =>
-                    removeAccents(option.label)
-                      .toLowerCase()
-                      .includes(removeAccents(input).toLowerCase()) ||
-                    removeAccents(option.value)
-                      .toLowerCase()
-                      .includes(removeAccents(input).toLowerCase())
-                  }
-                  placeholder="Nhập vị trí công việc"
-                  size="large"
-                  options={jobPosition}
-                  notFoundContent={contentSelect}
-                />
-              </Form.Item>
-              <Form.Item
-                label="Ngành nghề"
+                label="Vị trí chuyên môn"
                 name="job_categorie_id"
                 rules={[
                   {
@@ -247,6 +213,9 @@ function SuggestedClientSettings() {
                   placeholder="-- Chọn ngành nghề mong muốn của bạn --"
                   size="large"
                   options={jobCategoires}
+                  // mode="multiple"
+                  // maxTagCount={3}
+                  // maxCount={5}
                 />
               </Form.Item>
               <Form.Item
@@ -270,7 +239,7 @@ function SuggestedClientSettings() {
                   }
                   mode="multiple"
                   maxTagCount={3}
-                  maxTagTextLength={10}
+                  // maxTagTextLength={10}
                   maxCount={MAX_COUNT}
                   showSearch
                   placeholder="-- Chọn kỹ năng của bạn --"
