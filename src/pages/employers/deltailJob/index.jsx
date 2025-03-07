@@ -33,9 +33,9 @@ function DetailJob() {
     const result = await infoJobsEmployer(param.id,status);
     if (result.code === 200) {
       setLoading(false)
+      console.log("🚀 ~ fetchApi ~ decData(result.data):", decData(result.data))
       setData(decData(result.data));
-    }
-      
+    }    
   };
   useEffect(() => {
     fetchApi();

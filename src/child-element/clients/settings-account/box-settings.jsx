@@ -37,6 +37,12 @@ function BoxSettings() {
     setLoading(false);
   }, [authenMainClient]);
 
+  if (authenMainClient.status === false) return (
+    <div className="col-4 box-setting-account">
+      Banner
+    </div>
+  )
+
   return (
     <>
       <div className="col-4 box-setting-account">
