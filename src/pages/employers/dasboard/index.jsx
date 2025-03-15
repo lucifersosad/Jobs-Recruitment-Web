@@ -31,9 +31,10 @@ import "aplayer/dist/APlayer.min.css";
 import APlayer from "aplayer";
 import { useSelector } from "react-redux";
 import { statisticCompany } from "../../../services/employers/employer-userApi";
+import { onMessageListener, requestForToken } from "../../../helpers/firebase";
 function DashboardEmployer() {
   const [imageRole, setImageRole] = React.useState(MEMBER);
-const [data, setData] = useState([])
+  const [data, setData] = useState([]);
   const [objectCount, setObjectCount] = useState({
     coutCompaignIsOpen: 0,
     coutCompaignIsPending: 0,
@@ -45,8 +46,6 @@ const [data, setData] = useState([])
     (status) => status.authenticationReducerEmployer
   );
   const [infoUserEmployer, setInfoUserEmployer] = useState({});
-
- 
 
   const config = {
     data,
@@ -102,10 +101,8 @@ const [data, setData] = useState([])
 
   useEffect(() => {
     const fetchApi = async () => {
-    
       const result = await statisticCompany();
-      if(result.code === 200){
-        console.log(result);
+      if (result.code === 200) {
         setObjectCount({
           coutCompaignIsOpen: result?.data?.coutCompaignIsOpen,
           coutCompaignIsPending: result?.data?.coutCompaignIsPending,
@@ -113,11 +110,12 @@ const [data, setData] = useState([])
           coutCvApproved: result?.data?.coutCvApproved,
         });
 
-        setData(result?.data?.groupedCvs)
+        setData(result?.data?.groupedCvs);
       }
     };
     fetchApi();
   }, [infoUserEmployer]);
+
   return (
     <>
       {authenMainEmployer?.status === true && (

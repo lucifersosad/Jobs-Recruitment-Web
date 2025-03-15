@@ -243,7 +243,7 @@ function FormEdit(props) {
       </span>
       <Modal
         style={{
-          top: 20,
+          top: 20
         }}
         width={"80%"}
         title="Chỉnh Công Việc"

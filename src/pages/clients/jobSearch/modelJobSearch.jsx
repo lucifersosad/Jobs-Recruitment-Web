@@ -103,6 +103,7 @@ function ModelJobSearch({ record, infoUser, showModel }) {
       if (record) {
         valueForm.idJob = record._id;
         valueForm.employerId = record.employerId;
+        valueForm.title = record.title
       }
 
       const result = await recruitmentJob(valueForm);
@@ -243,6 +244,8 @@ function ModelJobSearch({ record, infoUser, showModel }) {
                     name="phone"
                     rules={[
                       {
+                        required: true,
+                        type: "number",
                         validator: async (_, value) => {
                           await phoneCheck(value);
                         },

@@ -12,6 +12,8 @@ import {
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
+import NotificationEmployer from "../../../components/employers/notification";
+
 function Header({ setIsCollapsed, isCollapsed }) {
   const handleCollapsed = () => {
     setIsCollapsed(!isCollapsed);
@@ -20,6 +22,7 @@ function Header({ setIsCollapsed, isCollapsed }) {
     Cookies.remove("token-employer");
     window.location.href = "/nha-tuyen-dung/login";
   };
+  
   return (
     <>
       <nav className="headerEmployer text-left">
@@ -66,14 +69,9 @@ function Header({ setIsCollapsed, isCollapsed }) {
                   <span>Trợ giúp</span>
                 </Link>
               </li>
-              {/* <li className="navbar__item no-check">
-                <Badge count={1}>
-                  <Avatar
-                    shape="square"
-                    icon={<FontAwesomeIcon icon={faBell} />}
-                  />
-                </Badge>
-              </li> */}
+              <li className="navbar__item no-check">
+                <NotificationEmployer />
+              </li>
               <li className="navbar__item check" onClick={handleLogout}>
                 <span>Đăng xuất</span>
               </li>

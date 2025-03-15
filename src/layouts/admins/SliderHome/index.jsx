@@ -14,8 +14,11 @@ import {
   faPersonMilitaryPointing,
   faGbp,
   faArrowRightFromBracket,
+  faUser,
+  faShieldHalved,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 function SliderHome(props) {
   const { collapsed, setCollapsed } = props;
@@ -31,6 +34,25 @@ function SliderHome(props) {
 
   const location = useLocation();
 
+  const [openKeys, setOpenKeys] = useState([]);
+
+  const handleOpenChange = (keys) => {
+    setOpenKeys(keys);
+  };
+
+  const getOpenKeys = () => {
+    const path = location.pathname;
+    if (path.includes("categories")) return ["categories"];
+    if (path.includes("jobs")) return ["jobs"];
+    if (path.includes("permission")) return ["permission"];
+    if (path.includes("accounts")) return ["accounts"];
+    return [];
+  };
+
+  useEffect(() => {
+    setOpenKeys(getOpenKeys());
+  }, [location.pathname]);
+
   function getItem(key, label, icon, children) {
     return {
       key,
@@ -41,12 +63,11 @@ function SliderHome(props) {
   }
   const items = [
     getItem(
-      "/dashboard",
-      <span className="layout__slider-item">Trang Chủ</span>,
+      "/admin",
+      <Link to="/admin">Trang chủ</Link>,
       <span className="layout__slider-item">
         <HomeOutlined />
-      </span>,
-      [getItem("/admin/", <Link to="/admin/">Go Home</Link>, null)]
+      </span>
     ),
     //nếu user có quyền xem thì mới hiển thị danh mục công việc
     permissions.includes("job-categories-view") &&
@@ -96,7 +117,7 @@ function SliderHome(props) {
         "permission",
         <span className="layout__slider-item">Quyền</span>,
         <span className="layout__slider-item">
-          <FontAwesomeIcon icon={faPersonMilitaryPointing} />
+          <FontAwesomeIcon icon={faShieldHalved} />
         </span>,
         [
           getItem(
@@ -116,8 +137,29 @@ function SliderHome(props) {
           ),
         ]
       ),
+    //nếu user có quyền xem thì mới hiển thị danh mục công việc
+    permissions.includes("accounts-view") &&
+      getItem(
+        "accounts",
+        <span className="layout__slider-item">Tài khoản</span>,
+        <span className="layout__slider-item">
+          <FontAwesomeIcon icon={faUser} />
+        </span>,
+        [
+          getItem(
+            "/admin/add-accounts",
+            <Link to="add-accounts">Thêm Tài Khoản</Link>,
+            null
+          ),
+          getItem(
+            "/admin/management-accounts",
+            <Link to="management-accounts">Quản Lý Tài Khoản</Link>,
+            null
+          ),
+        ]
+      ),
     getItem(
-      "/dashboard",
+      "",
       <span className="layout__slider-item" onClick={handleLogout}>
         Đăng xuất
       </span>,
@@ -129,15 +171,21 @@ function SliderHome(props) {
   function clickCollapsed() {
     setCollapsed(!collapsed);
   }
+
   return (
     <>
+      <div className="layout_slider-header">
+        <Link to={"/admin"} className=" layout_slider-logo">{collapsed ? "AD" : "ADMIN"}</Link>
+      </div>
       <Menu
-        className="layout__slider-menu-admin"
-        defaultSelectedKeys={location.pathname}
-        defaultOpenKeys={["categories"]}
+        className="layout_slider-menu-admin"
+        selectedKeys={[location.pathname]}
+        openKeys={openKeys}
+        onOpenChange={handleOpenChange}
         mode="inline"
         items={items}
         theme="light"
+        style={{border: 0}}
       />
       {collapsed ? (
         <span onClick={clickCollapsed} className="layout_slider-collab">
