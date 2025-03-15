@@ -30,7 +30,7 @@ const ExperienceCard = ({profile, loading, getData}) => {
           }
           title={"Kinh nghiệm"}
         >
-          {profile?.experiences && profile?.experiences?.length === 0 ? (
+          {!profile?.experiences || profile?.experiences?.length === 0 ? (
             <Flex align="center">
               <Space size={"large"} direction="vertical" style={{width: "50%"}}>
                 <Typography.Text style={{fontSize: "20px"}}>
@@ -102,7 +102,7 @@ const ExperienceCard = ({profile, loading, getData}) => {
                         justify="space-between"
                         align="center"
                       >
-                        {item?.attachments.map((item, index) => (
+                        {item?.attachments?.map((item, index) => (
                           <div
                             key={index}
                             style={{
@@ -133,7 +133,7 @@ const ExperienceCard = ({profile, loading, getData}) => {
         setOpen={setOpen}
         getData={getData}
         experience={experience}
-        experiences={profile?.experiences}
+        experiences={profile?.experiences || []}
       />
     </>
   );
