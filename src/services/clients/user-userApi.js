@@ -94,3 +94,7 @@ export const updateExperience = async (valueForm) => {
     const result = await AuthPost(`/users/update-experience`,valueForm, checkToken);
     return result;
 }
+export const updateEducation = async (valueForm) => {
+    const result = await AuthPost(`/users/update-education`,valueForm, checkToken);
+    return result;
+}
