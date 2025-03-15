@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
 import "./profile.scss";
 import { getProfile } from "../../../services/clients/user-userApi";
-import { useEffect, useState } from "react";
-import ExperienceCard from "./ExperienceCard";
+import ExperienceCard from "./Experience/ExperienceCard";
 
 const Profile = () => {
   const [loadingProfile, setLoadingProfile] = useState(true);

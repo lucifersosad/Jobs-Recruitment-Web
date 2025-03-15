@@ -1,6 +1,5 @@
 import { Avatar, Button, Card, Flex, Image, List, Space, Typography } from "antd";
 import { PlusSquareOutlined, EditOutlined } from "@ant-design/icons";
-import "./profile.scss";
 import ExperienceModal from "./ExperienceModal";
 import { useState } from "react";
 

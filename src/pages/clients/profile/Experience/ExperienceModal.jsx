@@ -2,7 +2,7 @@
 import { Modal, notification } from "antd";
 import { useEffect, useState } from "react";
 import FormExperience from "./FormExperience";
-import { getSkillList } from "../../../services/clients/skillApi";
+import { getSkillList } from "../../../../services/clients/skillApi";
 
 const ExperienceModal = ({
   open,

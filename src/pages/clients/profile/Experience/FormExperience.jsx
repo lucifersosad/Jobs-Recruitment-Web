@@ -16,10 +16,10 @@ import {
 import { DeleteOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { removeAccents } from "../../../helpers/removeAccents";
-import { companies, positions } from "../../../helpers/mockData";
-import UploadImages from "../../../components/alls/UploadImage";
-import { updateExperience } from "../../../services/clients/user-userApi";
+import { removeAccents } from "../../../../helpers/removeAccents";
+import { companies, positions } from "../../../../helpers/mockData";
+import UploadImages from "../../../../components/alls/UploadImage";
+import { updateExperience } from "../../../../services/clients/user-userApi";
 
 const FormExperience = ({ getData, experience, experiences, closeModal, api, skills }) => {
   const [openAlert, setOpenAlert] = useState(false)
@@ -44,6 +44,7 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
     const present = experience && !getFieldValue("end_time")
 
     setPresent(present)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearchCompanies = async (searchText) => {
