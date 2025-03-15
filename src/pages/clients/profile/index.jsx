@@ -4,6 +4,7 @@ import { getProfile } from "../../../services/clients/user-userApi";
 import ExperienceCard from "./Experience/ExperienceCard";
 import { Space } from "antd";
 import EducationCard from "./Education/EducationCard";
+import SkillCard from "./Skill/SkillCard";
 
 const Profile = () => {
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -28,6 +29,7 @@ const Profile = () => {
         <Space direction="vertical" size="large" style={{width: "100%"}}>
           <EducationCard getData={getData} loading={loadingProfile} profile={profile} />
           <ExperienceCard getData={getData} loading={loadingProfile} profile={profile} />
+          <SkillCard getData={getData} loading={loadingProfile} profile={profile} />
         </Space>
       </div>
     </>

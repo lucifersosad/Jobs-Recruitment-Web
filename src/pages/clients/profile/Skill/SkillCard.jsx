@@ -1,15 +1,15 @@
-import { Avatar, Button, Card, Flex, Image, List, Space, Typography } from "antd";
+import { Avatar, Button, Card, Flex, Image, List, Rate, Space, Typography } from "antd";
 import { PlusSquareOutlined, EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import EducationModal from "./EducationModal";
+import SkillModal from "./SkillModal";
 
-const EducationCard = ({profile, loading, getData}) => {
+const SkillCard = ({profile, loading, getData}) => {
   const [open, setOpen] = useState(false);
-  const [education, setEducation] = useState();
+  const [skill, setSkill] = useState();
 
   const handleAdd = () => {
     setOpen(true);
-    setEducation(undefined);
+    setSkill(undefined);
   }
 
   return (
@@ -19,7 +19,7 @@ const EducationCard = ({profile, loading, getData}) => {
           loading={loading}
           className="box-profile"
           extra={
-            profile?.educations?.length > 0 && (
+            profile?.skills?.length > 0 && (
               <Flex>
                 <PlusSquareOutlined
                   className="icon-edit"
@@ -28,21 +28,21 @@ const EducationCard = ({profile, loading, getData}) => {
               </Flex>
             )
           }
-          title={"Học vấn"}
+          title={"Kỹ năng"}
         >
-          {profile?.educations && profile?.educations?.length === 0 ? (
+          {!profile?.skills || profile.skills?.length === 0 ? (
             <Flex align="center">
               <Space size={"large"} direction="vertical" style={{width: "50%"}}>
                 <Typography.Text style={{fontSize: "20px"}}>
-                  Cập nhật thông tin học vấn của bạn 
+                  Cập nhật thông tin kỹ năng của bạn 
                 </Typography.Text>
                 <Button type="primary" ghost size="large" onClick={handleAdd}>Thêm mục</Button>
               </Space>
-              <Avatar size={150} src={"https://www.topcv.vn/v3/profile/profile-png/profile-education.png"} shape="square" style={{marginLeft: "auto"}} className="ml-5"/>
+              <Avatar size={150} src={"https://www.topcv.vn/v3/profile/profile-png/profile-skills.png"} shape="square" style={{marginLeft: "auto"}} className="ml-5"/>
             </Flex>
           ) : (
             <List className="box-profile__list" itemLayout="vertical">
-              {profile?.educations?.map((item, index) => (
+              {profile?.skills?.map((item, index) => (
                 <List.Item
                   key={index}
                   className="box-profile__item"
@@ -51,7 +51,7 @@ const EducationCard = ({profile, loading, getData}) => {
                       className="icon-edit"
                       onClick={() => {
                         setOpen(true);
-                        setEducation(item);
+                        setSkill(item);
                       }}
                     />
                   }
@@ -60,20 +60,12 @@ const EducationCard = ({profile, loading, getData}) => {
                     avatar={
                       <Avatar
                         size={60}
-                        src={`https://www.topcv.vn/v3/profile/profile-icon-svg/icon-education.svg`}
+                        src={`https://www.topcv.vn/v3/profile/profile-icon-svg/icon-skills.svg`}
                       />
                     }
-                    title={item.school_name}
+                    title={item.title}
                     description={
-                      <Space direction="vertical">
-                        <span>{item.title}</span>
-                        <span>
-                          {`${item.start_month}/${item.start_year} - ` +
-                            (item.end_month && item.end_year
-                              ? `${item.end_month}/${item.end_year}`
-                              : "Hiện tại")}
-                        </span>
-                      </Space>
+                      <Rate style={{fontSize: "28px"}} disabled allowHalf value={parseFloat(item.rate)}/>
                     }
                   />
                   <Space
@@ -94,14 +86,14 @@ const EducationCard = ({profile, loading, getData}) => {
           )}
         </Card>
       </div>
-      <EducationModal
+      <SkillModal
         open={open}
         setOpen={setOpen}
         getData={getData}
-        education={education}
-        educations={profile?.educations || []}
+        skill={skill}
+        skills={profile?.skills || []}
       />
     </>
   );
 };
-export default EducationCard;
+export default SkillCard;

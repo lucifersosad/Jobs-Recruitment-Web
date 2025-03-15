@@ -109,9 +109,9 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
       // console.log("🚀 ~ FormExperience ~ experiences:", experiences);
       // console.log("🚀 ~ FormExperience ~ experience:", experience);
 
-      const index = experiences.findIndex((exp) => exp._id === experience?._id);
+      const index = experiences?.findIndex((exp) => exp._id === experience?._id);
 
-      if (index !== -1) {
+      if (index !== undefined && index !== -1) {
         experiences[index] = { ...experiences[index], ...valueForm }
       } else {
         experiences.push(valueForm)
@@ -209,7 +209,7 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
                 options={optionsCompany}
                 onSearch={handleSearchCompanies}
               >
-                <Input placeholder="Công Ty" />
+                <Input placeholder="Nhập công ty" />
               </AutoComplete>
             </Form.Item>
           </Col>
@@ -220,7 +220,7 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
                 options={optionsPosition}
                 onSearch={handleSearchPositions}
               >
-                <Input placeholder="Chức vụ" />
+                <Input placeholder="Nhập chức vụ" />
               </AutoComplete>
             </Form.Item>
           </Col>
@@ -281,7 +281,7 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
 
           <Col xs={24}>
             <Form.Item label="Mô tả chi tiết" name="description">
-              <TextArea rows={4} minLength={4} />
+              <TextArea rows={4} minLength={4} placeholder="Mô tả chi tiết công việc, những gì đạt được trong quá trình làm việc"/>
             </Form.Item>
           </Col>
 

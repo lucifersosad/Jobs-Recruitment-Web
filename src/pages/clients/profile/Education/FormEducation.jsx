@@ -112,12 +112,12 @@ const FormEducation = ({ getData, education, educations, closeModal, api, skills
       valueForm.end_year = present ? "" : endTime[1];
 
       // console.log("🚀 ~ handleForm ~ valueForm:", valueForm);
-      console.log("🚀 ~ FormExperience ~ educations:", educations);
+      // console.log("🚀 ~ FormExperience ~ educations:", educations);
       // console.log("🚀 ~ FormExperience ~ education:", education);
 
       const index = educations?.findIndex((exp) => exp._id === education?._id);
 
-      if (index !== -1) {
+      if (index !== undefined && index !== -1) {
         educations[index] = { ...educations[index], ...valueForm }
       } else {
         educations.push(valueForm)
