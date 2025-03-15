@@ -392,13 +392,13 @@ input[type="button"] {
     color: #fff;
   }
   /* Hide required mark */
-  .ant-form-item
-    .ant-form-item-label
-    > label.ant-form-item-required:not(
-      .ant-form-item-required-mark-optional
-    )::before {
-    display: none;
-  }
+  // .ant-form-item
+  //   .ant-form-item-label
+  //   > label.ant-form-item-required:not(
+  //     .ant-form-item-required-mark-optional
+  //   )::before {
+  //   display: none;
+  // }
   .ant-select-dropdown
     .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
     background-color: #fda4c8 !important;

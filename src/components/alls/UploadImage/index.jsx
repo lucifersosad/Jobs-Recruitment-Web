@@ -1,42 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Image, message, Upload } from "antd";
 
-const UploadImage = () => {
+const UploadImages = ({fileList, setFileList}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-  const [fileList, setFileList] = useState([
-    {
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      percent: 50,
-      name: "image.png",
-      status: "uploading",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      name: "image.png",
-      status: "error",
-    },
-  ]);
+
+  // const [fileList, setFileList] = useState([
+  //   {
+  //     name: "image.png",
+  //     status: "done",
+  //     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+  //   },
+  //   {
+  //     name: "image.png",
+  //     status: "done",
+  //     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+  //   },
+  //   {
+  //     name: "image.png",
+  //     status: "done",
+  //     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+  //   },
+  //   {
+  //     name: "image.png",
+  //     status: "done",
+  //     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+  //   },
+  //   {
+  //     percent: 50,
+  //     name: "image.png",
+  //     status: "uploading",
+  //     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+  //   },
+  //   {
+  //     name: "image.png",
+  //     status: "error",
+  //   },
+  // ]);
 
   const uploadButton = (
     <button
@@ -77,8 +78,7 @@ const UploadImage = () => {
 
   const handleChange = ({ fileList: newFileList }) => {
     console.log("🚀 ~ handleChange ~ newFileList:", newFileList)
-    setFileList(newFileList)
-    
+    setFileList(newFileList)    
   };
 
   const props = {
@@ -111,4 +111,4 @@ const UploadImage = () => {
     </>
   );
 };
-export default UploadImage;
+export default UploadImages;
