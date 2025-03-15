@@ -10,83 +10,94 @@ import {
   Input,
   Modal,
   Row,
+  Spin,
   Typography,
 } from "antd";
 
-import { DeleteOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
+import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import { removeAccents } from "../../../../helpers/removeAccents";
-import { companies, positions } from "../../../../helpers/mockData";
+import {  majors } from "../../../../helpers/mockData";
 import UploadImages from "../../../../components/alls/UploadImage";
-import { updateExperience } from "../../../../services/clients/user-userApi";
+import { updateEducation, updateExperience } from "../../../../services/clients/user-userApi";
+import { getSkillList } from "../../../../services/clients/skillApi";
+import { getListSchool } from "../../../../services/common";
 
-const FormExperience = ({ getData, experience, experiences, closeModal, api, skills }) => {
+const FormEducation = ({ getData, education, educations, closeModal, api, skills }) => {
   const [openAlert, setOpenAlert] = useState(false)
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
-  const [optionsCompany, setOptionsCompany] = useState([]);
-  const [optionsPosition, setOptionsPosition] = useState([]);
+  const [optionsUniversity, setOptionsUniversity] = useState([]);
+  const [optionsMajor, setOptionsMajor] = useState([]);
   const [present, setPresent] = useState(false);
-  const [images, setImages] = useState([]);
+
+  const [loading, setLoading] = useState(false)
+  const debounceRef = useRef(null);
 
   const [form] = Form.useForm();
 
   const { TextArea } = Input;
 
   useEffect(() => {
-    setImages(
-      getFieldValue("attachments").map((item) => ({
-        url: item.image,
-      }))
-    );
-
-    const present = experience && !getFieldValue("end_time")
-
+    const present = education && !getFieldValue("end_time")
     setPresent(present)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSearchCompanies = async (searchText) => {
+  useEffect(() => {
+    const getUniversities = async () => {
+      const result = await getListSchool();
+      const valueUniversity = result.data.map((item) => ({ value: item.name }));
+      setOptionsUniversity(valueUniversity)
+    }
+    getUniversities();
+  }, [])
+
+  const handleSearchUniversities = async (searchText) => {
+
+    setLoading(true)
+
+    const result = await getListSchool(searchText)
+    
+    const valueUniversity = result.data.map((item) => ({ value: item.name }));
+    const options = valueUniversity.length === 0 ? [] : valueUniversity;
+
+    setOptionsUniversity(options);
+    setLoading(false)
+  };
+
+  const handleSearchMajor = async (searchText) => {
     if (!searchText) {
-      setOptionsCompany([]);
+      setOptionsMajor([])
       return;
     }
 
-    const filterCompany = companies.filter((item) =>
-      item.name.toLowerCase().includes(searchText.toLowerCase())
+    const filterMajor = majors.filter((item) =>
+      removeAccents(item.toLowerCase()).includes(removeAccents(searchText.toLowerCase()))
     );
-    const valueCompany = filterCompany.map((item) => ({
-      value: item.name,
-      label: <i>{item.name + " - " + item.address}</i>,
-    }));
-    const options = valueCompany.length === 0 ? [] : valueCompany;
-    setOptionsCompany(options);
+    const valueMajor = filterMajor.map((item) => ({ value: item }));
+    const options = valueMajor.length === 0 ? [] : valueMajor;
+
+    setOptionsMajor(options);
   };
 
-  const handleSearchPositions = async (searchText) => {
-    if (!searchText) {
-      setOptionsPosition([]);
-      return;
+  const handleSearchDebounce = (searchText) => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
     }
 
-    const filterPosition = positions.filter((item) =>
-      removeAccents(item.toLowerCase()).includes(
-        removeAccents(searchText.toLowerCase())
-      )
-    );
-    const valuePosition = filterPosition.map((item) => ({ value: item }));
-    const options = valuePosition.length === 0 ? [] : valuePosition;
-    setOptionsPosition(options);
-  };
+    debounceRef.current = setTimeout(() => {
+      handleSearchUniversities(searchText);
+    }, 0);
+  }
 
   const defaultValue = {
-    company_name: experience ? experience.company_name : "",
-    position_name: experience ? experience.position_name : "",
-    start_time: experience ? dayjs(`${experience.start_month}/${experience.start_year}`, "MM/YYYY") : "",
-    end_time: (experience?.end_month && experience?.end_year) ? dayjs(`${experience.end_month}/${experience.end_year}`, "MM/YYYY") : "",
-    description: experience ? experience.description : "",
-    attachments: experience ? experience.attachments : [],
+    school_name: education ? education.school_name : "",
+    title: education ? education.title : "",
+    start_time: education ? dayjs(`${education.start_month}/${education.start_year}`, "MM/YYYY") : "",
+    end_time: (education?.end_month && education?.end_year) ? dayjs(`${education.end_month}/${education.end_year}`, "MM/YYYY") : "",
+    description: education ? education.description : "",
   };
 
   const handleForm = async (valueForm) => {
@@ -100,28 +111,23 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
       valueForm.end_month = present ? "" : endTime[0];
       valueForm.end_year = present ? "" : endTime[1];
 
-      valueForm.attachments = images.map((item) => ({
-        type: "image",
-        image: item?.url || item?.response?.data?.url,
-      }));
-
       // console.log("🚀 ~ handleForm ~ valueForm:", valueForm);
-      // console.log("🚀 ~ FormExperience ~ experiences:", experiences);
-      // console.log("🚀 ~ FormExperience ~ experience:", experience);
+      console.log("🚀 ~ FormExperience ~ educations:", educations);
+      // console.log("🚀 ~ FormExperience ~ education:", education);
 
-      const index = experiences.findIndex((exp) => exp._id === experience?._id);
+      const index = educations?.findIndex((exp) => exp._id === education?._id);
 
       if (index !== -1) {
-        experiences[index] = { ...experiences[index], ...valueForm }
+        educations[index] = { ...educations[index], ...valueForm }
       } else {
-        experiences.push(valueForm)
+        educations.push(valueForm)
       }
         
-      // console.log("🚀 ~ handleForm ~ experiences:", experiences)
+      // console.log("🚀 ~ handleForm ~ educations:", educations)
 
       // return;
 
-      const result = await updateExperience(experiences);
+      const result = await updateEducation(educations);
       if (result.code === 200) {
         api.success({
           message: `Success`,
@@ -152,8 +158,8 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
   const handleDelete = async () => {
     setLoadingDelete(true)
     try {
-      const newExperiences = experiences.filter(item => item._id !== experience._id)
-      const result = await updateExperience(newExperiences);
+      const newEducations = educations.filter(item => item._id !== education._id)
+      const result = await updateEducation(newEducations);
       if (result.code === 200) {
         api.success({
           message: `Success`,
@@ -195,32 +201,36 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
       >
         <Row gutter={20}>
           <Col xs={24}>
-            <Form.Item
-              label="Công ty"
-              name="company_name"
-              rules={[
+            <Form.Item label="Trường" name="school_name" rules={[
                 {
                   required: true,
-                  message: "Vui Lòng Nhập Công Ty!",
+                  message: "Vui Lòng Nhập Trường!",
                 },
-              ]}
-            >
+              ]}>
               <AutoComplete
-                options={optionsCompany}
-                onSearch={handleSearchCompanies}
+                autoFocus
+                options={optionsUniversity}
+                onSearch={handleSearchDebounce}
               >
-                <Input placeholder="Công Ty" />
+                {/* <Input placeholder="Trường" /> */}
+                <Input placeholder="Nhập tên trường/Mã trường" suffix={loading && <Spin indicator={<LoadingOutlined spin />} />}/>
               </AutoComplete>
             </Form.Item>
           </Col>
 
           <Col xs={24}>
-            <Form.Item label="Chức vụ" name="position_name">
+            <Form.Item label="Chuyên ngành" name="title" rules={[
+                {
+                  required: true,
+                  message: "Vui Lòng Nhập Chuyên Ngành!",
+                },
+              ]}>
               <AutoComplete
-                options={optionsPosition}
-                onSearch={handleSearchPositions}
+                autoFocus
+                options={optionsMajor}
+                onSearch={handleSearchMajor}
               >
-                <Input placeholder="Chức vụ" />
+                <Input placeholder="Nhập chuyên ngành" />
               </AutoComplete>
             </Form.Item>
           </Col>
@@ -275,26 +285,17 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
                 setPresent(e.target.checked);
               }}
             >
-              Tôi đang làm việc ở đây
+              Tôi đang học ở đây
             </Checkbox>
           </Col>
 
           <Col xs={24}>
             <Form.Item label="Mô tả chi tiết" name="description">
-              <TextArea rows={4} minLength={4} />
+              <TextArea rows={4} minLength={4} placeholder="Mô tả chi tiết quá trình học của bạn để nhà tuyển dụng có thể hiểu bạn hơn"/>
             </Form.Item>
           </Col>
 
-          <Col xs={24}>
-            <Form.Item
-              label="Thêm liên kết hoặc tải lên hình ảnh về kinh nghiệm của bạn"
-              name="attachments"
-            >
-              <UploadImages fileList={images} setFileList={setImages} />
-            </Form.Item>
-          </Col>
-
-          {experience && (
+          {education && (
             <Col xs={12}>
               <Form.Item>
                 <Button block danger size="large" onClick={() => setOpenAlert(true)}>Xóa</Button>
@@ -302,7 +303,7 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
             </Col>
           )}
 
-          <Col xs={12} offset={experience ? 0 : 6}>
+          <Col xs={12} offset={education ? 0 : 6}>
             <Form.Item>
               <Button htmlType="submit" type="primary" ty block size="large" loading={loadingSubmit}>Cập nhật</Button>
             </Form.Item>  
@@ -320,11 +321,11 @@ const FormExperience = ({ getData, experience, experiences, closeModal, api, ski
           <Avatar size={50} icon={<DeleteOutlined />} style={{backgroundColor: "#FFF1F0", color: "#FF4D4F"}}/>
           <Flex align="center" vertical>
             <Typography.Title level={3}>Bạn có chắc muốn xóa</Typography.Title>
-            <Typography.Text>Tất cả thông tin về kinh nghiệm sẽ bị xóa vĩnh viễn</Typography.Text>
+            <Typography.Text>Tất cả thông tin về học vấn sẽ bị xóa vĩnh viễn</Typography.Text>
           </Flex>
         </Flex>
       </Modal>
     </>
   );
 };
-export default FormExperience;
+export default FormEducation;

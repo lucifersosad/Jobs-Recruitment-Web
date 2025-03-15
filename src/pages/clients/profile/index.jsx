@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "./profile.scss";
 import { getProfile } from "../../../services/clients/user-userApi";
 import ExperienceCard from "./Experience/ExperienceCard";
+import { Space } from "antd";
+import EducationCard from "./Education/EducationCard";
 
 const Profile = () => {
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -23,15 +25,10 @@ const Profile = () => {
   return (
     <>
       <div className="col-8">
-        <div style={{marginBottom: "15px"}}>
+        <Space direction="vertical" size="large" style={{width: "100%"}}>
+          <EducationCard getData={getData} loading={loadingProfile} profile={profile} />
           <ExperienceCard getData={getData} loading={loadingProfile} profile={profile} />
-        </div>
-        <div style={{marginBottom: "15px"}}>
-          <ExperienceCard getData={getData} loading={loadingProfile} profile={profile} />
-        </div>
-        <div style={{marginBottom: "15px"}}>
-          <ExperienceCard getData={getData} loading={loadingProfile} profile={profile} />
-        </div>
+        </Space>
       </div>
     </>
   );

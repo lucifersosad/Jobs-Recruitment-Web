@@ -1,15 +1,15 @@
 import { Avatar, Button, Card, Flex, Image, List, Space, Typography } from "antd";
 import { PlusSquareOutlined, EditOutlined } from "@ant-design/icons";
-import ExperienceModal from "./ExperienceModal";
 import { useState } from "react";
+import EducationModal from "./EducationModal";
 
-const ExperienceCard = ({profile, loading, getData}) => {
+const EducationCard = ({profile, loading, getData}) => {
   const [open, setOpen] = useState(false);
-  const [experience, setExperience] = useState();
+  const [education, setEducation] = useState();
 
   const handleAdd = () => {
     setOpen(true);
-    setExperience(undefined);
+    setEducation(undefined);
   }
 
   return (
@@ -19,7 +19,7 @@ const ExperienceCard = ({profile, loading, getData}) => {
           loading={loading}
           className="box-profile"
           extra={
-            profile?.experiences?.length > 0 && (
+            profile?.educations?.length > 0 && (
               <Flex>
                 <PlusSquareOutlined
                   className="icon-edit"
@@ -28,21 +28,21 @@ const ExperienceCard = ({profile, loading, getData}) => {
               </Flex>
             )
           }
-          title={"Kinh nghiệm"}
+          title={"Học vấn"}
         >
-          {profile?.experiences && profile?.experiences?.length === 0 ? (
+          {profile?.educations && profile?.educations?.length === 0 ? (
             <Flex align="center">
               <Space size={"large"} direction="vertical" style={{width: "50%"}}>
                 <Typography.Text style={{fontSize: "20px"}}>
-                  Cập nhật thông tin kinh nghiệm của bạn 
+                  Cập nhật thông tin học vấn của bạn 
                 </Typography.Text>
                 <Button type="primary" ghost size="large" onClick={handleAdd}>Thêm mục</Button>
               </Space>
-              <Avatar size={150} src={"https://www.topcv.vn/v3/profile/profile-png/profile-experience.png"} shape="square" style={{marginLeft: "auto"}} className="ml-5"/>
+              <Avatar size={150} src={"https://www.topcv.vn/v3/profile/profile-png/profile-education.png"} shape="square" style={{marginLeft: "auto"}} className="ml-5"/>
             </Flex>
           ) : (
             <List className="box-profile__list" itemLayout="vertical">
-              {profile?.experiences?.map((item, index) => (
+              {profile?.educations?.map((item, index) => (
                 <List.Item
                   key={index}
                   className="box-profile__item"
@@ -51,7 +51,7 @@ const ExperienceCard = ({profile, loading, getData}) => {
                       className="icon-edit"
                       onClick={() => {
                         setOpen(true);
-                        setExperience(item);
+                        setEducation(item);
                       }}
                     />
                   }
@@ -60,13 +60,13 @@ const ExperienceCard = ({profile, loading, getData}) => {
                     avatar={
                       <Avatar
                         size={60}
-                        src={`https://www.topcv.vn/v3/profile/profile-icon-svg/icon-exp.svg`}
+                        src={`https://www.topcv.vn/v3/profile/profile-icon-svg/icon-education.svg`}
                       />
                     }
-                    title={item.company_name}
+                    title={item.school_name}
                     description={
                       <Space direction="vertical">
-                        <span>{item.position_name}</span>
+                        <span>{item.title}</span>
                         <span>
                           {`${item.start_month}/${item.start_year} - ` +
                             (item.end_month && item.end_year
@@ -87,40 +87,6 @@ const ExperienceCard = ({profile, loading, getData}) => {
                         {item.description}
                       </Typography.Paragraph>
                     )}
-                    <Image.PreviewGroup
-                      preview={{
-                        onChange: (current, prev) =>
-                          console.log(
-                            `current index: ${current}, prev index: ${prev}`
-                          ),
-                      }}
-                    >
-                      <Flex
-                        direction="horizontal"
-                        wrap="wrap"
-                        gap={"20px"}
-                        justify="space-between"
-                        align="center"
-                      >
-                        {item?.attachments.map((item, index) => (
-                          <div
-                            key={index}
-                            style={{
-                              height: "300px",
-                              width: "calc(50% - 10px)",
-                              border: "1px solid #ddd",
-                            }}
-                          >
-                            <Image
-                              height={"100%"}
-                              width={"100%"}
-                              src={item?.image}
-                              style={{ objectFit: "contain" }}
-                            />
-                          </div>
-                        ))}
-                      </Flex>
-                    </Image.PreviewGroup>
                   </Space>
                 </List.Item>
               ))}
@@ -128,14 +94,14 @@ const ExperienceCard = ({profile, loading, getData}) => {
           )}
         </Card>
       </div>
-      <ExperienceModal
+      <EducationModal
         open={open}
         setOpen={setOpen}
         getData={getData}
-        experience={experience}
-        experiences={profile?.experiences}
+        education={education}
+        educations={profile?.educations}
       />
     </>
   );
 };
-export default ExperienceCard;
+export default EducationCard;
