@@ -162,17 +162,6 @@ function Login() {
                     </Link>
                   </p>
                 </div>
-                <hr />
-                <div className="box-helper">
-                  <p>Bạn gặp khó khăn khi tạo tài khoản?</p>
-                  <p>
-                    Vui lòng liên hệ tới số{" "}
-                    <a href="tel:+84879279678" style={{ color: "#69b5d6" }}>
-                      (+84) 879279678
-                    </a>{" "}
-                    để được hỗ trợ
-                  </p>
-                </div>
               </div>
             </div>
             <div className="col-5">

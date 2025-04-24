@@ -1,15 +1,19 @@
 import { Avatar, Button, Card, Flex, Image, List, Space, Typography } from "antd";
 import { PlusSquareOutlined, EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import EducationModal from "./EducationModal";
 
-const EducationCard = ({profile, loading, getData}) => {
+const CertificationCard = ({profile, loading, getData}) => {
   const [open, setOpen] = useState(false);
-  const [education, setEducation] = useState();
+  const [experience, setExperience] = useState();
 
   const handleAdd = () => {
     setOpen(true);
-    setEducation(undefined);
+    setExperience(undefined);
+  }
+
+  const handleEdit = (item) => {
+    setOpen(true);
+    setExperience(item);
   }
 
   return (
@@ -19,7 +23,7 @@ const EducationCard = ({profile, loading, getData}) => {
           loading={loading}
           className="box-profile"
           extra={
-            profile?.educations?.length > 0 && (
+            profile?.experiences?.length > 0 && (
               <Flex>
                 <PlusSquareOutlined
                   className="icon-edit"
@@ -28,42 +32,42 @@ const EducationCard = ({profile, loading, getData}) => {
               </Flex>
             )
           }
-          title={"Học vấn"}
+          title={"Chứng chỉ"}
         >
-          {profile?.educations && profile?.educations?.length === 0 ? (
+          {!profile?.certifications || profile?.certifications?.length === 0 ? (
             <Flex align="center">
               <Space size={"large"} direction="vertical" style={{width: "50%"}}>
                 <Typography.Text style={{fontSize: "20px"}}>
-                  Cập nhật thông tin học vấn của bạn 
+                  Cập nhật thông tin chứng chỉ của bạn 
                 </Typography.Text>
                 <Button type="primary" ghost size="large" onClick={handleAdd}>Thêm mục</Button>
               </Space>
-              <Avatar size={150} src={"https://www.topcv.vn/v3/profile/profile-png/profile-education.png"} shape="square" style={{marginLeft: "auto"}} className="ml-5"/>
+              <Avatar size={150} src={"https://www.topcv.vn/v3/profile/profile-png/profile-certificate.png"} shape="square" style={{marginLeft: "auto"}} className="ml-5"/>
             </Flex>
           ) : (
             <List className="box-profile__list" itemLayout="vertical">
-              {profile?.educations?.map((item, index) => (
+              {profile?.experiences?.map((item, index) => (
                 <List.Item
                   key={index}
                   className="box-profile__item"
                   extra={
                     <EditOutlined
                       className="icon-edit"
-                      onClick={() => {
-                        setOpen(true);
-                        setEducation(item);
-                      }}
+                      onClick={() => handleEdit(item)}
                     />
                   }
                 >
                   <List.Item.Meta
                     avatar={
-                      <img style={{width: "60px", height: "full"}} src={item.school_logo || `https://www.topcv.vn/v3/profile/profile-icon-svg/icon-education.svg`}/>
+                      <Avatar
+                        size={60}
+                        src={`https://www.topcv.vn/v3/profile/profile-icon-svg/icon-exp.svg`}
+                      />
                     }
-                    title={item.school_name}
+                    title={item.company_name}
                     description={
                       <Space direction="vertical">
-                        <span>{item.title}</span>
+                        <span>{item.position_name}</span>
                         <span>
                           {`${item.start_month}/${item.start_year} - ` +
                             (item.end_month && item.end_year
@@ -84,6 +88,40 @@ const EducationCard = ({profile, loading, getData}) => {
                         {item.description}
                       </Typography.Paragraph>
                     )}
+                    <Image.PreviewGroup
+                      preview={{
+                        onChange: (current, prev) =>
+                          console.log(
+                            `current index: ${current}, prev index: ${prev}`
+                          ),
+                      }}
+                    >
+                      <Flex
+                        direction="horizontal"
+                        wrap="wrap"
+                        gap={"20px"}
+                        justify="space-between"
+                        align="center"
+                      >
+                        {item?.attachments?.map((item, index) => (
+                          <div
+                            key={index}
+                            style={{
+                              height: "300px",
+                              width: "calc(50% - 10px)",
+                              border: "1px solid #ddd",
+                            }}
+                          >
+                            <Image
+                              height={"100%"}
+                              width={"100%"}
+                              src={item?.image}
+                              style={{ objectFit: "contain" }}
+                            />
+                          </div>
+                        ))}
+                      </Flex>
+                    </Image.PreviewGroup>
                   </Space>
                 </List.Item>
               ))}
@@ -91,14 +129,7 @@ const EducationCard = ({profile, loading, getData}) => {
           )}
         </Card>
       </div>
-      <EducationModal
-        open={open}
-        setOpen={setOpen}
-        getData={getData}
-        education={education}
-        educations={profile?.educations || []}
-      />
     </>
   );
 };
-export default EducationCard;
+export default CertificationCard;

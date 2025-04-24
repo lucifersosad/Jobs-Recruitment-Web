@@ -89,7 +89,7 @@ const FormEducation = ({ getData, education, educations, closeModal, api, skills
 
     debounceRef.current = setTimeout(() => {
       handleSearchUniversities(searchText);
-    }, 0);
+    }, 500);
   }
 
   const defaultValue = {
