@@ -51,12 +51,12 @@ function Header({ setIsCollapsed, isCollapsed }) {
                   <span to={"./add-jobs-employer"}>Đăng tin</span>
                 </Link>
               </li>
-              {/* <li className="navbar__item check">
+              <li className="navbar__item check">
                 <Link>
                   <FontAwesomeIcon icon={faPen} />
                   <span>Tìm CV</span>
                 </Link>
-              </li> */}
+              </li>
               <li className="navbar__item check">
                 <Link to={"./chat-box"}>
                   <FontAwesomeIcon icon={faFacebookMessenger} />

@@ -60,9 +60,9 @@ function BoxSettings() {
             <div className="profile-info col-8">
               <p className="title">Chào mừng bạn</p>
               <h4 className="name">{name}</h4>
-              {/* <div className="account-vip">
+              <div className="account-vip">
                 <span>Tài khoản đã xác thực</span>
-              </div> */}
+              </div>
               {/* <div className="upgrade-account">
                 <a href="#!">
                   <span>
@@ -76,7 +76,7 @@ function BoxSettings() {
 
           <hr />
 
-          {/* <div className="box-setting-account__body">
+          <div className="box-setting-account__body">
             <div className="job-waiting">
               <div className="col-12 switch-setting">
                 <Switch
@@ -131,9 +131,9 @@ function BoxSettings() {
                       Email và Số điện thoại của bạn
                     </li>
                   </ul>
-                  <div className="banner">
+                  {/* <div className="banner">
                     <img src={banner2} alt="" />
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <hr />
@@ -165,7 +165,7 @@ function BoxSettings() {
                 </button>
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
         {/* <div
           className="text-left box-siderbar"
