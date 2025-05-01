@@ -61,6 +61,8 @@ import AddAccounts from "../pages/admins/addAccounts";
 import ManagementAccounts from "../pages/admins/managementAccounts";
 import LayoutMainAdminNoHeaderAndNoFooter from "../layouts/admins/layout-login";
 import Profile from "../pages/clients/profile";
+import PreviewCv from "../pages/clients/previewCv";
+import LayoutClient from "../layouts/clients/LayoutClient";
 
 export const routes = [
   //client
@@ -200,6 +202,16 @@ export const routes = [
         element: <NotFound />,
       },
     ],
+  },
+  {
+    path: "/xem-cv",
+    element: <LayoutClient/>,
+    children: [
+      {
+        element: <PreviewCv />,
+        index: true,
+      }
+    ]
   },
   {
     element: <PrivateRoutesClient />,
