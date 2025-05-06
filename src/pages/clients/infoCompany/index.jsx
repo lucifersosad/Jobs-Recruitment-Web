@@ -1,65 +1,38 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getCompany } from "../../../services/clients/employersApi";
-import { getEmployerPosts, likePost, commentOnPost, checkLikedStatus, getPostComments, checkEmployerPostsLikeStatus } from "../../../services/clients/postApi";
+import { getPostComments, checkEmployerPostsLikeStatus, checkLikedStatus } from "../../../services/clients/postApi";
 import { decData } from "../../../helpers/decData";
-import { getCookie } from "../../../helpers/cookie";
 import "./infoCompany.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronDown,
-  faChevronUp,
-  faLink,
-  faLocationDot,
-  faMap,
-  faPhone,
-  faUserGroup,
-  faHeart,
-  faComment,
-  faPaperPlane,
-  faXmark,
-  faArrowLeft,
-  faArrowRight,
-  faCheckCircle,
-  faExpand,
-  faRotate,
-} from "@fortawesome/free-solid-svg-icons";
-import MemoizedJobByCompany from "../../../components/clients/jobByCompany";
-import { ConfigProvider, Input, message } from "antd";
-import { faCopy } from "@fortawesome/free-regular-svg-icons";
-import {
-  faFacebook,
-  faSquareInstagram,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import MemoizedBoxGoogleMap from "../../../components/clients/boxGoogleMap";
-import { getCoordinateAddress } from "../../../services/locations/locationsApi";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 
-import { dataNumberOfWorkers } from "./js/options";
+// Components
+import CompanyHeader from "./components/CompanyHeader";
+import TabNavigation from "./components/TabNavigation";
+import IntroductionCard from "./Introduction/IntroductionCard";
+import JobsCard from "./Jobs/JobsCard";
+import PostsCard from "./Posts/PostsCard";
+import ContactCard from "./Contact/ContactCard";
+import ShareCard from "./Share/ShareCard";
+import RelatedCompanies from "./components/RelatedCompanies";
+
+// Utils
+import { handleAddress, handleNumberOfWorkers } from "./utils/companyUtils";
+import { fetchPostsData, fetchPostComments, checkPostLikedStatus } from "./utils/postUtils";
 
 function InfoCompany() {
-  const { Search } = Input;
   const [currentPath] = useState(window.location);
-  const [isExpanded, setIsExpanded] = useState(false);
   const [location, setLocation] = useState([0, 0]);
   const { slug } = useParams();
   const [recordItem, setRecordItem] = useState([]);
   const [employersWithJobCounts, setEmployersWithJobCounts] = useState([]);
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('intro');
   const [posts, setPosts] = useState([]);
-  const [commentContent, setCommentContent] = useState({});
   const [postsLoading, setPostsLoading] = useState(false);
   const [postsError, setPostsError] = useState(null);
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
-
-  const [imageViewer, setImageViewer] = useState({
-    postId: null,
-    visible: false,
-    images: [],
-    currentIndex: 0
-  });
 
   const authUser = useSelector((state) => state.authenticationReducerClient?.infoUser);
 
@@ -70,43 +43,13 @@ function InfoCompany() {
 
       const dectDataConvert = decData(result.data);
       console.log("Thông tin công ty:", dectDataConvert);
-      handleAddress(dectDataConvert);
+      
+      const locationCoords = await handleAddress(dectDataConvert);
+      setLocation(locationCoords);
+      
       handleNumberOfWorkers(dectDataConvert);
       setRecordItem(dectDataConvert);
       setEmployersWithJobCounts(result.employersWithJobCounts);
-    };
-
-    const handleNumberOfWorkers = (data) => {
-      data.numberOfWorkers = dataNumberOfWorkers.find((item) => item?.value === data?.numberOfWorkers)?.label;
-    };
-      
-    const handleAddress = async (data) => {
-      if (!isAddressValid(data?.specificAddressCompany)) return;
-
-      const placeId = getPlaceIdFromAddress(data.specificAddressCompany);
-      const location = await fetchLocation(placeId);
-      if (location) setLocation(location);
-
-      const address = getAddressFromAddressString(data.specificAddressCompany);
-      data.specificAddressCompany = address;
-    };
-
-    const isAddressValid = (address) => {
-      return typeof address === "string" && address.includes("-");
-    };
-
-    const getPlaceIdFromAddress = (address) => {
-      return address.split("-")[1];
-    };
-
-    const fetchLocation = async (placeId) => {
-      const result = await getCoordinateAddress({ placeid: placeId });
-      if (result.code !== 200) return null;
-      return [result?.data?.location?.lat, result?.data?.location?.lng];
-    };
-
-    const getAddressFromAddressString = (address) => {
-      return address.split("-")[0];
     };
 
     fetchCompanyData();
@@ -123,566 +66,85 @@ function InfoCompany() {
   const fetchPosts = async () => {
     setPostsLoading(true);
     setPostsError(null);
-    const token = getCookie("token-user") || "";
-
-    if (!token) {
-      setPostsError("Vui lòng đăng nhập để xem bài viết.");
+    
+    const employerId = recordItem?._id || recordItem?.slug;
+    if (!employerId) {
+      setPostsError("Không thể tải bài viết: Thiếu thông tin công ty");
       setPostsLoading(false);
       return;
     }
-
+    
     try {
-      const employerId = recordItem?._id || recordItem?.slug;
-      console.log("Fetching posts for employer:", employerId);
+      // Set initial posts data
+      const handlePostsSuccess = (postsData) => {
+        setPosts(postsData);
+        
+        // Fetch comments for each post
+        postsData.forEach(async (post) => {
+          if (post.id) {
+            const comments = await fetchPostComments(post.id);
+            if (comments) {
+              setPosts(prevPosts => 
+                prevPosts.map(p => 
+                  p.id === post.id ? { ...p, comments } : p
+                )
+              );
+            }
+          }
+        });
+      };
       
-      const result = await getEmployerPosts(employerId, token);
-      console.log("InfoCompany - Posts Response:", result);
-
-      if (result && Array.isArray(result)) {
-        const postsWithDefaults = result.map(post => ({
-          ...post,
-          isLiked: false,
-          likes: post.likes || 0,
-          comments: []
-        }));
-        
-        setPosts(postsWithDefaults);
-        
-        if (result.length > 0) {
-          console.log(`Fetching details for ${result.length} posts...`);
-          
-          const postIds = postsWithDefaults.map(post => post.id).filter(Boolean);
-          
-          if (postIds.length > 0) {
-            try {
-              const likeStatusResult = await checkEmployerPostsLikeStatus(employerId, token);
-              
-              if (likeStatusResult?.code === 200 && likeStatusResult.data) {
-                console.log("Like status for employer posts:", likeStatusResult.data);
-                
-                setPosts(prevPosts => 
-                  prevPosts.map(post => ({
-                    ...post,
-                    isLiked: likeStatusResult.data[post.id] === true
-                  }))
-                );
-              } else {
-                console.log("Trying individual like status check for each post");
-                const batchLikeStatus = await checkLikedStatus(postIds);
-                if (batchLikeStatus?.code === 200 && batchLikeStatus.data) {
-                  setPosts(prevPosts => 
-                    prevPosts.map(post => ({
-                      ...post,
-                      isLiked: batchLikeStatus.data[post.id] === true
-                    }))
-                  );
-                }
-              }
-            } catch (likeError) {
-              console.error("Error checking like status:", likeError);
-            }
-          }
-          
-          for (const post of postsWithDefaults) {
-            if (post.id) {
-              try {
-                const commentsResult = await getPostComments(post.id);
-                
-                if (commentsResult?.code === 200 && commentsResult.data && Array.isArray(commentsResult.data)) {
-                  console.log(`Comments for post ${post.id}:`, commentsResult.data);
-                  
-                  setPosts(prevPosts => 
-                    prevPosts.map(p => 
-                      p.id === post.id ? { ...p, comments: commentsResult.data } : p
-                    )
-                  );
-                }
-              } catch (commentsError) {
-                console.error(`Error fetching comments for post ${post.id}:`, commentsError);
-              }
-            }
-          }
-        }
-      } else if (result?.error) {
-        console.log("InfoCompany - Posts Error:", result.error);
-        setPostsError(result.error || "Không tìm thấy bài viết.");
-      } else {
-        setPostsError("Dữ liệu bài viết không hợp lệ.");
+      const handlePostsError = (errorMessage) => {
+        setPostsError(errorMessage);
+      };
+      
+      // Fetch posts and get like status
+      const likeStatusData = await fetchPostsData(
+        employerId, 
+        handlePostsSuccess, 
+        handlePostsError
+      );
+      
+      // Update posts with like status if available
+      if (likeStatusData) {
+        setPosts(prevPosts => 
+          prevPosts.map(post => ({
+            ...post,
+            isLiked: likeStatusData[post.id] === true
+          }))
+        );
       }
     } catch (err) {
-      console.error("InfoCompany - Posts Error:", err);
-      setPostsError("Lỗi khi tải bài viết: " + (err.message || "Không rõ nguyên nhân."));
+      console.error("Error fetching posts:", err);
+      setPostsError("Lỗi khi tải bài viết");
     } finally {
       setPostsLoading(false);
     }
   };
 
-  const handleLike = async (postId) => {
-    try {
-      console.log("Liking post:", postId);
-      
-      const currentPost = posts.find(p => p.id === postId);
-      if (!currentPost) {
-        console.error("Post not found:", postId);
-        return;
-      }
-      
-      const wasLiked = currentPost.isLiked;
-      console.log("Current like status before API call:", wasLiked);
-      
-      // Đảo ngược trạng thái like trước, để UI phản hồi ngay lập tức
-      const newIsLiked = !wasLiked;
-      
-      // Cập nhật UI ngay lập tức - Sử dụng biến tạm để tránh hiệu ứng trở về
-      const tempPostId = `temp-${postId}`;
-      setPosts((prevPosts) => {
-        // Tạo bản sao mới của mảng bài viết
-        const newPosts = prevPosts.map((post) => {
-          if (post.id === postId) {
-            const newLikes = newIsLiked 
-              ? (post.likes || 0) + 1 
-              : Math.max(0, (post.likes || 0) - 1);
-            
-            console.log(`Updating post UI - isLiked: ${wasLiked} -> ${newIsLiked}, likes: ${post.likes} -> ${newLikes}`);
-            
-            return {
-              ...post,
-              likes: newLikes,
-              isLiked: newIsLiked,
-              tempId: tempPostId, // Đánh dấu bài viết này đã được cập nhật
-            };
-          }
-          return post;
-        });
-        
-        return newPosts;
-      });
-      
-      // Gọi API - Sử dụng async/await để đảm bảo xử lý tuần tự
-      const result = await likePost(postId);
-      console.log("Like API response:", result);
-      
-      // Kiểm tra xem đã có sự thay đổi UI từ lúc gửi request đến lúc nhận response không
-      const currentUIPost = posts.find(p => p.id === postId);
-      const hasUIChanged = currentUIPost && currentUIPost.tempId === tempPostId;
-      
-      // Nếu API thành công và UI đã được cập nhật
-      if (result?.code === 200 && hasUIChanged) {
-        let finalLikeStatus = newIsLiked; // Mặc định giữ trạng thái UI hiện tại
-        
-        // Nếu API trả về trạng thái rõ ràng
-        if (result.data && result.data.isLiked !== undefined) {
-          finalLikeStatus = result.data.isLiked;
-        } 
-        // Hoặc nếu có thông điệp trả về
-        else if (result.message) {
-          const unlikeMessage = result.message.includes("Bỏ like");
-          const likeMessage = result.message.includes("đã like");
-          
-          if (likeMessage) {
-            finalLikeStatus = true;
-          } else if (unlikeMessage) {
-            finalLikeStatus = false;
-          }
-        }
-        
-        // Nếu trạng thái cuối cùng khác với trạng thái UI hiện tại
-        if (finalLikeStatus !== newIsLiked) {
-          console.log("Updating UI with final like status:", finalLikeStatus);
-          setPosts((prevPosts) =>
-            prevPosts.map((post) => {
-              if (post.id === postId) {
-                const finalLikes = finalLikeStatus 
-                  ? (wasLiked ? post.likes : post.likes + 1) 
-                  : (wasLiked ? post.likes - 1 : post.likes);
-                
-                return {
-                  ...post,
-                  likes: finalLikes,
-                  isLiked: finalLikeStatus,
-                  tempId: null, // Xóa tempId
-                };
-              }
-              return post;
-            })
-          );
-        } else {
-          // Xóa tempId để hoàn tất quá trình cập nhật
-          setPosts((prevPosts) =>
-            prevPosts.map((post) => 
-              post.id === postId 
-                ? {...post, tempId: null} 
-                : post
-            )
-          );
-        }
-        
-        // Thông báo thành công
-        const actionText = finalLikeStatus ? "Đã thích" : "Đã bỏ thích";
-        showNotification(`${actionText} bài viết`, 'success');
-      } 
-      // Nếu API thất bại nhưng UI đã cập nhật
-      else if (hasUIChanged) {
-        console.error("Like API failed, reverting to previous state");
-        setPosts((prevPosts) =>
-          prevPosts.map((post) => {
-            if (post.id === postId) {
-              return {
-                ...post,
-                likes: wasLiked ? post.likes + 1 : Math.max(0, post.likes - 1),
-                isLiked: wasLiked,
-                tempId: null, // Xóa tempId
-              };
-            }
-            return post;
-          })
-        );
-        
-        showNotification('Không thể cập nhật trạng thái thích', 'error');
-      }
-      
-      // Sau khi like/dislike thành công, cập nhật lại thông tin chi tiết (đã được chuyển vào xử lý success)
-      if (result?.code === 200) {
-        setTimeout(() => {
-          fetchPostDetails(postId);
-        }, 500);
-      }
-    } catch (err) {
-      console.error("InfoCompany - Error liking post:", err);
-      showNotification('Đã xảy ra lỗi', 'error');
-    }
-  };
-
-  const showNotification = (message, type = 'success') => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => {
-      setNotification({ show: false, message: '', type: '' });
-    }, 3000);
-  };
-
-  const openImageViewer = (postId, images, index = 0) => {
-    if (!images || images.length === 0) return;
-
-    const validImages = images.filter(img => img && img.trim() !== '');
-
-    if (validImages.length === 0) return;
-
-    console.log("Opening image viewer for post:", postId);
-    console.log("Images:", validImages);
-    console.log("Starting at index:", index);
-
-    setImageViewer({
-      postId,
-      visible: true,
-      images: validImages,
-      currentIndex: index >= validImages.length ? 0 : index
-    });
-  };
-
-  const closeImageViewer = () => {
-    console.log("Closing image viewer");
-    setImageViewer(prev => ({ ...prev, visible: false }));
-    
-    setTimeout(() => {
-      setImageViewer({
-        postId: null,
-        visible: false,
-        images: [],
-        currentIndex: 0
-      });
-    }, 300);
-  };
-
-  const navigateImage = (direction) => {
-    const { images, currentIndex } = imageViewer;
-    let newIndex;
-
-    if (direction === 'next') {
-      newIndex = currentIndex + 1 >= images.length ? 0 : currentIndex + 1;
-    } else {
-      newIndex = currentIndex - 1 < 0 ? images.length - 1 : currentIndex - 1;
-    }
-
-    console.log(`Navigating ${direction} from index ${currentIndex} to ${newIndex}`);
-    setImageViewer({ ...imageViewer, currentIndex: newIndex });
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (!imageViewer.visible) return;
-
-      switch (e.key) {
-        case 'ArrowLeft':
-          navigateImage('prev');
-          break;
-        case 'ArrowRight':
-          navigateImage('next');
-          break;
-        case 'Escape':
-          closeImageViewer();
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [imageViewer]);
-
-  const getLikeButtonColor = (isLiked) => {
-    console.log("getLikeButtonColor called with:", isLiked);
-    return isLiked ? "text-blue-500" : "";
-  };
-
-  const handleComment = async (postId) => {
-    if (!commentContent[postId]?.trim()) return;
-    try {
-      const result = await commentOnPost(postId, commentContent[postId]);
-      console.log("Comment result:", result);
-      
-      if (result?.code === 200 && result.data) {
-        const newComment = {
-          id: result.data.id || result.data._id,
-          content: commentContent[postId],
-          userId: {
-            _id: authUser?._id,
-            avatar: authUser?.avatar || "https://via.placeholder.com/32"
-          },
-          timeAgo: "Vừa xong",
-          parentCommentId: null
-        };
-        
-        setPosts((prevPosts) =>
-          prevPosts.map((post) =>
-            post.id === postId
-              ? { 
-                  ...post, 
-                  comments: [...(post.comments || []), newComment],
-                  commentCount: (post.commentCount || 0) + 1
-                }
-              : post
-          )
-        );
-        
-        setCommentContent((prev) => ({ ...prev, [postId]: "" }));
-        showNotification('Đã đăng bình luận thành công!');
-        
-        setTimeout(() => {
-          fetchPostDetails(postId);
-        }, 500);
-      } else {
-        showNotification('Không thể đăng bình luận. Vui lòng thử lại!', 'error');
-      }
-    } catch (err) {
-      console.error("InfoCompany - Error commenting on post:", err);
-      showNotification('Không thể đăng bình luận. Vui lòng thử lại!', 'error');
-    }
-  };
-
-  const renderPostImages = (postId, images) => {
-    if (!images || images.length === 0) return null;
-
-    const validImages = images.filter(img => img && img.trim() !== '');
-
-    if (validImages.length === 0) return null;
-
-    if (imageViewer.visible && imageViewer.postId === postId) {
-      return (
-        <div className="inline-image-viewer">
-          <div className="image-viewer-container">
-            <button
-              className="close-viewer"
-              onClick={(e) => {
-                e.stopPropagation();
-                closeImageViewer();
-              }}
-            >
-              <FontAwesomeIcon icon={faXmark} />
-            </button>
-            
-            <div className="image-display">
-              {imageViewer.images[imageViewer.currentIndex] && (
-                <img
-                  src={imageViewer.images[imageViewer.currentIndex]}
-                  alt={`Ảnh ${imageViewer.currentIndex + 1}`}
-                />
-              )}
-            </div>
-
-            {validImages.length > 1 && (
-              <>
-                <button
-                  className="nav-button prev"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigateImage('prev');
-                  }}
-                >
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                </button>
-                <button
-                  className="nav-button next"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigateImage('next');
-                  }}
-                >
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </button>
-              </>
-            )}
-
-            <div className="image-counter">
-              {imageViewer.currentIndex + 1} / {validImages.length}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    if (validImages.length === 1) {
-      return (
-        <div className="post-images single-image">
-          <div className="image-wrapper">
-            <img
-              src={validImages[0]}
-              alt="Post image"
-              onClick={() => openImageViewer(postId, validImages, 0)}
-            />
-            <div className="hover-overlay" onClick={() => openImageViewer(postId, validImages, 0)}>
-              <FontAwesomeIcon icon={faExpand} />
-            </div>
-          </div>
-        </div>
-      );
-    } else if (validImages.length === 2) {
-      return (
-        <div className="post-images">
-          <div className="image-grid grid-2">
-            {validImages.map((image, index) => (
-              <div
-                key={index}
-                className="image-item"
-                onClick={() => openImageViewer(postId, validImages, index)}
-              >
-                <img src={image} alt={`Post ${index + 1}`} />
-                <div className="hover-overlay">
-                  <FontAwesomeIcon icon={faExpand} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    } else if (validImages.length >= 3) {
-      return (
-        <div className="post-images">
-          <div className="image-grid grid-3">
-            {validImages.slice(0, 3).map((image, index) => (
-              <div
-                key={index}
-                className={`image-item ${index === 2 && validImages.length > 3 ? 'has-overlay' : ''}`}
-                onClick={() => openImageViewer(postId, validImages, index)}
-              >
-                <img src={image} alt={`Post ${index + 1}`} />
-                {index === 2 && validImages.length > 3 && (
-                  <div className="overlay-count">
-                    +{validImages.length - 3}
-                  </div>
-                )}
-                <div className="hover-overlay">
-                  <FontAwesomeIcon icon={faExpand} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    }
-
-    return null;
-  };
-
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  useEffect(() => {
-    const updatePostLikeStatus = async () => {
-      if (posts.length === 0 || !recordItem?.slug || activeTab !== 'posts') return;
-      
-      try {
-        const employerId = recordItem?._id || recordItem?.slug;
-        console.log("Periodically checking like status for posts");
-        const likeStatusResult = await checkEmployerPostsLikeStatus(employerId);
-        
-        if (likeStatusResult?.code === 200 && likeStatusResult.data) {
-          console.log("Refreshing like statuses:", likeStatusResult.data);
-          
-          setPosts(prevPosts => 
-            prevPosts.map(post => ({
-              ...post,
-              isLiked: likeStatusResult.data[post.id] === true
-            }))
-          );
-        }
-      } catch (err) {
-        console.error("Error updating like status:", err);
-      }
-    };
-
-    if (activeTab === 'posts' && posts.length > 0) {
-      updatePostLikeStatus();
-    }
-
-    return () => {};
-  }, [activeTab, posts.length, recordItem?.slug]);
-
   const fetchPostDetails = async (postId) => {
     if (!postId) return;
     
     try {
-      console.log("Fetching details for post:", postId);
-      
-      try {
-        const likeStatusResult = await checkLikedStatus([postId]);
-        if (likeStatusResult?.code === 200 && likeStatusResult.data) {
-          const isLiked = likeStatusResult.data[postId] === true;
-          console.log(`Post ${postId} like status:`, isLiked);
-          
-          setPosts(prevPosts => 
-            prevPosts.map(post => 
-              post.id === postId
-                ? { ...post, isLiked: isLiked }
-                : post
-            )
-          );
-        }
-      } catch (likeError) {
-        console.error(`Error checking like status for post ${postId}:`, likeError);
+      // Check like status
+      const likeStatus = await checkPostLikedStatus([postId]);
+      if (likeStatus && typeof likeStatus[postId] === 'boolean') {
+        setPosts(prevPosts => 
+          prevPosts.map(post => 
+            post.id === postId ? { ...post, isLiked: likeStatus[postId] } : post
+          )
+        );
       }
       
-      try {
-        const commentsResult = await getPostComments(postId);
-        if (commentsResult?.code === 200 && commentsResult.data) {
-          console.log(`Refreshed comments for post ${postId}:`, commentsResult.data);
-          
-          setPosts(prevPosts => 
-            prevPosts.map(post => 
-              post.id === postId
-                ? { ...post, comments: commentsResult.data }
-                : post
-            )
-          );
-        }
-      } catch (commentsError) {
-        console.error(`Error fetching comments for post ${postId}:`, commentsError);
+      // Fetch comments
+      const comments = await fetchPostComments(postId);
+      if (comments) {
+        setPosts(prevPosts => 
+          prevPosts.map(post => 
+            post.id === postId ? { ...post, comments } : post
+          )
+        );
       }
-      
     } catch (err) {
       console.error(`Error fetching details for post ${postId}:`, err);
     }
@@ -706,8 +168,18 @@ function InfoCompany() {
         );
       }
       
+      // Refresh comments for all posts
       for (const post of posts) {
-        fetchPostDetails(post.id);
+        if (post.id) {
+          const comments = await fetchPostComments(post.id);
+          if (comments) {
+            setPosts(prevPosts => 
+              prevPosts.map(p => 
+                p.id === post.id ? { ...p, comments } : p
+              )
+            );
+          }
+        }
       }
       
       showNotification('Đã cập nhật dữ liệu bài viết', 'info');
@@ -716,413 +188,49 @@ function InfoCompany() {
     }
   };
 
-  const renderRefreshButton = () => (
-    <button
-      className="refresh-button"
-      onClick={refreshAllPosts}
-      title="Làm mới dữ liệu"
-    >
-      <FontAwesomeIcon icon={faRotate} className="refresh-icon" />
-    </button>
-  );
-
-  const renderComments = (comments, postId) => {
-    const parentComments = comments.filter(comment => !comment.parentCommentId);
-    const replyComments = comments.filter(comment => comment.parentCommentId);
-    
-    const replyMap = {};
-    replyComments.forEach(reply => {
-      if (!replyMap[reply.parentCommentId]) {
-        replyMap[reply.parentCommentId] = [];
-      }
-      replyMap[reply.parentCommentId].push(reply);
-    });
-    
-    return parentComments.map((comment, index) => (
-      <div key={`parent-${comment.id || index}`} className="comment-thread">
-        <div className="comment-item">
-          <div className="avatar">
-            <img
-              src={comment.userId?.avatar || "https://via.placeholder.com/32"}
-              alt="User Avatar"
-            />
-          </div>
-          <div className="comment-content">
-            <div className="name">
-              {comment.userId?.fullName || "Người dùng"}
-            </div>
-            <div className="text">
-              {comment.content || "Không có nội dung"}
-            </div>
-            <div className="comment-time">
-              {comment.timeAgo || ""}
-            </div>
-          </div>
-        </div>
-        
-        {replyMap[comment.id]?.map((reply, replyIndex) => (
-          <div key={`reply-${reply.id || replyIndex}`} className="comment-item reply-comment">
-            <div className="avatar">
-              <img
-                src={reply.userId?.avatar || recordItem?.logoCompany || "https://via.placeholder.com/32"}
-                alt="Reply Avatar"
-              />
-            </div>
-            <div className="comment-content">
-              <div className="name">
-                {reply.userId?.fullName || recordItem?.companyName || "Công ty"}
-                {!reply.userId && <span className="company-badge">Công ty</span>}
-              </div>
-              <div className="text">
-                {reply.content || "Không có nội dung"}
-              </div>
-              <div className="comment-time">
-                {reply.timeAgo || ""}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    ));
+  const showNotification = (message, type = 'success') => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: '' });
+    }, 3000);
   };
 
   return (
     <div className="cb-section cb-section-padding-bottom bg-grey2">
       <div className="container">
         <div className="full-info-company">
-          <div className="box-info-company mb-3">
-            <div className="header-company">
-              <div className="banner">
-                <img src={recordItem?.bannerCompany} alt="" />
-              </div>
-              <div className="comapany-logo">
-                <div className="company-image-logo">
-                  <img src={recordItem?.logoCompany} alt="logo" />
-                </div>
-              </div>
-              <div className="company-detail">
-                <div className="box-detail">
-                  <h1>CÔNG TY {recordItem?.companyName}</h1>
-                  <div className="box-icon">
-                    <div className="item">
-                      <FontAwesomeIcon icon={faLink} />
-                      <span>{recordItem?.website}</span>
-                    </div>
-                    <div className="item">
-                      <FontAwesomeIcon icon={faUserGroup} />
-                      <span>{recordItem?.numberOfWorkers} nhân viên</span>
-                    </div>
-                    <div className="item">
-                      <FontAwesomeIcon icon={faPhone} />
-                      <span>{recordItem?.phoneCompany}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <CompanyHeader companyData={recordItem} />
 
           <div className="row">
             <div className="col-md-8">
-              <div className="company-tabs">
-                <div
-                  className={`tab-item ${activeTab === 'intro' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('intro')}
-                >
-                  Giới thiệu công ty
-                </div>
-                <div
-                  className={`tab-item ${activeTab === 'jobs' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('jobs')}
-                >
-                  Tuyển dụng
-                </div>
-                <div
-                  className={`tab-item ${activeTab === 'posts' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('posts')}
-                >
-                  Bài viết
-                </div>
-              </div>
+              <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
               {activeTab === 'intro' && (
-              <div className="description-box mb-3">
-                <div className="title-header1">
-                  <h2>Giới thiệu công ty</h2>
-                </div>
-                <div className="box-item-content">
-                  <div
-                    className={"dest " + (isExpanded ? "expanded " : "")}
-                    dangerouslySetInnerHTML={{
-                      __html: recordItem?.descriptionCompany,
-                    }}
-                  />
-                  {!isExpanded && <div className="filter-blue"></div>}
-
-                    <div className="view" onClick={toggleExpand}>
-                    {isExpanded ? (
-                      <div>
-                        <span>Thu gọn</span>
-                        <FontAwesomeIcon icon={faChevronUp} />
-                      </div>
-                    ) : (
-                      <div>
-                        <span>Xem thêm</span>
-                        <FontAwesomeIcon icon={faChevronDown} />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+                <IntroductionCard companyData={recordItem} />
               )}
 
               {activeTab === 'jobs' && (
-              <div className="job-box mb-4">
-                <div className="title-header1">
-                  <h2>Tuyển dụng</h2>
-                </div>
-                <div className="box-item-content">
-                  <MemoizedJobByCompany slug={recordItem?.slug} />
-                </div>
-              </div>
+                <JobsCard slug={recordItem?.slug} />
               )}
 
               {activeTab === 'posts' && (
-                <div className="posts-box mb-4">
-                  <div className="title-header1">
-                    <h2>Bài viết của công ty</h2>
-                    {renderRefreshButton()}
-                  </div>
-                  <div className="box-item-content" style={{ maxHeight: '800px', overflowY: 'auto' }}>
-                    {postsLoading ? (
-                      <div className="text-center text-gray-600 p-4">Đang tải bài viết...</div>
-                    ) : postsError ? (
-                      <div className="text-center text-red-500 p-4">{postsError}</div>
-                    ) : (
-                      <div className="posts-container">
-                        {posts.length > 0 ? (
-                          posts.map((post) => (
-                            <div
-                              key={`post-${post.id}`}
-                              className="post-item"
-                            >
-                              <div className="post-header">
-                                <div className="avatar">
-                                  <img
-                                    src={recordItem?.logoCompany || "https://via.placeholder.com/40"}
-                                    alt="Company Logo"
-                                  />
-                                </div>
-                                <div className="info">
-                                  <div className="name">
-                                    {post.companyName || recordItem?.companyName || "Công ty ẩn danh"}
-                                  </div>
-                                  <div className="time">
-                                    {post.timeAgo || "Không rõ thời gian"}
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="post-content">
-                                {post.caption && (
-                                  <div className="text">{post.caption}</div>
-                                )}
-                              </div>
-
-                              {post.images && post.images.length > 0 && renderPostImages(post.id, post.images)}
-
-                              <div className="post-stats">
-                                <span>{post.likes || 0} lượt thích</span>
-                                <span>{post.comments?.length || 0} bình luận</span>
-                              </div>
-
-                              <div className="post-actions">
-                                <button 
-                                  className={`action-button ${post.isLiked ? 'liked' : ''}`}
-                                  onClick={() => handleLike(post.id)}
-                                  style={{ color: post.isLiked ? '#1877f2' : '' }}
-                                >
-                                  <FontAwesomeIcon 
-                                    icon={faHeart} 
-                                    className={post.isLiked ? 'liked-icon' : ''}
-                                    style={{ color: post.isLiked ? '#1877f2' : '#65676b' }}
-                                  />
-                                  <span>{post.isLiked ? 'Đã thích' : 'Thích'}</span>
-                                </button>
-                                <button className="action-button">
-                                  <FontAwesomeIcon icon={faComment} />
-                                  <span>Bình luận</span>
-                                </button>
-                              </div>
-                              
-                              <div className="post-comments">
-                                {post.comments?.length > 0 ? (
-                                  renderComments(post.comments, post.id)
-                                ) : (
-                                  <div className="no-comments">Chưa có bình luận nào</div>
-                                )}
-                                
-                                <div className="comment-form">
-                                  <div className="avatar">
-                                    <img
-                                      src={authUser?.avatar || "https://via.placeholder.com/32"}
-                                      alt="Current User Avatar"
-                                    />
-                                  </div>
-                                  <Input
-                                    value={commentContent[post.id] || ""}
-                                    onChange={(e) =>
-                                      setCommentContent((prev) => ({
-                                        ...prev,
-                                        [post.id]: e.target.value,
-                                      }))
-                                    }
-                                    placeholder="Viết bình luận..."
-                                    onPressEnter={() => handleComment(post.id)}
-                                    suffix={
-                                      <FontAwesomeIcon
-                                        icon={faPaperPlane}
-                                        onClick={() => handleComment(post.id)}
-                                        className="send-button"
-                                      />
-                                    }
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="text-center text-gray-600 p-4">Chưa có bài viết nào.</div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <PostsCard 
+                  posts={posts}
+                  postsLoading={postsLoading}
+                  postsError={postsError}
+                  companyData={recordItem}
+                  onRefresh={refreshAllPosts}
+                  onFetchPostDetails={fetchPostDetails}
+                />
               )}
 
               {employersWithJobCounts.length > 0 && (
-                <div className="job-box-cutstom">
-                  <div className="mb-3">
-                    <h3>Công ty cùng lĩnh vực</h3>
-                  </div>
-                  <div className="record-with-job">
-                    {employersWithJobCounts.length > 0 &&
-                      employersWithJobCounts.map((item, index) => (
-                        <div key={index} className="record mb-4">
-                          <div className="flex">
-                            <div className="logo-company">
-                              <img src={item?.logoCompany} alt="" />
-                            </div>
-                            <div className="content">
-                              <div>
-                                <a href={item?.slug} className="name-company">
-                                  CÔNG TY {item?.companyName}
-                                </a>
-                              </div>
-
-                              <div className="count-job">
-                                {item?.countJobs} việc làm
-                              </div>
-                            </div>
-                          </div>
-                          <div className="tag-tag">Cùng lĩnh vực</div>
-                        </div>
-                      ))}
-                  </div>
-                </div>
+                <RelatedCompanies companies={employersWithJobCounts} />
               )}
             </div>
             <div className="col-md-4">
-              <div className="info-contact">
-                <div className="box-contact mb-2">
-                  <div className="title-header1">
-                    <h2>Thông tin liên hệ</h2>
-                  </div>
-                  <div className="box-item-content">
-                    <div className="box-address">
-                      <div className="item-grid mb-2">
-                        <FontAwesomeIcon icon={faLocationDot} />
-                        <span>Địa chỉ công ty</span>
-                      </div>
-                      <div className="content-grid">
-                        {recordItem?.specificAddressCompany}
-                      </div>
-                    </div>
-                    <hr />
-                    <div className="box-map">
-                      <div className="item-grid mb-2">
-                        <FontAwesomeIcon icon={faMap} />
-                        <span>Xem bản đồ</span>
-                      </div>
-                      <div className="content-grid">
-                        <div
-                          style={{ borderRadius: "10px", overflow: "hidden" }}
-                        >
-                          <MemoizedBoxGoogleMap
-                          height={300}
-                            latitude={location[0]}
-                            longitude={location[1]}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="info-contact">
-                <div className="box-contact mb-2">
-                  <div className="title-header1">
-                    <h2>Chia sẻ công ty tới bạn bè</h2>
-                  </div>
-                  <div className="box-item-content">
-                    <div className="share-box mb-3">
-                      <div className="p-content mb-2">Sao chép đường dẫn</div>
-                      <div className="input">
-                        <ConfigProvider
-                          theme={{
-                            token: {
-                              colorPrimary: "#5dcaf9",
-                            },
-                            components: {
-                              Input: {
-                                paddingInlineLG: 16,
-                                paddingBlockLG: 7,
-                              },
-                            },
-                          }}
-                        >
-                          <Search
-                            defaultValue={currentPath}
-                            placeholder="Text..."
-                            allowClear
-                            enterButton={<FontAwesomeIcon icon={faCopy} />}
-                            size="large"
-                            onSearch={(value) => {
-                              navigator.clipboard.writeText(value);
-                            }}
-                          />
-                        </ConfigProvider>
-                      </div>
-                    </div>
-                    <div className="box-icon">
-                      <div className="p-content mb-2">
-                        Chia sẻ qua mạng xã hội
-                      </div>
-                      <div className="icon-icon">
-                        <div className="facebook">
-                          <FontAwesomeIcon icon={faFacebook} />
-                        </div>
-                        <div className="twitter">
-                          <FontAwesomeIcon icon={faTwitter} />
-                        </div>
-                        <div className="instagram">
-                          <FontAwesomeIcon icon={faSquareInstagram} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ContactCard companyData={recordItem} mapLocation={location} />
+              <ShareCard currentPath={currentPath} />
             </div>
           </div>
         </div>
@@ -1137,4 +245,5 @@ function InfoCompany() {
     </div>
   );
 }
-export default InfoCompany;
+
+export default InfoCompany; 
