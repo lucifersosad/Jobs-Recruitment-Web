@@ -1,0 +1,27 @@
+/* Custom styles for PostProfile */
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+/* Override Ant Design Input */
+.ant-input {
+  border-radius: 9999px !important;
+  border: 1px solid #d1d5db !important;
+}
+
+.ant-input-suffix {
+  margin-right: 8px;
+}
+
+.liked {
+  color: #3b82f6;
+}
+
+/* Ensure images are responsive */
+.post-image {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Custom hover effects */
+.action-item:hover {
+  background-color: #f3f4f6;
+}
