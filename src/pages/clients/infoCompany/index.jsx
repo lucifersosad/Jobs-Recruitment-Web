@@ -25,7 +25,7 @@ import {
   faRotate,
 } from "@fortawesome/free-solid-svg-icons";
 import MemoizedJobByCompany from "../../../components/clients/jobByCompany";
-import { ConfigProvider, Input, message } from "antd";
+import { ConfigProvider, Input, message, Image } from "antd";
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import {
   faFacebook,
@@ -47,7 +47,7 @@ function InfoCompany() {
   const [recordItem, setRecordItem] = useState([]);
   const [employersWithJobCounts, setEmployersWithJobCounts] = useState([]);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('intro');
+  const [activeTab, setActiveTab] = useState('posts');
   const [posts, setPosts] = useState([]);
   const [commentContent, setCommentContent] = useState({});
   const [postsLoading, setPostsLoading] = useState(false);
@@ -62,6 +62,8 @@ function InfoCompany() {
   });
 
   const authUser = useSelector((state) => state.authenticationReducerClient?.infoUser);
+
+  const [expandedComments, setExpandedComments] = useState({});
 
   useEffect(() => {
     const fetchCompanyData = async () => {
@@ -439,167 +441,137 @@ function InfoCompany() {
   };
 
   const handleComment = async (postId) => {
-    if (!commentContent[postId]?.trim()) return;
+    if (!commentContent[postId]?.trim()) {
+      return;
+    }
+
     try {
+      // Xóa nội dung input ngay lập tức
+      setCommentContent((prev) => ({ ...prev, [postId]: "" }));
+
+      // Gửi bình luận
       const result = await commentOnPost(postId, commentContent[postId]);
-      console.log("Comment result:", result);
       
-      if (result?.code === 200 && result.data) {
-        const newComment = {
-          id: result.data.id || result.data._id,
-          content: commentContent[postId],
-          userId: {
-            _id: authUser?._id,
-            avatar: authUser?.avatar || "https://via.placeholder.com/32"
-          },
-          timeAgo: "Vừa xong",
-          parentCommentId: null
-        };
+      if (result?.code === 200) {
+        // Đợi một chút để server xử lý xong
+        await new Promise(resolve => setTimeout(resolve, 500));
         
-        setPosts((prevPosts) =>
-          prevPosts.map((post) =>
-            post.id === postId
-              ? { 
-                  ...post, 
-                  comments: [...(post.comments || []), newComment],
-                  commentCount: (post.commentCount || 0) + 1
-                }
-              : post
-          )
-        );
-        
-        setCommentContent((prev) => ({ ...prev, [postId]: "" }));
-        showNotification('Đã đăng bình luận thành công!');
-        
-        setTimeout(() => {
-          fetchPostDetails(postId);
-        }, 500);
-      } else {
-        showNotification('Không thể đăng bình luận. Vui lòng thử lại!', 'error');
+        // Fetch lại bình luận mới nhất
+        const commentsResult = await getPostComments(postId);
+        if (commentsResult?.code === 200 && commentsResult.data) {
+          setPosts(prevPosts => 
+            prevPosts.map(post => 
+              post.id === postId
+                ? { ...post, comments: commentsResult.data }
+                : post
+            )
+          );
+        }
       }
     } catch (err) {
-      console.error("InfoCompany - Error commenting on post:", err);
-      showNotification('Không thể đăng bình luận. Vui lòng thử lại!', 'error');
+      console.error("Error commenting:", err);
+    }
+  };
+
+  // Thêm hàm mới để xử lý việc gửi bình luận khi nhấn Enter
+  const handleCommentKeyPress = (e, postId) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleComment(postId);
     }
   };
 
   const renderPostImages = (postId, images) => {
     if (!images || images.length === 0) return null;
-
     const validImages = images.filter(img => img && img.trim() !== '');
+    const total = validImages.length;
 
-    if (validImages.length === 0) return null;
-
-    if (imageViewer.visible && imageViewer.postId === postId) {
+    // 2 ảnh: chia đôi ngang, mỗi ô vuông
+    if (total === 2) {
       return (
-        <div className="inline-image-viewer">
-          <div className="image-viewer-container">
-            <button
-              className="close-viewer"
-              onClick={(e) => {
-                e.stopPropagation();
-                closeImageViewer();
-              }}
-            >
-              <FontAwesomeIcon icon={faXmark} />
-            </button>
-            
-            <div className="image-display">
-              {imageViewer.images[imageViewer.currentIndex] && (
-                <img
-                  src={imageViewer.images[imageViewer.currentIndex]}
-                  alt={`Ảnh ${imageViewer.currentIndex + 1}`}
-                />
-              )}
+        <div className="post-images">
+          <Image.PreviewGroup items={validImages}>
+            <div style={{ display: 'flex', gap: 4 }}>
+              {validImages.map((img, idx) => (
+                <div key={idx} style={{ flex: 1, aspectRatio: '1/1', overflow: 'hidden' }}>
+                  <Image src={img} alt={`Post ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} preview={{ src: img }} />
+                </div>
+              ))}
             </div>
-
-            {validImages.length > 1 && (
-              <>
-                <button
-                  className="nav-button prev"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigateImage('prev');
-                  }}
-                >
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                </button>
-                <button
-                  className="nav-button next"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigateImage('next');
-                  }}
-                >
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </button>
-              </>
-            )}
-
-            <div className="image-counter">
-              {imageViewer.currentIndex + 1} / {validImages.length}
-            </div>
-          </div>
+          </Image.PreviewGroup>
         </div>
       );
     }
 
-    if (validImages.length === 1) {
-      return (
-        <div className="post-images single-image">
-          <div className="image-wrapper">
-            <img
-              src={validImages[0]}
-              alt="Post image"
-              onClick={() => openImageViewer(postId, validImages, 0)}
-            />
-            <div className="hover-overlay" onClick={() => openImageViewer(postId, validImages, 0)}>
-              <FontAwesomeIcon icon={faExpand} />
-            </div>
-          </div>
-        </div>
-      );
-    } else if (validImages.length === 2) {
+    // 3 ảnh: bên trái 1 ô vuông, bên phải 2 ô vuông dọc
+    if (total === 3) {
       return (
         <div className="post-images">
-          <div className="image-grid grid-2">
-            {validImages.map((image, index) => (
-              <div
-                key={index}
-                className="image-item"
-                onClick={() => openImageViewer(postId, validImages, index)}
-              >
-                <img src={image} alt={`Post ${index + 1}`} />
-                <div className="hover-overlay">
-                  <FontAwesomeIcon icon={faExpand} />
+          <Image.PreviewGroup items={validImages}>
+            <div style={{ display: 'flex', gap: 4 }}>
+              <div style={{ flex: 1, aspectRatio: '1/1', overflow: 'hidden' }}>
+                <Image src={validImages[0]} alt="Post 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} preview={{ src: validImages[0] }} />
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <div style={{ flex: 1, aspectRatio: '1/1', overflow: 'hidden' }}>
+                  <Image src={validImages[1]} alt="Post 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} preview={{ src: validImages[1] }} />
+                </div>
+                <div style={{ flex: 1, aspectRatio: '1/1', overflow: 'hidden' }}>
+                  <Image src={validImages[2]} alt="Post 3" style={{ width: '100%', height: '100%', objectFit: 'cover' }} preview={{ src: validImages[2] }} />
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          </Image.PreviewGroup>
         </div>
       );
-    } else if (validImages.length >= 3) {
+    }
+
+    // 4 ảnh trở lên: grid 2x2, ô thứ 4 overlay dấu +, preview đủ ảnh
+    if (total >= 4) {
+      // Chỉ render 4 ô, nhưng preview đủ toàn bộ ảnh
       return (
         <div className="post-images">
-          <div className="image-grid grid-3">
-            {validImages.slice(0, 3).map((image, index) => (
-              <div
-                key={index}
-                className={`image-item ${index === 2 && validImages.length > 3 ? 'has-overlay' : ''}`}
-                onClick={() => openImageViewer(postId, validImages, index)}
-              >
-                <img src={image} alt={`Post ${index + 1}`} />
-                {index === 2 && validImages.length > 3 && (
-                  <div className="overlay-count">
-                    +{validImages.length - 3}
+          <Image.PreviewGroup items={validImages}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 4 }}>
+              {validImages.slice(0, 3).map((img, idx) => (
+                <div key={idx} style={{ aspectRatio: '1/1', width: '100%', overflow: 'hidden' }}>
+                  <Image src={img} alt={`Post ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} preview={{ src: img }} />
+                </div>
+              ))}
+              <div style={{ aspectRatio: '1/1', width: '100%', position: 'relative', overflow: 'hidden', cursor: 'pointer' }}>
+                <Image src={validImages[3]} alt="Post 4" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: total > 4 ? 'brightness(0.4) blur(2px)' : undefined }} preview={{ src: validImages[3] }} />
+                {total > 4 && (
+                  <div style={{
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#fff', fontSize: 32, fontWeight: 'bold', background: 'rgba(0,0,0,0.4)',
+                    pointerEvents: 'none',
+                  }}>
+                    +{total - 4}
                   </div>
                 )}
-                <div className="hover-overlay">
-                  <FontAwesomeIcon icon={faExpand} />
-                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          </Image.PreviewGroup>
+        </div>
+      );
+    }
+
+    // 1 ảnh (mặc định)
+    if (total === 1) {
+      return (
+        <div className="post-images single-image">
+          <Image.PreviewGroup items={validImages}>
+            <div className="image-wrapper" style={{ aspectRatio: '1/1', width: '100%', overflow: 'hidden' }}>
+              <Image
+                src={validImages[0]}
+                alt="Post image"
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                preview={{ src: validImages[0] }}
+              />
+            </div>
+          </Image.PreviewGroup>
         </div>
       );
     }
@@ -726,6 +698,13 @@ function InfoCompany() {
     </button>
   );
 
+  const toggleComments = (postId) => {
+    setExpandedComments(prev => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
+
   const renderComments = (comments, postId) => {
     const parentComments = comments.filter(comment => !comment.parentCommentId);
     const replyComments = comments.filter(comment => comment.parentCommentId);
@@ -737,53 +716,78 @@ function InfoCompany() {
       }
       replyMap[reply.parentCommentId].push(reply);
     });
+
+    const isExpanded = expandedComments[postId];
+    const initialComments = parentComments.slice(0, 3);
+    const remainingComments = parentComments.slice(3);
+    const displayedComments = isExpanded ? parentComments : initialComments;
     
-    return parentComments.map((comment, index) => (
-      <div key={`parent-${comment.id || index}`} className="comment-thread">
-        <div className="comment-item">
-          <div className="avatar">
-            <img
-              src={comment.userId?.avatar || "https://via.placeholder.com/32"}
-              alt="User Avatar"
-            />
-          </div>
-          <div className="comment-content">
-            <div className="name">
-              {comment.userId?.fullName || "Người dùng"}
-            </div>
-            <div className="text">
-              {comment.content || "Không có nội dung"}
-            </div>
-            <div className="comment-time">
-              {comment.timeAgo || ""}
-            </div>
-          </div>
-        </div>
-        
-        {replyMap[comment.id]?.map((reply, replyIndex) => (
-          <div key={`reply-${reply.id || replyIndex}`} className="comment-item reply-comment">
-            <div className="avatar">
-              <img
-                src={reply.userId?.avatar || recordItem?.logoCompany || "https://via.placeholder.com/32"}
-                alt="Reply Avatar"
-              />
-            </div>
-            <div className="comment-content">
-              <div className="name">
-                {reply.userId?.fullName || recordItem?.companyName || "Công ty"}
-                {!reply.userId && <span className="company-badge">Công ty</span>}
+    return (
+      <div className="comments-container">
+        {displayedComments.map((comment, index) => (
+          <div key={`parent-${comment.id || index}`} className="comment-thread">
+            <div className="comment-item">
+              <div className="avatar">
+                <img
+                  src={comment.userId?.avatar || "https://via.placeholder.com/32"}
+                  alt="User Avatar"
+                />
               </div>
-              <div className="text">
-                {reply.content || "Không có nội dung"}
-              </div>
-              <div className="comment-time">
-                {reply.timeAgo || ""}
+              <div className="comment-content">
+                <div className="name">
+                  {comment.userId?.fullName || "Người dùng"}
+                </div>
+                <div className="text">
+                  {comment.content || "Không có nội dung"}
+                </div>
+                <div className="comment-time">
+                  {comment.timeAgo || ""}
+                </div>
               </div>
             </div>
+            
+            {replyMap[comment.id]?.map((reply, replyIndex) => (
+              <div key={`reply-${reply.id || replyIndex}`} className="comment-item reply-comment">
+                <div className="avatar">
+                  <img
+                    src={reply.userId?.avatar || recordItem?.logoCompany || "https://via.placeholder.com/32"}
+                    alt="Reply Avatar"
+                  />
+                </div>
+                <div className="comment-content">
+                  <div className="name">
+                    {reply.userId?.fullName || recordItem?.companyName || "Công ty"}
+                    {!reply.userId && <span className="company-badge">Công ty</span>}
+                  </div>
+                  <div className="text">
+                    {reply.content || "Không có nội dung"}
+                  </div>
+                  <div className="comment-time">
+                    {reply.timeAgo || ""}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ))}
+
+        {parentComments.length > 3 && (
+          <div className="view-more-comments" onClick={() => toggleComments(postId)}>
+            {isExpanded ? (
+              <div className="view-more-button">
+                <span>Ẩn bớt</span>
+                <FontAwesomeIcon icon={faChevronUp} />
+              </div>
+            ) : (
+              <div className="view-more-button">
+                <span>Xem thêm {parentComments.length - 3} bình luận</span>
+                <FontAwesomeIcon icon={faChevronDown} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
-    ));
+    );
   };
 
   return (
@@ -907,14 +911,14 @@ function InfoCompany() {
                               className="post-item"
                             >
                               <div className="post-header">
-                                <div className="avatar">
+                                <div className="avatar" style={{ cursor: 'pointer' }} onClick={() => window.location.reload()}>
                                   <img
                                     src={recordItem?.logoCompany || "https://via.placeholder.com/40"}
                                     alt="Company Logo"
                                   />
                                 </div>
                                 <div className="info">
-                                  <div className="name">
+                                  <div className="name" style={{ cursor: 'pointer' }} onClick={() => window.location.reload()}>
                                     {post.companyName || recordItem?.companyName || "Công ty ẩn danh"}
                                   </div>
                                   <div className="time">
@@ -957,7 +961,12 @@ function InfoCompany() {
                               
                               <div className="post-comments">
                                 {post.comments?.length > 0 ? (
-                                  renderComments(post.comments, post.id)
+                                  <div className="comments-wrapper" style={{ 
+                                    maxHeight: expandedComments[post.id] ? '400px' : 'auto',
+                                    overflowY: expandedComments[post.id] ? 'auto' : 'visible'
+                                  }}>
+                                    {renderComments(post.comments, post.id)}
+                                  </div>
                                 ) : (
                                   <div className="no-comments">Chưa có bình luận nào</div>
                                 )}
@@ -977,8 +986,12 @@ function InfoCompany() {
                                         [post.id]: e.target.value,
                                       }))
                                     }
+                                    onKeyPress={(e) => handleCommentKeyPress(e, post.id)}
                                     placeholder="Viết bình luận..."
-                                    onPressEnter={() => handleComment(post.id)}
+                                    autoComplete="off"
+                                    autoCorrect="off"
+                                    autoCapitalize="off"
+                                    spellCheck="false"
                                     suffix={
                                       <FontAwesomeIcon
                                         icon={faPaperPlane}
