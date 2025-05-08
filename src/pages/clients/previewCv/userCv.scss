@@ -18,7 +18,9 @@
 
 
 .cv-user {
+  min-height: 100%;
   width: 100%;
+  display: flex;
 
   &__wrapper {
     width: 100%;
@@ -32,12 +34,24 @@
 
     .ant-typography {
       color: #fff;
+
+      ul {
+        list-style-type: disc;
+        margin: 0;
+      }
     }
   }
 
   &__col-2 {
     width: 65%;
     padding: 0 10px 20px 10px;
+
+    .ant-typography {
+      ul {
+        list-style-type: disc;
+        margin: 0;
+      }
+    }
   }
 
   &__avatar {

@@ -21,7 +21,8 @@ const TinyMce = forwardRef(function TinyMce({ value, height = 500 }, ref) {
   return (
     <Editor
       onInit={(evt, editor) => editorRef.current = editor}
-      apiKey='9yecvyh5m7fyb3z4mofetyifuc2ktpz5de78j55h483do465'
+      // apiKey='9yecvyh5m7fyb3z4mofetyifuc2ktpz5de78j55h483do465'
+      apiKey='n0b1bgizavq3v9v5hyc66p6u66hzn0p5qf6va46hjodmmrub'
       value={editorContent}
       init={{
         images_upload_url: "http://localhost:2709/api/v1/admin/uploads/image",

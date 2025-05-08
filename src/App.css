@@ -522,6 +522,15 @@ body::-webkit-scrollbar-horizontal-thumb {
 .icon-edit:hover {
   opacity: 60%
 }
+.icon-delete {
+  font-size: 20px;
+  color: #ff4d4f;
+  cursor: pointer;
+  transition: all 0.3s
+}
+.icon-delete:hover {
+  opacity: 60%
+}
 
 @keyframes typing {
   0% { content: '...'; }

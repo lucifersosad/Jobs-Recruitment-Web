@@ -63,6 +63,7 @@ import LayoutMainAdminNoHeaderAndNoFooter from "../layouts/admins/layout-login";
 import Profile from "../pages/clients/profile";
 import PreviewCv from "../pages/clients/previewCv";
 import LayoutClient from "../layouts/clients/LayoutClient";
+import CreateCv from "../pages/clients/createCv";
 
 export const routes = [
   //client
@@ -107,7 +108,6 @@ export const routes = [
           }
         ],
       },
-
       {
         element: <CheckRoutesClient />,
         children: [
@@ -183,7 +183,6 @@ export const routes = [
             path: "cv/upload-cv",
             element: <UploadCv />,
           },
-
           {
             path: "cv",
             element: <SettingsAccount />,
@@ -194,17 +193,20 @@ export const routes = [
               },
             ],
           },
+          {
+            path: "cv/tao-cv",
+            element: <CreateCv />,
+          },
         ],
-      },
-
-      {
-        path: "*",
-        element: <NotFound />,
       },
     ],
   },
   {
-    path: "/xem-cv",
+    path: "*",
+    element: <NotFound />,
+  },
+  {
+    path: "/xem-cv/:idCv",
     element: <LayoutClient/>,
     children: [
       {
