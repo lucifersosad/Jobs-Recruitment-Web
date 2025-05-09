@@ -18,7 +18,7 @@ import { removeAccents } from "../../../helpers/removeAccents";
 
 import { options } from "./js/options";
 
-function ApplyCv({ record, fetchApi }) {
+function ApplyCv({ record, fetchApi, loading }) {
   const [statusCheck, setStatus] = useState("");
   const [data, setData] = useState([]);
   const [dataFull, setDataFull] = useState([]);
@@ -248,6 +248,7 @@ function ApplyCv({ record, fetchApi }) {
         />
       </div>
       <Table
+        loading={loading}
         showSorterTooltip={false}
         rowKey={"email"}
         columns={columns}

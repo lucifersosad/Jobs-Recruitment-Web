@@ -104,8 +104,6 @@ a:hover {
 .button-delete,
 .button-edit,
 .button-eye {
-  -webkit-box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 5px;
   font-size: 25px;
   cursor: pointer;
@@ -115,8 +113,6 @@ a:hover {
 .button-delete-role,
 .button-edit-role,
 .button-eye-role {
-  -webkit-box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 5px;
   font-size: 19px;
   cursor: pointer;
@@ -516,6 +512,24 @@ body::-webkit-scrollbar-horizontal-thumb {
 }
 .title-employer-setting h3{
   font-weight: 500 !important;
+}
+.icon-edit {
+  font-size: 20px;
+  color: #1677ff;
+  cursor: pointer;
+  transition: all 0.3s
+}
+.icon-edit:hover {
+  opacity: 60%
+}
+.icon-delete {
+  font-size: 20px;
+  color: #ff4d4f;
+  cursor: pointer;
+  transition: all 0.3s
+}
+.icon-delete:hover {
+  opacity: 60%
 }
 
 @keyframes typing {

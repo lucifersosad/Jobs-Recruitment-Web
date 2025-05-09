@@ -37,6 +37,12 @@ function BoxSettings() {
     setLoading(false);
   }, [authenMainClient]);
 
+  if (authenMainClient.status === false) return (
+    <div className="col-4 box-setting-account">
+      Banner
+    </div>
+  )
+
   return (
     <>
       <div className="col-4 box-setting-account">
@@ -47,7 +53,7 @@ function BoxSettings() {
                 src={avatar}
                 alt="avatar"
               />
-              <span className="vip-badge">VERIFIED</span>
+              {/* <span className="vip-badge">VERIFIED</span> */}
 
               <ModelChangeImage avatar={avatar}/>
             </div>
@@ -57,14 +63,14 @@ function BoxSettings() {
               <div className="account-vip">
                 <span>Tài khoản đã xác thực</span>
               </div>
-              <div className="upgrade-account">
+              {/* <div className="upgrade-account">
                 <a href="#!">
                   <span>
                     <FontAwesomeIcon icon={faArrowUp} />
                   </span>
                   <span>Nâng cấp tài khoản</span>
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -125,9 +131,9 @@ function BoxSettings() {
                       Email và Số điện thoại của bạn
                     </li>
                   </ul>
-                  <div className="banner">
+                  {/* <div className="banner">
                     <img src={banner2} alt="" />
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <hr />
@@ -161,7 +167,7 @@ function BoxSettings() {
             </div>
           </div>
         </div>
-        <div
+        {/* <div
           className="text-left box-siderbar"
           style={{ margin: "20px 0 0 0" }}
         >
@@ -188,7 +194,7 @@ function BoxSettings() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -71,30 +71,30 @@ const location = useLocation();
         </Link>
       ),
     },
-    {
-      key: "/tai-khoan/test",
-      label: (
-        <>
-          <Link className="info-drop__button" to="/tai-khoan/test">
-            <FontAwesomeIcon icon={faCircleUp} />
-            <span>Nâng cấp tài khoản</span>
-          </Link>
+    // {
+    //   key: "/tai-khoan/test",
+    //   label: (
+    //     <>
+    //       <Link className="info-drop__button" to="/tai-khoan/test">
+    //         <FontAwesomeIcon icon={faCircleUp} />
+    //         <span>Nâng cấp tài khoản</span>
+    //       </Link>
          
-        </>
-      ),
-    },
+    //     </>
+    //   ),
+    // },
     {
       type: "divider",
     },
-    {
-      key: "5",
-      label: (
-        <a className="info-drop__button" href="#!">
-          <FontAwesomeIcon icon={faEye} />
-          <span> Nhà tuyển dụng xem hồ sơ</span>
-        </a>
-      ),
-    },
+    // {
+    //   key: "5",
+    //   label: (
+    //     <a className="info-drop__button" href="#!">
+    //       <FontAwesomeIcon icon={faEye} />
+    //       <span> Nhà tuyển dụng xem hồ sơ</span>
+    //     </a>
+    //   ),
+    // },
     {
       key: "/tai-khoan/mat-khau",
       label: (

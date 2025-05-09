@@ -227,9 +227,16 @@ strong {
   font-weight: bold;
 }
 
-td,
-td img {
-  vertical-align: top;
+// td,
+// td img {
+//   vertical-align: top;
+// }
+
+.ant-table-body {
+  scrollbar-width: thin;
+  scrollbar-color: #eaeaea transparent;
+  scrollbar-gutter: stable;
+  overflow-y: auto !important;
 }
 
 /* Make sure sup and sub don't mess with your line-heights https://gist.github.com/413930 */
@@ -385,13 +392,13 @@ input[type="button"] {
     color: #fff;
   }
   /* Hide required mark */
-  .ant-form-item
-    .ant-form-item-label
-    > label.ant-form-item-required:not(
-      .ant-form-item-required-mark-optional
-    )::before {
-    display: none;
-  }
+  // .ant-form-item
+  //   .ant-form-item-label
+  //   > label.ant-form-item-required:not(
+  //     .ant-form-item-required-mark-optional
+  //   )::before {
+  //   display: none;
+  // }
   .ant-select-dropdown
     .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
     background-color: #fda4c8 !important;

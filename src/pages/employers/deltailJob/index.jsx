@@ -26,13 +26,16 @@ function DetailJob() {
   const [data, setData] = useState({});
   const [cv_open_contact, setCvOpenContact] = useState(0);
   const [countViewCv, setCountViewCv] = useState(0);
+  const [loading, setLoading] = useState(false)
 
   const fetchApi = async (status="") => {
+    setLoading(true)
     const result = await infoJobsEmployer(param.id,status);
     if (result.code === 200) {
+      setLoading(false)
+      console.log("🚀 ~ fetchApi ~ decData(result.data):", decData(result.data))
       setData(decData(result.data));
-    }
-      
+    }    
   };
   useEffect(() => {
     fetchApi();
@@ -71,7 +74,7 @@ function DetailJob() {
       icon: <FontAwesomeIcon icon={faEye} />,
     },
     {
-      label: <Link to={"./?active_tab=followed_cv"}>CV đang theo dõi</Link>,
+      label: <Link to={"./?active_tab=followed_cv"}>Hồ sơ đang theo dõi</Link>,
       key: "followed_cv",
       icon: <FontAwesomeIcon icon={faPlus} />,
     },
@@ -134,7 +137,7 @@ function DetailJob() {
           <div className="item-box">
             {queryGet === "job" && <MemoizedInfoJobEmployer record={data} />}
             {queryGet === "apply_cv" && (
-              <ApplyCv record={data} fetchApi={fetchApi} />
+              <ApplyCv record={data} fetchApi={fetchApi} loading={loading}/>
             )}
             {queryGet === "viewed_job" && <ViewedJob record={data} />}
             {queryGet === "followed_cv" && <FollowedCv record={data} />}

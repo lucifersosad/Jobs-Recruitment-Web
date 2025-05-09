@@ -12,6 +12,8 @@ import {
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
+import NotificationEmployer from "../../../components/employers/notification";
+
 function Header({ setIsCollapsed, isCollapsed }) {
   const handleCollapsed = () => {
     setIsCollapsed(!isCollapsed);
@@ -20,6 +22,7 @@ function Header({ setIsCollapsed, isCollapsed }) {
     Cookies.remove("token-employer");
     window.location.href = "/nha-tuyen-dung/login";
   };
+  
   return (
     <>
       <nav className="headerEmployer text-left">
@@ -38,10 +41,10 @@ function Header({ setIsCollapsed, isCollapsed }) {
 
           <div className="headerEmployer__navbar">
             <ul className="navbar__ul">
-              <li className="navbar__item main">
+              {/* <li className="navbar__item main">
                 <FontAwesomeIcon icon={faChartLine} />
                 <span>Báo cáo thị trường tuyển dụng</span>
-              </li>
+              </li> */}
               <li className="navbar__item check">
                 <Link to={"./add-jobs-employer"}>
                   <FontAwesomeIcon icon={faPen} />
@@ -67,12 +70,7 @@ function Header({ setIsCollapsed, isCollapsed }) {
                 </Link>
               </li>
               <li className="navbar__item no-check">
-                <Badge count={1}>
-                  <Avatar
-                    shape="square"
-                    icon={<FontAwesomeIcon icon={faBell} />}
-                  />
-                </Badge>
+                <NotificationEmployer />
               </li>
               <li className="navbar__item check" onClick={handleLogout}>
                 <span>Đăng xuất</span>

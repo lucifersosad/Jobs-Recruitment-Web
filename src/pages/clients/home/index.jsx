@@ -25,7 +25,6 @@ function Home() {
   useEffect(() => {
     const fetchApi = async () => {
       const recordEmployers = await getListEmployers();
-      console.log("🚀 ~ fetchApi ~ recordEmployers:", recordEmployers)
 
       if (recordEmployers.code === 200) {
 

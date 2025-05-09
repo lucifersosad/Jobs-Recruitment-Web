@@ -27,7 +27,6 @@ function Login() {
       const result = await loginUser(valueForm);
      
       if (result.code === 200) {
-        console.log("🚀 ~ handleForm ~ result:", result)
         
         Cookies.set("token-user", result.token, { expires: 3 }); // expires: số ngày cookie sẽ hết hạn
       
@@ -161,17 +160,6 @@ function Login() {
                     <Link to={"/register"} style={{ color: "#25a6dd" }}>
                       Đăng ký ngay
                     </Link>
-                  </p>
-                </div>
-                <hr />
-                <div className="box-helper">
-                  <p>Bạn gặp khó khăn khi tạo tài khoản?</p>
-                  <p>
-                    Vui lòng liên hệ tới số{" "}
-                    <a href="tel:+84879279678" style={{ color: "#69b5d6" }}>
-                      (+84) 879279678
-                    </a>{" "}
-                    để được hỗ trợ
                   </p>
                 </div>
               </div>

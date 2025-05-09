@@ -83,6 +83,22 @@ export const editCvByUser = async (valueForm)=>{
     return result;
 }
 export const saveJob = async (valueForm)=>{
-    const result = await AuthPost(`/users//save-job`,valueForm,checkToken);
+    const result = await AuthPost(`/users/save-job`,valueForm,checkToken);
+    return result;
+}
+export const getProfile = async (id)=>{
+    const result = await AuthGet(`/users/get-profile/${id}`);
+    return result;
+}
+export const updateExperience = async (valueForm) => {
+    const result = await AuthPost(`/users/update-experience`,valueForm, checkToken);
+    return result;
+}
+export const updateEducation = async (valueForm) => {
+    const result = await AuthPost(`/users/update-education`,valueForm, checkToken);
+    return result;
+}
+export const updateSkill = async (valueForm) => {
+    const result = await AuthPost(`/users/update-skill`,valueForm, checkToken);
     return result;
 }

@@ -53,7 +53,6 @@ function ModelMapAddress(props) {
     const dataCitySearch = await getCitySearch(value);
     if (dataCitySearch.code === 200) {
       const options = dataCitySearch.data.map((item) => {
-        console.log("🚀 ~ options ~ item:", item)
         return {
           value: item.code,
           label: item.name_with_type,

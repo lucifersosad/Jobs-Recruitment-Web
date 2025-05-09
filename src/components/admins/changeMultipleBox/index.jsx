@@ -18,13 +18,18 @@ function ChangeMultipleBox(props) {
             >
                 <Form.Item
                     name="action"
-                    label="Chọn Nhiều Hành Động"
-
+                    rules={[
+                      {
+                        required: true,
+                        message: "Chọn Ít Nhất Một Hành Động!",
+                      },
+                    ]}
                 >
                     <Select
+                        placeholder="Chọn Hành Động"
                         style={{
                             width: 190,
-                            margin: '0 8px',
+                            margin: 0,
                         }}
                      
                         options={options} />

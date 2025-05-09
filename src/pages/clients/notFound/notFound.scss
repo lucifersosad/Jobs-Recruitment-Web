@@ -1,0 +1,24 @@
+.no-match {
+  height: 100vh;
+  width: 100%;
+  background: #f0f9fc;
+
+  &__img {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+
+    img {
+      height: 30rem;
+      object-fit: cover;
+      width: 30rem;
+    }
+  }
+
+  &__button {
+    margin-top: 2rem;
+  }
+}

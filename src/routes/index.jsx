@@ -57,6 +57,13 @@ import JobSaves from "../pages/clients/jobSaves";
 import ListJobAppy from "../pages/clients/listJobApply";
 import InfoCompany from "../pages/clients/infoCompany";
 import JobSearchAdvanced from "../pages/clients/jobSearchAdvanced";
+import AddAccounts from "../pages/admins/addAccounts";
+import ManagementAccounts from "../pages/admins/managementAccounts";
+import LayoutMainAdminNoHeaderAndNoFooter from "../layouts/admins/layout-login";
+import Profile from "../pages/clients/profile";
+import PreviewCv from "../pages/clients/previewCv";
+import LayoutClient from "../layouts/clients/LayoutClient";
+import CreateCv from "../pages/clients/createCv";
 
 export const routes = [
   //client
@@ -89,9 +96,18 @@ export const routes = [
             path: "cong-ty/:slug",
             element: <InfoCompany />,
           },
+          {
+            path: "profile/:id",
+            element: <SettingsAccount />,
+            children: [
+              {
+                index: true,
+                element: <Profile />
+              }
+            ]
+          }
         ],
       },
-
       {
         element: <CheckRoutesClient />,
         children: [
@@ -167,7 +183,6 @@ export const routes = [
             path: "cv/upload-cv",
             element: <UploadCv />,
           },
-
           {
             path: "cv",
             element: <SettingsAccount />,
@@ -178,14 +193,27 @@ export const routes = [
               },
             ],
           },
+          {
+            path: "cv/tao-cv",
+            element: <CreateCv />,
+          },
         ],
       },
-
-      {
-        path: "*",
-        element: <NotFound />,
-      },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+  {
+    path: "/xem-cv/:idCv",
+    element: <LayoutClient/>,
+    children: [
+      {
+        element: <PreviewCv />,
+        index: true,
+      }
+    ]
   },
   {
     element: <PrivateRoutesClient />,
@@ -203,7 +231,7 @@ export const routes = [
   //admin
   {
     path: "admin",
-    element: <LayoutMainAdmin />,
+    element: <LayoutMainAdminNoHeaderAndNoFooter />,
     children: [
       {
         element: <CheckRoutes />,
@@ -214,7 +242,12 @@ export const routes = [
           },
         ],
       },
-
+    ]
+  },
+  {
+    path: "admin",
+    element: <LayoutMainAdmin />,
+    children: [
       {
         element: <PrivateRoutes />,
         children: [
@@ -252,6 +285,15 @@ export const routes = [
           {
             path: "set-permission",
             element: <SetPermission />,
+          },
+          //Tài khoản
+          {
+            path: "add-accounts",
+            element: <AddAccounts />,
+          },
+          {
+            path: "management-accounts",
+            element: <ManagementAccounts />,
           },
         ],
       },

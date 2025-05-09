@@ -15,7 +15,6 @@ function CheckRoutesEmployer() {
      useEffect(() => {
          const checkAuthen = async () => {
             const CheckAuth = await CheckAuthEmployer()
-             console.log("🚀 ~ checkAuthen ~ CheckAuth:", CheckAuth)
              //if check token đúng thì gán lại token không rỗng
              if (CheckAuth.status) {
                 //nếu đúng thì sẽ dispath thành true và thêm infoUser vào trong store

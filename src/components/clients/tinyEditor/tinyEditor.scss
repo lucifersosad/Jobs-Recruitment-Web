@@ -1,0 +1,13 @@
+.mce-content-body[contenteditable="true"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  min-height: 50px;
+  cursor: text;
+}
+
+.mce-content-body[contenteditable="true"]:focus {
+  border-color: #1677ff;
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
+  outline: 0;
+}
