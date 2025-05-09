@@ -22,8 +22,7 @@ const TinyMce = forwardRef(function TinyMce({ value, height = 200, onChange }, r
   return (
     <Editor
       onInit={(evt, editor) => editorRef.current = editor}
-      // apiKey='9yecvyh5m7fyb3z4mofetyifuc2ktpz5de78j55h483do465'
-      apiKey='n0b1bgizavq3v9v5hyc66p6u66hzn0p5qf6va46hjodmmrub'
+      apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
       value={editorContent}
       init={{
         inline: true,

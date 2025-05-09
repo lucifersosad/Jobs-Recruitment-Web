@@ -10,6 +10,7 @@ import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 
 import { fetchApi, loadMore } from "./js";
+import { DOMAIN } from "../../../utils/api-domain";
 const checkTokenClient = getCookie("token-user") || "";
 
 function ChatBoxClient() {
@@ -33,7 +34,7 @@ function ChatBoxClient() {
       socketClient?.disconnect();
     }
     setSocketClient(
-      io("http://localhost:8386", {
+      io(DOMAIN, {
         auth: {
           token: checkTokenClient,
           role: "client",
