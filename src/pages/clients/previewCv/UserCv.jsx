@@ -45,8 +45,7 @@ const UserCv = ({ data }) => {
                 className="cv-user__avatar"
                 shape="square"
                 src={
-                  "https://s3-utem.s3.ap-southeast-2.amazonaws.com/profile/1746072696658.jpeg" ||
-                  "https://static.topcv.vn/cv-builder/assets/default-avatar.fc9c40ba.png"
+                  data?.avatar || "https://static.topcv.vn/cv-builder/assets/default-avatar.fc9c40ba.png"
                 }
                 alt="avatar"
               />
@@ -88,37 +87,41 @@ const UserCv = ({ data }) => {
               </Space>
             </div>
           </div>
-          <div className="cv-user__section">
-            <Divider
-              orientation="left"
-              orientationMargin="0"
-              className="cv-user__section-title"
-              style={{ fontWeight: "bold" }}
-            >
-              Các kỹ năng
-            </Divider>
-            <div className="cv-user__section-body">
-              <Paragraph>
-                <div dangerouslySetInnerHTML={{ __html: data?.skills[0]?.description }} />
-              </Paragraph>
+          {data?.experiences?.length > 0 && (
+            <div className="cv-user__section">
+              <Divider
+                orientation="left"
+                orientationMargin="0"
+                className="cv-user__section-title"
+                style={{ fontWeight: "bold" }}
+              >
+                Các kỹ năng
+              </Divider>
+              <div className="cv-user__section-body">
+                <Paragraph>
+                  <div dangerouslySetInnerHTML={{ __html: data?.skills[0]?.description }} />
+                </Paragraph>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className="cv-user__col-2">
-          <div className="cv-user__section cv-user__objective">
-            <Divider
-              orientation="left"
-              orientationMargin="0"
-              className="cv-user__section-title"
-            >
-              Mục tiêu nghề nghiệp
-            </Divider>
-            <div className="cv-user__section-body">
-              <Paragraph>
-                {data?.objective}
-              </Paragraph>
+          {data?.objective && (
+            <div className="cv-user__section cv-user__objective">
+              <Divider
+                orientation="left"
+                orientationMargin="0"
+                className="cv-user__section-title"
+              >
+                Mục tiêu nghề nghiệp
+              </Divider>
+              <div className="cv-user__section-body">
+                <Paragraph>
+                  {data?.objective}
+                </Paragraph>
+              </div>
             </div>
-          </div>
+          )}
           {data?.experiences?.length > 0 && (
             <div className="cv-user__section cv-user__experiences">
               <Divider

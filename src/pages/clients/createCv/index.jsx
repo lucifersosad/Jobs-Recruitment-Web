@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   message,
+  notification,
   Row,
   Space,
   Typography,
@@ -18,12 +19,15 @@ import {
 } from "@ant-design/icons";
 import MemoizedTinyMce from "../../../components/clients/tinyEditor";
 import { createMyCv } from "../../../services/clients/myCvsApi";
+import { useNavigate } from "react-router-dom";
+import banner from "/images/banner-cv.png";
 
 const CreateCv = () => {
-  const [messageApi, contextHolder] = message.useMessage();
+  const [api, contextHolder] = notification.useNotification();
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
+  const navigate = useNavigate()
 
   const defaultValue = {
     fullName: "",
@@ -43,20 +47,58 @@ const CreateCv = () => {
 
   const handleForm = async (values) => {
     console.log("🚀 ~ CreateCv ~ values:", values);
+    setLoadingSubmit(true)
     try {
       const result = await createMyCv(values)
-      console.log("🚀 ~ handleForm ~ result:", result)
+      if (result.code === 200) {
+        const idCv = result.data._id
+        
+        api.success({
+          message: `Success`,
+          description: (
+            <>
+              <i>{result.success}</i>
+            </>
+          ),
+        });
+
+        navigate(`/xem-cv/${idCv}`)
+      } else {
+        api.error({
+          message: <span style={{ color: "red" }}>Thất bại</span>,
+          description: (
+            <>
+              <i>{result.error}</i>
+            </>
+          ),
+        });
+      }
     } catch (error) {
       console.log("🚀 ~ handleForm ~ error:", error)
     }
+    setLoadingSubmit(false)
   };
 
   return (
     <>
       {contextHolder}
+      
       <div className="cb-section cb-section-padding-bottom bg-grey2">
         <div className="container">
-          <Card>
+          <div className="box-settings-info__banner" style={{zIndex: 1}}>
+            <div className="left">
+              <h1 className="title">
+                Tạo CV để các cơ hội việc làm tự tìm đến bạn
+              </h1>
+              <h2 className="sub-title">
+                Giảm đến 50% thời gian cần thiết để tìm được một công việc phù hợp
+              </h2>
+            </div>
+            <div className="right">
+              <img src={banner} alt="" />
+            </div>
+          </div>
+          <Card style={{borderTopRightRadius: 0, borderTopLeftRadius: 0, border: 0}}>
             <Form
               layout="vertical"
               encType="multipart/form-data"
@@ -694,7 +736,24 @@ const CreateCv = () => {
                   </Col>
                 </Row>
 
-                <Form.Item>
+                <Row>
+                  <Col xs={24}>
+                    <Form.Item>
+                      <Button
+                        style={{marginTop: "40px"}}
+                        htmlType="submit"
+                        type="primary"
+                        block
+                        size="large"
+                        loading={loadingSubmit}
+                      >
+                        Hoàn Thành
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                {/* <Form.Item>
                   <Button
                     htmlType="submit"
                     type="primary"
@@ -705,7 +764,7 @@ const CreateCv = () => {
                   >
                     Hoàn Thành
                   </Button>
-                </Form.Item>
+                </Form.Item> */}
               </Space>
             </Form>
           </Card>
