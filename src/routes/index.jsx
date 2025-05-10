@@ -61,6 +61,8 @@ import Profile from "../pages/clients/profile";
 import PreviewCv from "../pages/clients/previewCv";
 import LayoutClient from "../layouts/clients/LayoutClient";
 import PostProfile from "../pages/clients/postProfile";
+import ManagementPost from "../pages/employers/managementPost";
+import FormCreatePost from "../pages/employers/managementPost/formCreatePost";
 
 export const routes = [
   // client
@@ -352,6 +354,10 @@ export const routes = [
             element: <ManagementJobsEmployer />,
           },
           {
+            path: "management-posts",
+            element: <ManagementPost />,
+          },
+          {
             path: "detail-jobs/:id",
             element: <DetailJob />,
           },
@@ -370,6 +376,10 @@ export const routes = [
           {
             path: "account/phone-verify",
             element: <PhoneVerify />,
+          },
+          {
+            path: "create-post",
+            element: <FormCreatePost />,
           },
         ],
       },
