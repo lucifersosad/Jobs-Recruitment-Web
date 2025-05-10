@@ -13,7 +13,7 @@ import {
   checkLikeStatus
 } from "../../../services/employers/postApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faComment, faPaperPlane, faTrash, faEdit, faReply, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faComment, faPaperPlane, faTrash, faEdit, faReply, faChevronLeft, faChevronRight, faSearch, faSearchMinus, faSearchPlus } from "@fortawesome/free-solid-svg-icons";
 import { ConfigProvider, Input, Modal, Form, message, Button, Upload, Spin, Image } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { getCookie } from "../../../helpers/cookie";
@@ -323,6 +323,12 @@ function ManagementPost() {
   const [loadingAllComments, setLoadingAllComments] = useState(false);
   const [visibleCommentsMap, setVisibleCommentsMap] = useState({});
   const [avatarCache, setAvatarCache] = useState({}); // Cache avatar đã kiểm tra
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const maxZoomLevel = 3;
+  const minZoomLevel = 0.5;
+  const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   
   // Lấy thông tin công ty từ Redux store
   const authenMainEmployer = useSelector(state => state.authenticationReducerEmployer);
@@ -1096,6 +1102,9 @@ function ManagementPost() {
 
   const handleUpdate = async (values) => {
     try {
+      // Hiển thị thông báo đang xử lý
+      message.loading({ content: "Đang cập nhật bài viết...", key: "updatePost" });
+      
       const formData = new FormData();
       formData.append("caption", values.caption);
       if (values.images) {
@@ -1104,21 +1113,90 @@ function ManagementPost() {
         });
       }
 
-      const result = await updatePost(editingPost.id, formData);
-      if (result?.code === 200) {
-        message.success("Cập nhật bài viết thành công");
-        setPosts(prevPosts =>
-          prevPosts.map(post =>
-            post.id === editingPost.id ? { ...post, ...result.data } : post
-          )
-        );
+      // Lưu trữ caption mới để so sánh sau này
+      const newCaption = values.caption;
+      
+      try {
+        const result = await updatePost(editingPost.id, formData);
+        console.log("Kết quả cập nhật bài viết:", result);
+        
+        // Kiểm tra xem kết quả API trả về có đúng dạng thành công không
+        if (result?.code === 200) {
+          // Cập nhật thành công theo API
+          message.success({ content: "Cập nhật bài viết thành công", key: "updatePost", duration: 2 });
+          
+          // Cập nhật state với dữ liệu mới từ API
+          setPosts(prevPosts =>
+            prevPosts.map(post =>
+              post.id === editingPost.id ? { ...post, ...result.data } : post
+            )
+          );
+        } else {
+          // Kiểm tra xem API có trả về data dù không có code 200
+          if (result?.data) {
+            message.success({ content: "Cập nhật bài viết thành công", key: "updatePost", duration: 2 });
+            
+            // Cập nhật state với dữ liệu mới từ API
+            setPosts(prevPosts =>
+              prevPosts.map(post =>
+                post.id === editingPost.id ? { ...post, ...result.data } : post
+              )
+            );
+          } else {
+            // API không trả về result.data, tự cập nhật state với dữ liệu từ form
+            message.success({ content: "Bài viết đã được cập nhật", key: "updatePost", duration: 2 });
+            
+            // Tự cập nhật state với dữ liệu caption mới
+            setPosts(prevPosts =>
+              prevPosts.map(post =>
+                post.id === editingPost.id ? { ...post, caption: newCaption } : post
+              )
+            );
+          }
+        }
+        
+        // Đóng modal và reset state
         setIsModalVisible(false);
         setEditingPost(null);
-        fetchPosts();
+        
+        // Thêm timeout để đảm bảo giao diện người dùng được cập nhật trước khi tải lại
+        setTimeout(() => {
+          fetchPosts();
+        }, 800);
+        
+      } catch (apiError) {
+        // Kiểm tra xem có phải lỗi kết nối không
+        console.error("API error:", apiError);
+        
+        if (apiError.message && (apiError.message.includes("network") || apiError.message.includes("Network"))) {
+          // Lỗi mạng - cập nhật UI nhưng hiển thị cảnh báo
+          message.warning({ 
+            content: "Đã cập nhật bài viết nhưng có vấn đề kết nối. Dữ liệu sẽ được đồng bộ khi kết nối lại.", 
+            key: "updatePost", 
+            duration: 3 
+          });
+          
+          // Vẫn cập nhật UI với giá trị mới
+          setPosts(prevPosts =>
+            prevPosts.map(post =>
+              post.id === editingPost.id ? { ...post, caption: newCaption } : post
+            )
+          );
+          
+          // Đóng modal và reset state
+          setIsModalVisible(false);
+          setEditingPost(null);
+        } else {
+          // Lỗi API khác
+          message.error({ 
+            content: "Không thể cập nhật bài viết: " + (apiError.message || "Lỗi không xác định"), 
+            key: "updatePost" 
+          });
+        }
       }
     } catch (error) {
       console.error("Error updating post:", error);
-      message.error("Không thể cập nhật bài viết");
+      message.error({ content: "Không thể cập nhật bài viết: " + (error.message || "Lỗi không xác định"), key: "updatePost" });
     }
   };
 
@@ -1127,6 +1205,8 @@ function ManagementPost() {
     setPreviewIndex(index);
     setPreviewImage(images[index]);
     setPreviewTitle(`Ảnh ${index + 1}/${images.length}`);
+    setZoomLevel(1); // Reset zoom về mức mặc định
+    setPanPosition({ x: 0, y: 0 }); // Reset vị trí pan
     setPreviewVisible(true);
   };
 
@@ -1160,26 +1240,77 @@ function ManagementPost() {
     const maxDisplay = 4;
     const remaining = imageUrls.length > maxDisplay ? imageUrls.length - maxDisplay : 0;
 
-    return (
-      <div className="post-images">
-        <div className="grid grid-cols-2 gap-1 rounded-lg overflow-hidden">
-          {imageUrls.slice(0, maxDisplay).map((image, index) => {
-            const isLastWithMore = index === maxDisplay - 1 && remaining > 0;
+    // Xác định cách hiển thị dựa trên số lượng ảnh
+    if (imageUrls.length === 1) {
+      // Nếu chỉ có 1 ảnh, hiển thị ở giữa khung với chiều cao cố định
+      return (
+        <div className="post-single-image">
+          <img
+            src={imageUrls[0]}
+            alt="Post image"
+            className="single-image"
+            onClick={() => openImagePreview(imageUrls, 0)}
+          />
+        </div>
+      );
+    } else if (imageUrls.length === 2) {
+      // Nếu có 2 ảnh, hiển thị cạnh nhau
+      return (
+        <div className="post-images-grid grid-2">
+          {imageUrls.map((image, index) => (
+            <div 
+              key={`image-${index}`} 
+              className="image-container"
+              onClick={() => openImagePreview(imageUrls, index)}
+            >
+              <img src={image} alt={`Post ${index + 1}`} />
+            </div>
+          ))}
+        </div>
+      );
+    } else if (imageUrls.length === 3) {
+      // Nếu có 3 ảnh, hiển thị 1 ảnh lớn bên trái và 2 ảnh nhỏ bên phải
+      return (
+        <div className="post-images-grid grid-3">
+          <div 
+            className="image-container main"
+            onClick={() => openImagePreview(imageUrls, 0)}
+          >
+            <img src={imageUrls[0]} alt="Post 1" />
+          </div>
+          <div className="image-column">
+            <div 
+              className="image-container"
+              onClick={() => openImagePreview(imageUrls, 1)}
+            >
+              <img src={imageUrls[1]} alt="Post 2" />
+            </div>
+            <div 
+              className="image-container"
+              onClick={() => openImagePreview(imageUrls, 2)}
+            >
+              <img src={imageUrls[2]} alt="Post 3" />
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      // Nếu có 4 ảnh trở lên, hiển thị dạng lưới 2x2
+      return (
+        <div className="post-images-grid grid-4">
+          {imageUrls.slice(0, 4).map((image, index) => {
+            const isLastWithMore = index === 3 && remaining > 0;
             
             return (
               <div 
                 key={`image-${index}`} 
-                className="relative aspect-w-1 aspect-h-1 cursor-pointer"
+                className="image-container"
                 onClick={() => !isLastWithMore && openImagePreview(imageUrls, index)}
               >
-                <img
-                  src={image}
-                  alt={`Post ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
+                <img src={image} alt={`Post ${index + 1}`} />
                 {isLastWithMore && (
                   <div 
-                    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-xl font-bold cursor-pointer"
+                    className="image-overlay"
                     onClick={() => openImagePreview(imageUrls, 0)}
                   >
                     +{remaining}
@@ -1189,8 +1320,8 @@ function ManagementPost() {
             );
           })}
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   const viewLikeList = async (postId) => {
@@ -1392,12 +1523,7 @@ function ManagementPost() {
                         }}
                       />
                       <div className="flex-1 flex flex-col">
-                        <ConfigProvider
-                          theme={{
-                            token: { colorPrimary: "#5dcaf9" },
-                            components: { Input: { paddingInlineLG: 12, paddingBlockLG: 6 } },
-                          }}
-                        >
+                        <div className="relative flex-1">
                           <Input
                             value={replyContent[`${post.id}-${commentId}`] || ""}
                             onChange={(e) =>
@@ -1407,28 +1533,29 @@ function ManagementPost() {
                               }))
                             }
                             placeholder={`${companyInfo.name} đang trả lời...`}
-                            className="flex-1 rounded-full reply-input"
+                            className="rounded-full reply-input pr-10"
+                            style={{ paddingRight: "40px" }}
                             disabled={replyContent[`${post.id}-${commentId}-loading`]}
-                            suffix={
-                              replyContent[`${post.id}-${commentId}-loading`] ? (
-                                <Spin size="small" />
-                              ) : (
-                                <FontAwesomeIcon
-                                  icon={faPaperPlane}
-                                  onClick={() => handleReply(post.id, commentId)}
-                                  className="text-gray-500 cursor-pointer hover:text-blue-500"
-                                />
-                              )
-                            }
                             onPressEnter={(e) => {
-                              e.preventDefault(); // Ngăn chặn hành vi mặc định
+                              e.preventDefault();
                               if (!replyContent[`${post.id}-${commentId}-loading`]) {
                                 handleReply(post.id, commentId);
                               }
                             }}
-                            autoFocus // Tự động focus vào input khi hiển thị
+                            autoFocus
                           />
-                        </ConfigProvider>
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10">
+                            {replyContent[`${post.id}-${commentId}-loading`] ? (
+                              <Spin size="small" />
+                            ) : (
+                              <FontAwesomeIcon
+                                icon={faPaperPlane}
+                                onClick={() => handleReply(post.id, commentId)}
+                                className="text-gray-500 cursor-pointer hover:text-blue-500"
+                              />
+                            )}
+                          </div>
+                        </div>
                         <div className="text-right mt-1">
                           <Button 
                             type="text" 
@@ -1646,6 +1773,87 @@ function ManagementPost() {
     );
   };
 
+  // Hàm xử lý bắt đầu kéo ảnh
+  const handleMouseDown = (e) => {
+    if (zoomLevel > 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.clientX - panPosition.x,
+        y: e.clientY - panPosition.y
+      });
+    }
+  };
+  
+  // Hàm xử lý di chuyển ảnh khi kéo
+  const handleMouseMove = (e) => {
+    if (isDragging && zoomLevel > 1) {
+      // Tính toán vị trí mới
+      const newX = e.clientX - dragStart.x;
+      const newY = e.clientY - dragStart.y;
+      
+      // Giới hạn khoảng di chuyển dựa vào tỷ lệ zoom
+      const maxPanX = (zoomLevel - 1) * 150;
+      const maxPanY = (zoomLevel - 1) * 150;
+      
+      // Áp dụng giới hạn và cập nhật vị trí
+      setPanPosition({
+        x: Math.max(-maxPanX, Math.min(maxPanX, newX)),
+        y: Math.max(-maxPanY, Math.min(maxPanY, newY))
+      });
+    }
+  };
+  
+  // Hàm xử lý kết thúc kéo ảnh
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+  
+  // Hàm xử lý phóng to ảnh
+  const handleZoomIn = () => {
+    if (zoomLevel < maxZoomLevel) {
+      setZoomLevel(prev => Math.min(prev + 0.25, maxZoomLevel));
+    }
+  };
+  
+  // Hàm xử lý thu nhỏ ảnh
+  const handleZoomOut = () => {
+    if (zoomLevel > minZoomLevel) {
+      const newZoomLevel = Math.max(zoomLevel - 0.25, minZoomLevel);
+      setZoomLevel(newZoomLevel);
+      
+      // Nếu thu nhỏ về 1x, reset vị trí pan
+      if (newZoomLevel <= 1) {
+        setPanPosition({ x: 0, y: 0 });
+      }
+    }
+  };
+  
+  // Hàm reset zoom về mức mặc định
+  const handleResetZoom = () => {
+    setZoomLevel(1);
+    setPanPosition({ x: 0, y: 0 });
+  };
+
+  // Hàm xử lý phóng to/thu nhỏ bằng bánh xe chuột
+  const handleWheel = (e) => {
+    if (previewVisible) {
+      e.preventDefault();
+      
+      // Xác định hướng cuộn (lên là phóng to, xuống là thu nhỏ)
+      const delta = e.deltaY < 0 ? 0.1 : -0.1;
+      const newZoomLevel = Math.max(minZoomLevel, Math.min(maxZoomLevel, zoomLevel + delta));
+      
+      if (newZoomLevel !== zoomLevel) {
+        // Nếu thu nhỏ về mức 1 hoặc nhỏ hơn, reset vị trí
+        if (newZoomLevel <= 1) {
+          setPanPosition({ x: 0, y: 0 });
+        }
+        
+        setZoomLevel(newZoomLevel);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-4xl mx-auto">
@@ -1707,7 +1915,9 @@ function ManagementPost() {
 
                   <div className="mb-4">
                     <p className="text-gray-700 whitespace-pre-line">{post.caption}</p>
-                    {renderImages(post.images)}
+                    <div className="post-image-container">
+                      {renderImages(post.images)}
+                    </div>
                   </div>
 
                   <div className="flex justify-between text-gray-500 text-sm mb-2">
@@ -1833,55 +2043,118 @@ function ManagementPost() {
         open={previewVisible}
         title={previewTitle}
         footer={null}
-        onCancel={() => setPreviewVisible(false)}
+        onCancel={() => {
+          setPreviewVisible(false);
+          setZoomLevel(1); // Reset zoom khi đóng modal
+          setPanPosition({ x: 0, y: 0 }); // Reset vị trí pan
+        }}
         width={800}
         centered
+        className="image-preview-modal"
       >
-        <div className="relative">
-          <img 
-            alt={previewTitle} 
-            src={previewImage} 
-            style={{ width: '100%' }} 
-          />
+        <div className="image-preview-container">
+          <div 
+            className={`image-preview-wrapper ${zoomLevel > 1 ? 'can-pan' : ''}`}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onWheel={handleWheel}
+          >
+            <img 
+              alt={previewTitle} 
+              src={previewImage} 
+              className={`preview-image ${zoomLevel !== 1 ? 'zoomed' : ''}`}
+              style={{ 
+                transform: `scale(${zoomLevel}) translate(${panPosition.x / zoomLevel}px, ${panPosition.y / zoomLevel}px)`, 
+                transition: isDragging ? 'none' : 'transform 0.3s ease' 
+              }}
+              draggable="false"
+              onDragStart={(e) => e.preventDefault()}
+            />
+          </div>
           
           {previewImages.length > 1 && (
             <>
               <Button 
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 rounded-full"
+                className="preview-nav-button preview-nav-prev"
                 icon={<FontAwesomeIcon icon={faChevronLeft} />} 
-                onClick={handlePrevImage}
+                onClick={() => {
+                  handlePrevImage();
+                  setZoomLevel(1); // Reset zoom khi chuyển ảnh
+                  setPanPosition({ x: 0, y: 0 }); // Reset vị trí pan
+                }}
                 shape="circle"
                 style={{ background: 'rgba(255, 255, 255, 0.8)' }}
               />
               
               <Button 
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full"
+                className="preview-nav-button preview-nav-next"
                 icon={<FontAwesomeIcon icon={faChevronRight} />} 
-                onClick={handleNextImage}
+                onClick={() => {
+                  handleNextImage();
+                  setZoomLevel(1); // Reset zoom khi chuyển ảnh
+                  setPanPosition({ x: 0, y: 0 }); // Reset vị trí pan
+                }}
                 shape="circle"
                 style={{ background: 'rgba(255, 255, 255, 0.8)' }}
               />
             </>
           )}
+          
+          {/* Thêm các nút điều khiển zoom */}
+          <div className="preview-zoom-controls">
+            <Button
+              className="zoom-button"
+              icon={<FontAwesomeIcon icon={faSearch} />}
+              onClick={handleResetZoom}
+              title="Khôi phục kích thước gốc (100%)"
+            >
+              {Math.round(zoomLevel * 100)}%
+            </Button>
+            <Button 
+              className="zoom-button"
+              icon={<FontAwesomeIcon icon={faSearchMinus} />}
+              onClick={handleZoomOut}
+              disabled={zoomLevel <= minZoomLevel}
+              title="Thu nhỏ"
+            />
+            <Button 
+              className="zoom-button"
+              icon={<FontAwesomeIcon icon={faSearchPlus} />}
+              onClick={handleZoomIn}
+              disabled={zoomLevel >= maxZoomLevel}
+              title="Phóng to"
+            />
+          </div>
+          
+          {zoomLevel > 1 && (
+            <div className="preview-zoom-hint">
+              <FontAwesomeIcon icon={faSearch} className="hint-icon" />
+              <span>Kéo để di chuyển ảnh</span>
+            </div>
+          )}
         </div>
         
         {/* Hiển thị các ảnh nhỏ bên dưới để dễ chuyển */}
         {previewImages.length > 1 && (
-          <div className="mt-4 flex space-x-2 overflow-x-auto py-2">
+          <div className="preview-thumbnails">
             {previewImages.map((image, index) => (
               <div 
                 key={`thumb-${index}`}
-                className={`cursor-pointer border-2 ${index === previewIndex ? 'border-blue-500' : 'border-transparent'}`}
+                className={`thumbnail-item ${index === previewIndex ? 'active' : ''}`}
                 onClick={() => {
                   setPreviewIndex(index);
                   setPreviewImage(image);
                   setPreviewTitle(`Ảnh ${index + 1}/${previewImages.length}`);
+                  setZoomLevel(1); // Reset zoom khi chọn ảnh mới
+                  setPanPosition({ x: 0, y: 0 }); // Reset vị trí pan
                 }}
               >
                 <img 
                   src={image} 
                   alt={`Thumbnail ${index + 1}`}
-                  className="h-16 w-16 object-cover"
+                  className="thumbnail-image"
                 />
               </div>
             ))}

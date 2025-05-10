@@ -428,6 +428,17 @@ textarea.ant-input {
   margin-bottom: 8px !important;
   width: 100%;
   
+  .reply-input {
+    padding-right: 40px !important;
+    border-radius: 20px !important;
+    transition: all 0.3s ease;
+    
+    &:hover, &:focus {
+      border-color: #5dcaf9 !important;
+      box-shadow: 0 0 0 2px rgba(93, 202, 249, 0.2) !important;
+    }
+  }
+  
   .ant-input-affix-wrapper {
     border-radius: 20px !important;
     transition: all 0.3s ease;
@@ -478,4 +489,389 @@ textarea.ant-input {
   100% {
     transform: scale(1);
   }
+}
+
+/* CSS cho hiển thị ảnh */
+.post-images {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  
+  .rounded-lg {
+    border-radius: 8px;
+  }
+  
+  .aspect-w-1.aspect-h-1 {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
+  
+  /* Style cho hiển thị một ảnh */
+  .object-contain {
+    max-height: 400px;
+    width: auto;
+    margin: 0 auto;
+    display: block;
+  }
+  
+  /* Style cho overlay "+more" */
+  .absolute.inset-0 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
+/* Styling cho khung chứa ảnh trong bài viết của ManagementPost */
+.post-image-container {
+  width: 100%;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Single image display */
+.post-single-image {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.post-single-image .single-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.post-single-image .single-image:hover {
+  transform: scale(1.02);
+}
+
+/* Grid layouts for multiple images */
+.post-images-grid {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  display: flex;
+  border-radius: 8px;
+  gap: 2px;
+}
+
+.post-images-grid .image-container {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.post-images-grid .image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-images-grid .image-container:hover img {
+  transform: scale(1.02);
+}
+
+.post-images-grid .image-container .image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.post-images-grid .image-container .image-overlay:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* 2 images layout */
+.post-images-grid.grid-2 .image-container {
+  flex: 1;
+  height: 100%;
+}
+
+/* 3 images layout */
+.post-images-grid.grid-3 .image-container.main {
+  flex: 2;
+  height: 100%;
+}
+
+.post-images-grid.grid-3 .image-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.post-images-grid.grid-3 .image-column .image-container {
+  flex: 1;
+}
+
+/* 4 images layout */
+.post-images-grid.grid-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+}
+
+.post-images-grid.grid-4 .image-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* Styling cho phần xem trước ảnh (Preview) */
+.image-preview-modal .ant-modal-body {
+  padding: 16px;
+}
+
+.image-preview-modal .ant-modal-title {
+  font-size: 16px;
+  text-align: center;
+}
+
+.image-preview-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  border-radius: 8px;
+}
+
+.image-preview-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.image-preview-wrapper:active {
+  cursor: grabbing;
+}
+
+.image-preview-wrapper.can-pan {
+  cursor: move;
+}
+
+.image-preview-wrapper.can-pan:active {
+  cursor: grabbing;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  margin: 0 auto;
+  transform-origin: center center;
+  user-select: none;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.preview-image.zoomed {
+  transition: transform 0.3s ease;
+  border-radius: 0;
+}
+
+.preview-nav-button {
+  position: absolute;
+  z-index: 10;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+.preview-nav-button:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.preview-nav-button.preview-nav-prev {
+  left: 16px;
+}
+
+.preview-nav-button.preview-nav-next {
+  right: 16px;
+}
+
+/* CSS cho thanh điều khiển zoom */
+.preview-zoom-controls {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
+  padding: 4px 12px;
+  z-index: 20;
+  transition: opacity 0.3s ease;
+}
+
+.preview-zoom-controls .zoom-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  border-radius: 4px;
+  padding: 4px 8px;
+  transition: all 0.2s ease;
+  margin: 0;
+}
+
+.preview-zoom-controls .zoom-button:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.preview-zoom-controls .zoom-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.preview-zoom-controls .zoom-button:disabled {
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+}
+
+.preview-zoom-controls .zoom-button:first-child {
+  min-width: 70px;
+}
+
+/* CSS cho hướng dẫn kéo ảnh */
+.preview-zoom-hint {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
+  padding: 8px 16px;
+  color: white;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 20;
+  /* Hiệu ứng biến mất sau một khoảng thời gian */
+  animation: fadeOutHint 4s forwards;
+  animation-delay: 2s;
+}
+
+.preview-zoom-hint:hover {
+  opacity: 0.9;
+}
+
+.preview-zoom-hint .hint-icon {
+  font-size: 16px;
+}
+
+.preview-thumbnails {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 12px 4px;
+  margin-top: 12px;
+}
+
+.preview-thumbnails .thumbnail-item {
+  width: 60px;
+  height: 60px;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preview-thumbnails .thumbnail-item:hover {
+  transform: translateY(-2px);
+}
+
+.preview-thumbnails .thumbnail-item.active {
+  border-color: #1890ff;
+}
+
+.preview-thumbnails .thumbnail-item .thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-thumbnails::-webkit-scrollbar {
+  height: 6px;
+}
+
+.preview-thumbnails::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.preview-thumbnails::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.preview-thumbnails::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@keyframes fadeOutHint {
+  0% {
+    opacity: 0.7;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+    visibility: hidden;
+  }
+}
+
+/* Thêm CSS cho trạng thái liked */
+.post-liked {
+  color: #f34f90;
 }

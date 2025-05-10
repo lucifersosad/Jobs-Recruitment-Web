@@ -7,7 +7,7 @@
     overflow: hidden;
     .header-company {
       .banner {
-        height: 224px;
+        height: 260px;
         overflow: hidden;
         img {
           height: 100%;
@@ -21,16 +21,17 @@
         .company-image-logo {
           align-items: center;
           background: #fff;
-          border: 4.5px solid #fff;
+          border: 5px solid #fff;
           border-radius: 99px;
           display: flex;
-          height: 180px;
+          height: 200px;
           justify-content: center;
           left: 40px;
           overflow: hidden;
           position: absolute;
-          top: -90px;
-          width: 180px;
+          top: -100px;
+          width: 200px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
           img {
             height: 100%;
             object-fit: cover;
@@ -43,48 +44,65 @@
         column-gap: 32px;
         display: flex;
         margin-bottom: 30px;
-        margin-top: 30px;
-        padding-left: 252px;
+        margin-top: 40px;
+        padding-left: 272px;
         padding-right: 40px;
         position: relative;
         .box-detail {
           h1 {
             background: #ffffff;
-            padding: 5px 10px;
+            padding: 8px 15px;
             border-radius: 10px;
             color: #000000;
             display: -webkit-box;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
-            line-height: 28px;
-            margin-bottom: 8px;
+            line-height: 30px;
+            margin-bottom: 12px;
             margin-top: 0;
             max-width: 100%;
             overflow: hidden;
             width: fit-content;
             border-style: solid;
-            border-width: 0 0 1px 0;
+            border-width: 0 0 2px 0;
             border-color: rgb(43, 190, 235);
           }
           .box-icon {
             display: flex;
             gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 8px;
             .item {
               background: #faf9fa;
-              padding: 5px 10px;
+              padding: 8px 15px;
               border-radius: 10px 0 10px 0;
               display: flex;
               align-items: center;
-              gap: 8px;
+              gap: 10px;
+              transition: all 0.3s ease;
+              border-left: 3px solid #5dcaf9;
+              margin-bottom: 8px;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+              
+              &:hover {
+                background: #eef8fb;
+                transform: translateY(-2px);
+              }
+              
               span,
               svg {
                 color: #000;
-                font-size: 14px;
-                font-weight: 400;
+                font-size: 15px;
+                font-weight: 500;
                 line-height: 20px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
+              }
+              
+              svg {
+                color: #5dcaf9;
+                font-size: 16px;
               }
             }
           }
@@ -225,13 +243,14 @@
     font-weight: 600;
     line-height: 26px;
     margin: 0;
-    padding: 12px 20px;
+    padding: 16px 25px;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     position: relative;
     
     h2 {
       font-weight: 600;
+      font-size: 20px;
     }
     
     .refresh-button {
@@ -912,6 +931,42 @@
           color: #65676b;
           font-size: 14px;
           padding: 10px 0;
+        }
+      }
+    }
+    
+    &.mb-4 > .box-item-content {
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border-radius: 0 0 10px 10px;
+      padding: 25px 25px 30px;
+      min-height: 250px;
+      
+      .post-header {
+        .avatar {
+          width: 50px;
+          height: 50px;
+          border: 2px solid #5dcaf9;
+        }
+        
+        .info {
+          .name {
+            font-size: 17px;
+          }
+          
+          .time {
+            font-size: 14px;
+          }
+        }
+      }
+      
+      .post-content {
+        padding: 5px 10px 20px;
+        
+        .text {
+          font-size: 16px;
+          line-height: 1.6;
+          margin-bottom: 20px;
         }
       }
     }
