@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { DownloadOutlined } from "@ant-design/icons";
 import { downloadMyCv, getMyCv } from "../../../services/clients/myCvsApi";
 import NotFound from "../notFound";
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 import { convertFileCvDriverToUrl } from "../../../helpers/convertFileCvDriverToUrl";
 
 const PreviewCv = () => {
@@ -15,6 +15,7 @@ const PreviewCv = () => {
   const [loading, setLoading] = useState(true)
   const [loadingDownload, setLoadingDownload] = useState(false)
   const [cv, setCv] = useState();
+  const { Title } = Typography
 
   useEffect(() => {
     const getData = async () => {
@@ -32,6 +33,7 @@ const PreviewCv = () => {
       }
     };
     getData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const handleDownloadCV = async () => {
@@ -65,28 +67,27 @@ const PreviewCv = () => {
       console.error("Download error:", error);
     }
   };
-  
-  if (loading) return;
 
   if (cv === null) return <NotFound />
 
   return (
     <>
-      <div className="non-print" style={{padding: "25px", display: "flex", justifyContent: "end", alignItems: "center", height: "50px", background: "rgba(0,0,0,.5)", zIndex: "1", position: "fixed", inset: 0}}>
+      <div className="non-print" style={{padding: "25px", display: "flex", alignItems: "center", height: "50px", background: "rgba(0,0,0,.5)", zIndex: "1", position: "fixed", inset: 0}}>
         {/* <Button onClick={handleDownloadCV}>
           <a 
             href={"https://s3-utem.s3.ap-southeast-2.amazonaws.com/my-cvs/cv.pdf"}
             download={`CV-${cv.fullName}-${cv.email}.pdf`}
           >Tải CV</a>
         </Button> */}
-        <Button style={{color: "#ddd"}} size="middle" type="text" onClick={handleDownloadCV} loading={loadingDownload} icon={<DownloadOutlined />}>
-          Tải CV
+        {!loading && <Title level={5} style={{margin: 0, color: "#ddd"}}>Xem CV online trên UTEM của {cv.fullName}</Title>}
+        <Button style={{color: "#ddd", marginLeft: "auto", fontWeight: "bold"}} size="middle" type="text" onClick={handleDownloadCV} loading={loadingDownload} icon={<DownloadOutlined />}>
+          <spa>Tải CV</spa>
         </Button>
       </div>
       <div className="preview-cv__layout">
         <div className="preview-cv__container">
           <div className="preview-cv__content">
-            <UserCv data={cv}/>
+            {!loading && <UserCv data={cv}/>}
           </div>
         </div>
       </div>
