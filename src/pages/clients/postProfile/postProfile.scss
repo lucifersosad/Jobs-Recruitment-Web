@@ -1,0 +1,573 @@
+/* PostProfile Component Styles - SCSS Version */
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+// Variables
+$primary-color: #5dcaf9;
+$secondary-color: #f3f4f6;
+$accent-color: #ef4444;
+$border-color: #d1d5db;
+$text-dark: #374151;
+$text-light: #6b7280;
+$bg-light: #f9fafb;
+$transition-default: all 0.2s ease;
+
+// Container styles
+.post-container {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 0 0 1rem 0;
+  
+  .post-header {
+    padding: 0.75rem 1rem !important;
+    display: flex;
+    align-items: center;
+    
+    .avatar {
+      width: 2.5rem !important;
+      height: 2.5rem !important;
+      border-radius: 9999px;
+      object-fit: cover;
+      margin-right: 0.75rem;
+      border: 2px solid $primary-color;
+    }
+    
+    .post-info {
+      .company-name {
+        font-weight: 600;
+        color: $text-dark;
+        font-size: 1rem !important;
+      }
+      
+      .post-time {
+        font-size: 0.8rem;
+        color: $text-light;
+      }
+    }
+  }
+  
+  .post-content {
+    .post-caption {
+      margin-bottom: 0.5rem;
+      color: $text-dark;
+      padding: 0 0.75rem;
+      font-size: 0.9rem;
+    }
+    
+    .post-image-container {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+  
+  .post-stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.35rem 0.75rem;
+    color: $text-light;
+    font-size: 0.8rem;
+    border-top: 1px solid $secondary-color;
+    border-bottom: 1px solid $secondary-color;
+  }
+  
+  .post-actions {
+    padding: 0.35rem 0;
+    display: flex;
+    justify-content: space-around;
+    
+    .action-button {
+      display: flex;
+      align-items: center;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.25rem;
+      color: $text-light;
+      transition: $transition-default;
+      cursor: pointer;
+      font-size: 0.85rem;
+      
+      &:hover {
+        background-color: $secondary-color;
+      }
+      
+      svg {
+        margin-right: 0.35rem;
+      }
+    }
+    
+    .post-liked {
+      color: $accent-color !important;
+      font-weight: 600;
+      
+      svg {
+        color: $accent-color !important;
+        animation: likeAnimation 0.6s ease-in-out;
+        fill: $accent-color !important;
+      }
+    }
+  }
+  
+  .post-comments {
+    padding: 0.75rem;
+    
+    .comment {
+      display: flex;
+      margin-bottom: 0.5rem;
+      
+      .commenter-avatar {
+        width: 1.8rem;
+        height: 1.8rem;
+        border-radius: 9999px;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+      }
+      
+      .comment-content {
+        background-color: $bg-light;
+        padding: 0.35rem 0.5rem;
+        border-radius: 0.5rem;
+        flex-grow: 1;
+        
+        .commenter-name {
+          font-weight: 600;
+          color: $text-dark;
+          font-size: 0.8rem;
+        }
+        
+        .comment-text {
+          font-size: 0.8rem;
+          color: $text-dark;
+        }
+      }
+    }
+    
+    .comment-input-container {
+      display: flex;
+      align-items: center;
+      margin-top: 0.75rem;
+      
+      .commenter-avatar {
+        width: 1.8rem;
+        height: 1.8rem;
+        border-radius: 9999px;
+        margin-right: 0.5rem;
+      }
+      
+      .ant-input {
+        border-radius: 9999px !important;
+        border: 1px solid $border-color !important;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+      }
+      
+      .send-icon {
+        cursor: pointer;
+        color: $text-light;
+        transition: color 0.2s ease;
+        
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+/* Styling cho khung chứa ảnh trong bài viết - Sao chép từ managementPost.scss */
+.post-image-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+// Thêm class riêng cho các loại container ảnh trong PostProfile
+.post-profile-single-image,
+.post-profile-grid {
+  height: 300px !important;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Single image display */
+.post-single-image {
+  width: 100%;
+  height: 400px; /* Quay lại độ cao cũ 400px để không ảnh hưởng đến managementPost */
+  overflow: hidden;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-single-image .single-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.post-single-image .single-image:hover {
+  transform: scale(1.02);
+}
+
+/* Grid layouts for multiple images */
+.post-images-grid {
+  width: 100%;
+  height: 400px; /* Quay lại độ cao cũ 400px để không ảnh hưởng đến managementPost */
+  overflow: hidden;
+  display: flex;
+  border-radius: 8px;
+  gap: 2px;
+}
+
+.post-images-grid .image-container {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 100%;
+}
+
+.post-images-grid .image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-images-grid .image-container:hover img {
+  transform: scale(1.02);
+}
+
+.post-images-grid .image-container .image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.post-images-grid .image-container .image-overlay:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* 2 images layout */
+.post-images-grid.grid-2 {
+  height: 400px; /* Quay lại độ cao cũ 400px để không ảnh hưởng đến managementPost */
+  
+  .image-container {
+    flex: 1;
+    height: 100%;
+  }
+}
+
+/* 3 images layout */
+.post-images-grid.grid-3 {
+  height: 400px; /* Quay lại độ cao cũ 400px để không ảnh hưởng đến managementPost */
+  
+  .image-container.main {
+    flex: 2;
+    height: 100%;
+  }
+  
+  .image-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    height: 100%;
+    
+    .image-container {
+      flex: 1;
+      min-height: calc(50% - 1px);
+    }
+  }
+}
+
+/* 4 images layout */
+.post-images-grid.grid-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  height: 400px; /* Quay lại độ cao cũ 400px để không ảnh hưởng đến managementPost */
+  
+  .image-container {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Styling cho phần xem trước ảnh (Preview) */
+.image-preview-modal .ant-modal-body {
+  padding: 16px;
+}
+
+.image-preview-modal .ant-modal-title {
+  font-size: 16px;
+  text-align: center;
+}
+
+.image-preview-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  border-radius: 8px;
+}
+
+.image-preview-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: grab;
+  
+  &:active {
+    cursor: grabbing;
+  }
+  
+  &.can-pan {
+    cursor: move;
+    
+    &:active {
+      cursor: grabbing;
+    }
+  }
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  margin: 0 auto;
+  transform-origin: center center;
+  user-select: none;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  
+  &.zoomed {
+    transition: transform 0.3s ease;
+    border-radius: 0;
+  }
+}
+
+.preview-nav-button {
+  position: absolute;
+  z-index: 10;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+  
+  &:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  
+  &.preview-nav-prev {
+    left: 16px;
+  }
+  
+  &.preview-nav-next {
+    right: 16px;
+  }
+}
+
+/* CSS cho thanh điều khiển zoom */
+.preview-zoom-controls {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
+  padding: 4px 12px;
+  z-index: 20;
+  transition: opacity 0.3s ease;
+  
+  .zoom-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    transition: all 0.2s ease;
+    margin: 0;
+    
+    &:hover:not(:disabled) {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    &:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+    
+    &:disabled {
+      color: rgba(255, 255, 255, 0.4);
+      cursor: not-allowed;
+    }
+    
+    &:first-child {
+      min-width: 70px;
+    }
+  }
+}
+
+/* CSS cho hướng dẫn kéo ảnh */
+.preview-zoom-hint {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
+  padding: 8px 16px;
+  color: white;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 20;
+  animation: fadeOutHint 4s forwards;
+  animation-delay: 2s;
+  
+  &:hover {
+    opacity: 0.9;
+  }
+  
+  .hint-icon {
+    font-size: 16px;
+  }
+}
+
+.preview-thumbnails {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 12px 4px;
+  margin-top: 12px;
+  
+  .thumbnail-item {
+    width: 60px;
+    height: 60px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+    
+    &.active {
+      border-color: $primary-color;
+    }
+    
+    .thumbnail-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+}
+
+// CSS cho Ant Design Image component
+.ant-image {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  
+  img.ant-image-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  
+  .ant-image-mask {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Tạo CSS cho bố cục ảnh với Ant
+.post-images {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  
+  > div {
+    border-radius: 8px;
+    overflow: hidden;
+    
+    div[style*="aspect-ratio"] {
+      border-radius: 0;
+      overflow: hidden;
+    }
+  }
+}
+
+@keyframes likeAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOutHint {
+  0% {
+    opacity: 0.7;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+    visibility: hidden;
+  }
+} 
