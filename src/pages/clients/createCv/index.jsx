@@ -10,8 +10,11 @@ import {
   Row,
   Space,
   Typography,
+  Alert,
+  Spin,
 } from "antd";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   PlusSquareOutlined,
   DeleteOutlined,
@@ -19,15 +22,17 @@ import {
 } from "@ant-design/icons";
 import MemoizedTinyMce from "../../../components/clients/tinyEditor";
 import { createMyCv } from "../../../services/clients/myCvsApi";
-import { useNavigate } from "react-router-dom";
 import banner from "/images/banner-cv.png";
+import DropCvModal from "./DropCvModal";
 
 const CreateCv = () => {
   const [api, contextHolder] = notification.useNotification();
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [form] = Form.useForm();
-  const { Text, Title } = Typography;
-  const navigate = useNavigate()
+  const { Text, Title, Link } = Typography;
+  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
 
   const defaultValue = {
     fullName: "",
@@ -47,12 +52,12 @@ const CreateCv = () => {
 
   const handleForm = async (values) => {
     console.log("🚀 ~ CreateCv ~ values:", values);
-    setLoadingSubmit(true)
+    setLoadingSubmit(true);
     try {
-      const result = await createMyCv(values)
+      const result = await createMyCv(values);
       if (result.code === 200) {
-        const idCv = result.data._id
-        
+        const idCv = result.data._id;
+
         api.success({
           message: `Success`,
           description: (
@@ -62,7 +67,7 @@ const CreateCv = () => {
           ),
         });
 
-        navigate(`/xem-cv/${idCv}`)
+        navigate(`/xem-cv/${idCv}`);
       } else {
         api.error({
           message: <span style={{ color: "red" }}>Thất bại</span>,
@@ -74,31 +79,84 @@ const CreateCv = () => {
         });
       }
     } catch (error) {
-      console.log("🚀 ~ handleForm ~ error:", error)
+      console.log("🚀 ~ handleForm ~ error:", error);
     }
-    setLoadingSubmit(false)
+    setLoadingSubmit(false);
   };
+
+const handleImportCv = (values) => {
+  if (!values) return;
+
+  // Format skills
+  const skills = values.skills?.map(skill => ({
+    skill_name: skill
+  })) || [];
+
+  const newValues = { ...values, skills };
+
+  // Duyệt qua từng phần tử trong newValues
+  for (const key in newValues) {
+    newValues[key] = newValues[key]?.map?.(item => {
+      if (item?.description) {
+        const descriptions = item.description
+          .split(".")
+          .map(desc => desc.trim())
+          .filter(desc => desc);
+
+        const htmlList = `<ul>${descriptions.map(d => `<li>${d}</li>`).join("")}</ul>`;
+
+        return {
+          ...item,
+          description: htmlList
+        };
+      }
+      return item;
+    }) || newValues[key];
+  }
+
+  console.log("🚀 ~ handleImportCv ~ newValues:", newValues)
+
+  form.setFieldsValue(newValues);
+};
+
 
   return (
     <>
       {contextHolder}
-      
       <div className="cb-section cb-section-padding-bottom bg-grey2">
         <div className="container">
-          <div className="box-settings-info__banner" style={{zIndex: 1}}>
+          <div className="box-settings-info__banner" style={{ zIndex: 1 }}>
             <div className="left">
               <h1 className="title">
                 Tạo CV để các cơ hội việc làm tự tìm đến bạn
               </h1>
               <h2 className="sub-title">
-                Giảm đến 50% thời gian cần thiết để tìm được một công việc phù hợp
+                Giảm đến 50% thời gian cần thiết để tìm được một công việc phù
+                hợp
               </h2>
             </div>
             <div className="right">
               <img src={banner} alt="" />
             </div>
           </div>
-          <Card style={{borderTopRightRadius: 0, borderTopLeftRadius: 0, border: 0}}>
+          <Card
+            style={{
+              borderTopRightRadius: 0,
+              borderTopLeftRadius: 0,
+              border: 0,
+            }}
+          >
+            <Flex className="mb-2" gap={4}>
+              <Text>Bạn đã có sẵn CV?</Text>
+              <Link
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpen(true);
+                }}
+              >
+                Import ngay
+              </Link>
+            </Flex>
             <Form
               layout="vertical"
               encType="multipart/form-data"
@@ -221,76 +279,88 @@ const CreateCv = () => {
                             size={"large"}
                             style={{ width: "100%" }}
                           >
-                            {fields.map(({ key, name, ...restField }, index) => (
-                              <Card
-                                key={key}
-                                type="inner"
-                                extra={
-                                  <DeleteOutlined
-                                    className="icon-delete"
-                                    onClick={() => remove(name)}
-                                  />
-                                }
-                              >
-                                <Row gutter={20}>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "title"]}
-                                      label="Ngành học"
-                                    >
-                                      <Input placeholder="Nhập ngành học" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "school_name"]}
-                                      label="Trường học"
-                                    >
-                                      <Input placeholder="Nhập tên trường học" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "start_date"]}
-                                      label="Ngày bắt đầu"
-                                    >
-                                      <Input placeholder="MM-YYYY" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "end_date"]}
-                                      label="Ngày kết thúc"
-                                    >
-                                      <Input placeholder="MM-YYYY" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={24}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "description"]}
-                                      label="Mô tả"
-                                    >
-                                      <MemoizedTinyMce
-                                        value={form.getFieldValue(['educations', index, 'description'])}
-                                        onChange={(val) => {
-                                          const updated = [...form.getFieldValue('educations')];
-                                          updated[index] = {
-                                            ...updated[index],
-                                            description: val,
-                                          };
-                                          form.setFieldsValue({ educations: updated });
-                                        }}
-                                      />
-                                    </Form.Item>
-                                  </Col>
-                                </Row>
-                              </Card>
-                            ))}
+                            {fields.map(
+                              ({ key, name, ...restField }, index) => (
+                                <Card
+                                  key={key}
+                                  type="inner"
+                                  extra={
+                                    <DeleteOutlined
+                                      className="icon-delete"
+                                      onClick={() => remove(name)}
+                                    />
+                                  }
+                                >
+                                  <Row gutter={20}>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "title"]}
+                                        label="Ngành học"
+                                      >
+                                        <Input placeholder="Nhập ngành học" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "school_name"]}
+                                        label="Trường học"
+                                      >
+                                        <Input placeholder="Nhập tên trường học" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "start_date"]}
+                                        label="Ngày bắt đầu"
+                                      >
+                                        <Input placeholder="MM-YYYY" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "end_date"]}
+                                        label="Ngày kết thúc"
+                                      >
+                                        <Input placeholder="MM-YYYY" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={24}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "description"]}
+                                        label="Mô tả"
+                                      >
+                                        <MemoizedTinyMce
+                                          value={form.getFieldValue([
+                                            "educations",
+                                            index,
+                                            "description",
+                                          ])}
+                                          onChange={(val) => {
+                                            const updated = [
+                                              ...form.getFieldValue(
+                                                "educations"
+                                              ),
+                                            ];
+                                            updated[index] = {
+                                              ...updated[index],
+                                              description: val,
+                                            };
+                                            form.setFieldsValue({
+                                              educations: updated,
+                                            });
+                                          }}
+                                        />
+                                      </Form.Item>
+                                    </Col>
+                                  </Row>
+                                </Card>
+                              )
+                            )}
 
                             <Button
                               type="dashed"
@@ -327,76 +397,88 @@ const CreateCv = () => {
                             size={"large"}
                             style={{ width: "100%" }}
                           >
-                            {fields.map(({ key, name, ...restField }, index) => (
-                              <Card
-                                key={key}
-                                type="inner"
-                                extra={
-                                  <DeleteOutlined
-                                    className="icon-delete"
-                                    onClick={() => remove(name)}
-                                  />
-                                }
-                              >
-                                <Row gutter={20}>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "position_name"]}
-                                      label="Vị trí công việc"
-                                    >
-                                      <Input placeholder="Nhập vị trí công việc" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "company_name"]}
-                                      label="Công ty"
-                                    >
-                                      <Input placeholder="Nhập tên công ty" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "start_date"]}
-                                      label="Ngày bắt đầu"
-                                    >
-                                      <Input placeholder="MM-YYYY" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "end_date"]}
-                                      label="Ngày kết thúc"
-                                    >
-                                      <Input placeholder="MM-YYYY" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={24}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "description"]}
-                                      label="Mô tả"
-                                    >
-                                      <MemoizedTinyMce 
-                                        value={form.getFieldValue(['experiences', index, 'description'])}
-                                        onChange={(val) => {
-                                          const updated = [...form.getFieldValue('experiences')];
-                                          updated[index] = {
-                                            ...updated[index],
-                                            description: val,
-                                          };
-                                          form.setFieldsValue({ experiences: updated });
-                                        }}
-                                      />
-                                    </Form.Item>
-                                  </Col>
-                                </Row>
-                              </Card>
-                            ))}
+                            {fields.map(
+                              ({ key, name, ...restField }, index) => (
+                                <Card
+                                  key={key}
+                                  type="inner"
+                                  extra={
+                                    <DeleteOutlined
+                                      className="icon-delete"
+                                      onClick={() => remove(name)}
+                                    />
+                                  }
+                                >
+                                  <Row gutter={20}>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "position_name"]}
+                                        label="Vị trí công việc"
+                                      >
+                                        <Input placeholder="Nhập vị trí công việc" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "company_name"]}
+                                        label="Công ty"
+                                      >
+                                        <Input placeholder="Nhập tên công ty" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "start_date"]}
+                                        label="Ngày bắt đầu"
+                                      >
+                                        <Input placeholder="MM-YYYY" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "end_date"]}
+                                        label="Ngày kết thúc"
+                                      >
+                                        <Input placeholder="MM-YYYY" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={24}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "description"]}
+                                        label="Mô tả"
+                                      >
+                                        <MemoizedTinyMce
+                                          value={form.getFieldValue([
+                                            "experiences",
+                                            index,
+                                            "description",
+                                          ])}
+                                          onChange={(val) => {
+                                            const updated = [
+                                              ...form.getFieldValue(
+                                                "experiences"
+                                              ),
+                                            ];
+                                            updated[index] = {
+                                              ...updated[index],
+                                              description: val,
+                                            };
+                                            form.setFieldsValue({
+                                              experiences: updated,
+                                            });
+                                          }}
+                                        />
+                                      </Form.Item>
+                                    </Col>
+                                  </Row>
+                                </Card>
+                              )
+                            )}
 
                             <Button
                               type="dashed"
@@ -433,49 +515,59 @@ const CreateCv = () => {
                             size={"large"}
                             style={{ width: "100%" }}
                           >
-                            {fields.map(({ key, name, ...restField }, index) => (
-                              <Card
-                                key={key}
-                                type="inner"
-                                extra={
-                                  <DeleteOutlined
-                                    className="icon-delete"
-                                    onClick={() => remove(name)}
-                                  />
-                                }
-                              >
-                                <Row gutter={20}>
-                                  <Col xs={24}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "skill_name"]}
-                                      label="Kỹ năng"
-                                    >
-                                      <Input placeholder="Nhập tên kỹ năng" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={24}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "description"]}
-                                      label="Mô tả"
-                                    >
-                                      <MemoizedTinyMce
-                                        value={form.getFieldValue(['skills', index, 'description'])}
-                                        onChange={(val) => {
-                                          const updated = [...form.getFieldValue('skills')];
-                                          updated[index] = {
-                                            ...updated[index],
-                                            description: val,
-                                          };
-                                          form.setFieldsValue({ skills: updated });
-                                        }}
-                                      />
-                                    </Form.Item>
-                                  </Col>
-                                </Row>
-                              </Card>
-                            ))}
+                            {fields.map(
+                              ({ key, name, ...restField }, index) => (
+                                <Card
+                                  key={key}
+                                  type="inner"
+                                  extra={
+                                    <DeleteOutlined
+                                      className="icon-delete"
+                                      onClick={() => remove(name)}
+                                    />
+                                  }
+                                >
+                                  <Row gutter={20}>
+                                    <Col xs={24}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "skill_name"]}
+                                        label="Kỹ năng"
+                                      >
+                                        <Input placeholder="Nhập tên kỹ năng" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={24}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "description"]}
+                                        label="Mô tả"
+                                      >
+                                        <MemoizedTinyMce
+                                          value={form.getFieldValue([
+                                            "skills",
+                                            index,
+                                            "description",
+                                          ])}
+                                          onChange={(val) => {
+                                            const updated = [
+                                              ...form.getFieldValue("skills"),
+                                            ];
+                                            updated[index] = {
+                                              ...updated[index],
+                                              description: val,
+                                            };
+                                            form.setFieldsValue({
+                                              skills: updated,
+                                            });
+                                          }}
+                                        />
+                                      </Form.Item>
+                                    </Col>
+                                  </Row>
+                                </Card>
+                              )
+                            )}
 
                             <Button
                               type="dashed"
@@ -512,39 +604,41 @@ const CreateCv = () => {
                             size={"large"}
                             style={{ width: "100%" }}
                           >
-                            {fields.map(({ key, name, ...restField }, index) => (
-                              <Card
-                                key={key}
-                                type="inner"
-                                extra={
-                                  <DeleteOutlined
-                                    className="icon-delete"
-                                    onClick={() => remove(name)}
-                                  />
-                                }
-                              >
-                                <Row gutter={20}>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "date"]}
-                                      label="Thời gian"
-                                    >
-                                      <Input placeholder="YYYY" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "title"]}
-                                      label="Giải thưởng"
-                                    >
-                                      <Input placeholder="Nhập tên giải thưởng" />
-                                    </Form.Item>
-                                  </Col>
-                                </Row>
-                              </Card>
-                            ))}
+                            {fields.map(
+                              ({ key, name, ...restField }, index) => (
+                                <Card
+                                  key={key}
+                                  type="inner"
+                                  extra={
+                                    <DeleteOutlined
+                                      className="icon-delete"
+                                      onClick={() => remove(name)}
+                                    />
+                                  }
+                                >
+                                  <Row gutter={20}>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "date"]}
+                                        label="Thời gian"
+                                      >
+                                        <Input placeholder="YYYY" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "title"]}
+                                        label="Giải thưởng"
+                                      >
+                                        <Input placeholder="Nhập tên giải thưởng" />
+                                      </Form.Item>
+                                    </Col>
+                                  </Row>
+                                </Card>
+                              )
+                            )}
 
                             <Button
                               type="dashed"
@@ -581,39 +675,41 @@ const CreateCv = () => {
                             size={"large"}
                             style={{ width: "100%" }}
                           >
-                            {fields.map(({ key, name, ...restField }, index) => (
-                              <Card
-                                key={key}
-                                type="inner"
-                                extra={
-                                  <DeleteOutlined
-                                    className="icon-delete"
-                                    onClick={() => remove(name)}
-                                  />
-                                }
-                              >
-                                <Row gutter={20}>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "date"]}
-                                      label="Thời gian"
-                                    >
-                                      <Input placeholder="YYYY" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "title"]}
-                                      label="Chứng chỉ"
-                                    >
-                                      <Input placeholder="Nhập tên chứng chỉ" />
-                                    </Form.Item>
-                                  </Col>
-                                </Row>
-                              </Card>
-                            ))}
+                            {fields.map(
+                              ({ key, name, ...restField }, index) => (
+                                <Card
+                                  key={key}
+                                  type="inner"
+                                  extra={
+                                    <DeleteOutlined
+                                      className="icon-delete"
+                                      onClick={() => remove(name)}
+                                    />
+                                  }
+                                >
+                                  <Row gutter={20}>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "date"]}
+                                        label="Thời gian"
+                                      >
+                                        <Input placeholder="YYYY" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "title"]}
+                                        label="Chứng chỉ"
+                                      >
+                                        <Input placeholder="Nhập tên chứng chỉ" />
+                                      </Form.Item>
+                                    </Col>
+                                  </Row>
+                                </Card>
+                              )
+                            )}
 
                             <Button
                               type="dashed"
@@ -650,76 +746,88 @@ const CreateCv = () => {
                             size={"large"}
                             style={{ width: "100%" }}
                           >
-                            {fields.map(({ key, name, ...restField }, index) => (
-                              <Card
-                                key={key}
-                                type="inner"
-                                extra={
-                                  <DeleteOutlined
-                                    className="icon-delete"
-                                    onClick={() => remove(name)}
-                                  />
-                                }
-                              >
-                                <Row gutter={20}>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "position_name"]}
-                                      label="Vị trí"
-                                    >
-                                      <Input placeholder="Nhập vị trí của bạn" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "group_name"]}
-                                      label="Tổ chức"
-                                    >
-                                      <Input placeholder="Nhập tên tổ chức" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "start_date"]}
-                                      label="Ngày bắt đầu"
-                                    >
-                                      <Input placeholder="MM-YYYY" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={12}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "end_date"]}
-                                      label="Ngày kết thúc"
-                                    >
-                                      <Input placeholder="MM-YYYY" />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col xs={24}>
-                                    <Form.Item
-                                      {...restField}
-                                      name={[name, "description"]}
-                                      label="Mô tả"
-                                    >
-                                      <MemoizedTinyMce 
-                                        value={form.getFieldValue(['activities', index, 'description'])}
-                                        onChange={(val) => {
-                                          const updated = [...form.getFieldValue('activities')];
-                                          updated[index] = {
-                                            ...updated[index],
-                                            description: val,
-                                          };
-                                          form.setFieldsValue({ activities: updated });
-                                        }}
-                                      />
-                                    </Form.Item>
-                                  </Col>
-                                </Row>
-                              </Card>
-                            ))}
+                            {fields.map(
+                              ({ key, name, ...restField }, index) => (
+                                <Card
+                                  key={key}
+                                  type="inner"
+                                  extra={
+                                    <DeleteOutlined
+                                      className="icon-delete"
+                                      onClick={() => remove(name)}
+                                    />
+                                  }
+                                >
+                                  <Row gutter={20}>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "position_name"]}
+                                        label="Vị trí"
+                                      >
+                                        <Input placeholder="Nhập vị trí của bạn" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "group_name"]}
+                                        label="Tổ chức"
+                                      >
+                                        <Input placeholder="Nhập tên tổ chức" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "start_date"]}
+                                        label="Ngày bắt đầu"
+                                      >
+                                        <Input placeholder="MM-YYYY" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={12}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "end_date"]}
+                                        label="Ngày kết thúc"
+                                      >
+                                        <Input placeholder="MM-YYYY" />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col xs={24}>
+                                      <Form.Item
+                                        {...restField}
+                                        name={[name, "description"]}
+                                        label="Mô tả"
+                                      >
+                                        <MemoizedTinyMce
+                                          value={form.getFieldValue([
+                                            "activities",
+                                            index,
+                                            "description",
+                                          ])}
+                                          onChange={(val) => {
+                                            const updated = [
+                                              ...form.getFieldValue(
+                                                "activities"
+                                              ),
+                                            ];
+                                            updated[index] = {
+                                              ...updated[index],
+                                              description: val,
+                                            };
+                                            form.setFieldsValue({
+                                              activities: updated,
+                                            });
+                                          }}
+                                        />
+                                      </Form.Item>
+                                    </Col>
+                                  </Row>
+                                </Card>
+                              )
+                            )}
 
                             <Button
                               type="dashed"
@@ -740,7 +848,7 @@ const CreateCv = () => {
                   <Col xs={24}>
                     <Form.Item>
                       <Button
-                        style={{marginTop: "40px"}}
+                        style={{ marginTop: "40px" }}
                         htmlType="submit"
                         type="primary"
                         block
@@ -770,6 +878,7 @@ const CreateCv = () => {
           </Card>
         </div>
       </div>
+      <DropCvModal open={open} setOpen={setOpen} handleImportCv={handleImportCv}/>
     </>
   );
 };

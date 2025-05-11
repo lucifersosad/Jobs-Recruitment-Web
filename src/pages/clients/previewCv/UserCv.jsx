@@ -87,7 +87,7 @@ const UserCv = ({ data }) => {
               </Space>
             </div>
           </div>
-          {data?.experiences?.length > 0 && (
+          {data?.skills?.length > 0 && (
             <div className="cv-user__section">
               <Divider
                 orientation="left"
@@ -99,7 +99,13 @@ const UserCv = ({ data }) => {
               </Divider>
               <div className="cv-user__section-body">
                 <Paragraph>
-                  <div dangerouslySetInnerHTML={{ __html: data?.skills[0]?.description }} />
+                  <ul>
+                    {data.skills.map((item, index) => (
+                      <>
+                        <li>{item.skill_name}</li>
+                      </>
+                    ))}
+                  </ul>
                 </Paragraph>
               </div>
             </div>
