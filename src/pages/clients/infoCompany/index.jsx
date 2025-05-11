@@ -38,6 +38,9 @@ import { useSelector } from "react-redux";
 
 import { dataNumberOfWorkers } from "./js/options";
 
+// Thêm hằng số cho avatar mặc định
+const DEFAULT_AVATAR = "https://via.placeholder.com/32";
+
 function InfoCompany() {
   const { Search } = Input;
   const [currentPath] = useState(window.location);
@@ -64,6 +67,7 @@ function InfoCompany() {
   const authUser = useSelector((state) => state.authenticationReducerClient?.infoUser);
 
   const [expandedComments, setExpandedComments] = useState({});
+  const [commentDisplayMode, setCommentDisplayMode] = useState({});
 
   useEffect(() => {
     const fetchCompanyData = async () => {
@@ -192,6 +196,40 @@ function InfoCompany() {
                 
                 if (commentsResult?.code === 200 && commentsResult.data && Array.isArray(commentsResult.data)) {
                   console.log(`Comments for post ${post.id}:`, commentsResult.data);
+                  
+                  // Thêm log để kiểm tra cấu trúc comment
+                  if (commentsResult.data.length > 0) {
+                    console.log(`Comment structure debug for post ${post.id}:`);
+                    console.log("First comment full data:", commentsResult.data[0]);
+                    
+                    // Kiểm tra giá trị của userId
+                    const sampleComment = commentsResult.data[0];
+                    const userId = sampleComment.userId;
+                    console.log("userId value:", userId);
+                    console.log("userId type:", typeof userId);
+                    
+                    // Nếu userId là object, kiểm tra các thuộc tính của nó
+                    if (typeof userId === 'object' && userId !== null) {
+                      console.log("userId object keys:", Object.keys(userId));
+                      console.log("userId.fullName:", userId.fullName);
+                      console.log("userId.avatar:", userId.avatar);
+                    }
+                    
+                    // Kiểm tra các thuộc tính cấp cao nhất
+                    console.log("Direct userName:", sampleComment.userName);
+                    console.log("Direct userAvatar:", sampleComment.userAvatar);
+                    console.log("Direct user object:", sampleComment.user);
+                    
+                    // Kiểm tra tất cả thuộc tính để tìm thông tin người dùng
+                    console.log("All comment keys:", Object.keys(sampleComment));
+                    
+                    // Tìm tất cả thuộc tính chứa từ user hoặc name
+                    for (const key in sampleComment) {
+                      if (key.toLowerCase().includes('user') || key.toLowerCase().includes('name')) {
+                        console.log(`Found potential user info field: ${key} =`, sampleComment[key]);
+                      }
+                    }
+                  }
                   
                   setPosts(prevPosts => 
                     prevPosts.map(p => 
@@ -466,6 +504,13 @@ function InfoCompany() {
                 : post
             )
           );
+          
+          // Sau khi bình luận thành công, luôn chuyển sang chế độ 'more' để hiển thị 
+          // bình luận mới (đảm bảo người dùng thấy bình luận vừa thêm)
+          setCommentDisplayMode(prev => ({
+            ...prev,
+            [postId]: 'more'
+          }));
         }
       }
     } catch (err) {
@@ -489,7 +534,7 @@ function InfoCompany() {
     // 2 ảnh: chia đôi ngang, mỗi ô vuông
     if (total === 2) {
       return (
-        <div className="post-images">
+        <div className="post-images" style={{ marginTop: '4px' }}>
           <Image.PreviewGroup items={validImages}>
             <div style={{ display: 'flex', gap: 4 }}>
               {validImages.map((img, idx) => (
@@ -506,7 +551,7 @@ function InfoCompany() {
     // 3 ảnh: bên trái 1 ô vuông, bên phải 2 ô vuông dọc
     if (total === 3) {
       return (
-        <div className="post-images">
+        <div className="post-images" style={{ marginTop: '4px' }}>
           <Image.PreviewGroup items={validImages}>
             <div style={{ display: 'flex', gap: 4 }}>
               <div style={{ flex: 1, aspectRatio: '1/1', overflow: 'hidden' }}>
@@ -530,7 +575,7 @@ function InfoCompany() {
     if (total >= 4) {
       // Chỉ render 4 ô, nhưng preview đủ toàn bộ ảnh
       return (
-        <div className="post-images">
+        <div className="post-images" style={{ marginTop: '4px' }}>
           <Image.PreviewGroup items={validImages}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 4 }}>
               {validImages.slice(0, 3).map((img, idx) => (
@@ -561,7 +606,7 @@ function InfoCompany() {
     // 1 ảnh (mặc định)
     if (total === 1) {
       return (
-        <div className="post-images single-image">
+        <div className="post-images single-image" style={{ marginTop: '4px' }}>
           <Image.PreviewGroup items={validImages}>
             <div className="image-wrapper" style={{ aspectRatio: '1/1', width: '100%', overflow: 'hidden' }}>
               <Image
@@ -643,6 +688,21 @@ function InfoCompany() {
         if (commentsResult?.code === 200 && commentsResult.data) {
           console.log(`Refreshed comments for post ${postId}:`, commentsResult.data);
           
+          // Thêm log chi tiết để xem cấu trúc chính xác của dữ liệu bình luận
+          if (commentsResult.data.length > 0) {
+            console.log("Detail comment structure:", JSON.stringify(commentsResult.data[0]));
+            console.log("Comment keys:", Object.keys(commentsResult.data[0]));
+            
+            // Kiểm tra cụ thể giá trị của userId
+            const userIdVal = commentsResult.data[0].userId;
+            console.log("userId value:", userIdVal);
+            console.log("userId type:", typeof userIdVal);
+            
+            if (typeof userIdVal === 'object' && userIdVal !== null) {
+              console.log("userId keys:", Object.keys(userIdVal));
+            }
+          }
+          
           setPosts(prevPosts => 
             prevPosts.map(post => 
               post.id === postId
@@ -698,17 +758,149 @@ function InfoCompany() {
     </button>
   );
 
-  const toggleComments = (postId) => {
-    setExpandedComments(prev => ({
+  const toggleComments = (postId, mode) => {
+    // Nếu mode là 'hide', đặt về trạng thái mặc định (ban đầu)
+    if (mode === 'hide') {
+      setCommentDisplayMode(prev => ({
+        ...prev,
+        [postId]: 'default'
+      }));
+      return;
+    }
+    
+    // Nếu mode là 'all', đặt trạng thái hiển thị tất cả với scroll
+    if (mode === 'all') {
+      setCommentDisplayMode(prev => ({
+        ...prev,
+        [postId]: 'all'
+      }));
+      return;
+    }
+    
+    // Chế độ xem thêm - hiển thị tối đa 5 bình luận
+    setCommentDisplayMode(prev => ({
       ...prev,
-      [postId]: !prev[postId]
+      [postId]: 'more'
     }));
   };
 
+  // Cập nhật hàm getUserNameFromComment để xử lý tất cả các trường hợp
+  const getUserInfoFromComment = (comment) => {
+    // Đối tượng kết quả trả về (tên và avatar)
+    let result = {
+      name: "Người dùng",
+      avatar: DEFAULT_AVATAR
+    };
+    
+    try {
+      // Kiểm tra xem comment có hợp lệ không
+      if (!comment || typeof comment !== 'object') {
+        console.warn("Invalid comment object:", comment);
+        return result;
+      }
+      
+      // Log dữ liệu comment để debug
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Comment data debug:", comment);
+      }
+      
+      // Kiểm tra userId trong comment - Bước 1 (Ưu tiên cao nhất)
+      if (comment.userId) {
+        if (typeof comment.userId === 'object' && comment.userId !== null) {
+          // Case 1: userId là object
+          if (comment.userId.fullName) {
+            result.name = comment.userId.fullName;
+          } else if (comment.userId.name) {
+            result.name = comment.userId.name;
+          }
+          
+          if (comment.userId.avatar) {
+            result.avatar = comment.userId.avatar;
+          } else if (comment.userId.avatarUrl) {
+            result.avatar = comment.userId.avatarUrl;
+          }
+        } else if (typeof comment.userId === 'string') {
+          // Case 2: userId là string, thường là ID của user
+          // Trong trường hợp này, cần kiểm tra các trường khác
+          if (comment.userName) {
+            result.name = comment.userName;
+          }
+          if (comment.userAvatar) {
+            result.avatar = comment.userAvatar;
+          }
+        }
+      }
+      
+      // Kiểm tra các trường thường gặp cho tên - Bước 2
+      if (comment.userName) {
+        result.name = comment.userName;
+      } else if (comment.user && comment.user.name) {
+        result.name = comment.user.name;
+      } else if (comment.user && comment.user.fullName) {
+        result.name = comment.user.fullName;
+      } else if (comment.name) {
+        result.name = comment.name;
+      } else if (comment.fullName) {
+        result.name = comment.fullName;
+      }
+      
+      // Kiểm tra các trường thường gặp cho avatar - Bước 3
+      if (comment.userAvatar) {
+        result.avatar = comment.userAvatar;
+      } else if (comment.user && comment.user.avatar) {
+        result.avatar = comment.user.avatar;
+      } else if (comment.user && comment.user.avatarUrl) {
+        result.avatar = comment.user.avatarUrl;
+      } else if (comment.avatar) {
+        result.avatar = comment.avatar;
+      } else if (comment.avatarUrl) {
+        result.avatar = comment.avatarUrl;
+      }
+      
+      // Kiểm tra và tìm kiếm trong tất cả các thuộc tính của comment - Bước 4
+      for (const key in comment) {
+        if (typeof comment[key] === 'object' && comment[key] !== null) {
+          // Tìm tên từ đối tượng lồng nhau
+          if (comment[key].fullName && result.name === "Người dùng") {
+            result.name = comment[key].fullName;
+          } else if (comment[key].name && result.name === "Người dùng") {
+            result.name = comment[key].name;
+          }
+          
+          // Tìm avatar từ đối tượng lồng nhau
+          if (comment[key].avatar && result.avatar === DEFAULT_AVATAR) {
+            result.avatar = comment[key].avatar;
+          } else if (comment[key].avatarUrl && result.avatar === DEFAULT_AVATAR) {
+            result.avatar = comment[key].avatarUrl;
+          }
+        }
+      }
+      
+      // Xử lý trường hợp đặc biệt - nếu reply từ công ty
+      const isCompanyReply = 
+        comment.isCompanyReply === true || 
+        (!comment.userId && recordItem?.companyName) ||
+        (comment.fromCompany === true);
+      
+      if (isCompanyReply) {
+        result.name = recordItem?.companyName || "Công ty";
+        result.avatar = recordItem?.logoCompany || result.avatar;
+        result.isCompany = true;
+      }
+    } catch (error) {
+      console.error("Error extracting user info from comment:", error);
+    }
+    
+    return result;
+  };
+
+  // Hàm xử lý hiển thị bình luận, cập nhật theo mẫu
   const renderComments = (comments, postId) => {
+    // Tách bình luận gốc và bình luận trả lời
     const parentComments = comments.filter(comment => !comment.parentCommentId);
     const replyComments = comments.filter(comment => comment.parentCommentId);
     
+    // Tạo map lưu trữ các bình luận trả lời theo parentCommentId
     const replyMap = {};
     replyComments.forEach(reply => {
       if (!replyMap[reply.parentCommentId]) {
@@ -717,71 +909,216 @@ function InfoCompany() {
       replyMap[reply.parentCommentId].push(reply);
     });
 
-    const isExpanded = expandedComments[postId];
-    const initialComments = parentComments.slice(0, 3);
-    const remainingComments = parentComments.slice(3);
-    const displayedComments = isExpanded ? parentComments : initialComments;
+    // Lấy chế độ hiển thị hiện tại, mặc định là 'default'
+    const displayMode = commentDisplayMode[postId] || 'default';
+    
+    // Xác định số lượng bình luận gốc hiển thị dựa trên chế độ
+    let commentsToShow;
+    const totalComments = [...parentComments];
+    
+    if (displayMode === 'default') {
+      commentsToShow = totalComments.slice(0, 3); // Hiển thị 3 bình luận gốc
+    } else if (displayMode === 'more') {
+      commentsToShow = totalComments.slice(0, 5); // Hiển thị 5 bình luận gốc
+    } else {
+      commentsToShow = totalComments; // Hiển thị tất cả bình luận gốc
+    }
+    
+    // Kiểm tra xem còn bình luận nào không được hiển thị
+    const hasMoreComments = totalComments.length > commentsToShow.length;
+    
+    // Xác định chiều cao tối đa của container bình luận và các thuộc tính khác
+    const containerStyle = {
+      maxHeight: displayMode === 'default' ? '160px' : '450px',
+      overflowY: displayMode === 'default' ? 'hidden' : 'auto',
+      transition: 'max-height 0.3s ease, opacity 0.2s ease',
+      opacity: 1,
+      padding: displayMode !== 'default' ? '0 5px 0 0' : '0', // Thêm padding bên phải khi có scrollbar
+    };
+    
+    // Thêm style cho comments-container để đảm bảo không bị overflow
+    const commentsContainerStyle = { 
+      position: 'relative', 
+      overflow: 'hidden', 
+      marginBottom: '10px',
+      border: displayMode !== 'default' ? '1px solid #f0f2f5' : 'none',
+      borderRadius: displayMode !== 'default' ? '8px' : '0',
+    };
     
     return (
-      <div className="comments-container">
-        {displayedComments.map((comment, index) => (
-          <div key={`parent-${comment.id || index}`} className="comment-thread">
-            <div className="comment-item">
-              <div className="avatar">
-                <img
-                  src={comment.userId?.avatar || "https://via.placeholder.com/32"}
-                  alt="User Avatar"
-                />
-              </div>
-              <div className="comment-content">
-                <div className="name">
-                  {comment.userId?.fullName || "Người dùng"}
-                </div>
-                <div className="text">
-                  {comment.content || "Không có nội dung"}
-                </div>
-                <div className="comment-time">
-                  {comment.timeAgo || ""}
-                </div>
-              </div>
-            </div>
-            
-            {replyMap[comment.id]?.map((reply, replyIndex) => (
-              <div key={`reply-${reply.id || replyIndex}`} className="comment-item reply-comment">
-                <div className="avatar">
-                  <img
-                    src={reply.userId?.avatar || recordItem?.logoCompany || "https://via.placeholder.com/32"}
-                    alt="Reply Avatar"
-                  />
-                </div>
-                <div className="comment-content">
-                  <div className="name">
-                    {reply.userId?.fullName || recordItem?.companyName || "Công ty"}
-                    {!reply.userId && <span className="company-badge">Công ty</span>}
+      <div className="comments-container" style={commentsContainerStyle}>
+        <div style={containerStyle}>
+          {commentsToShow.map((comment, index) => {
+            try {
+              // Lấy thông tin người dùng từ bình luận
+              const userInfo = getUserInfoFromComment(comment);
+              
+              return (
+                <div key={`parent-${comment.id || index}`} className="comment-thread" style={{ 
+                  marginBottom: '12px',
+                  padding: displayMode === 'default' ? '0 0 8px 0' : '0 0 10px 0',
+                  borderBottom: index < commentsToShow.length - 1 ? '1px solid #f0f2f5' : 'none'
+                }}>
+                  <div className="comment-item">
+                    <div className="avatar" style={{ marginRight: '12px' }}>
+                      <img
+                        src={userInfo.avatar}
+                        alt="User Avatar"
+                      />
+                    </div>
+                    <div className="comment-content">
+                      <div className="name" style={{ 
+                        fontWeight: 'bold', 
+                        color: '#050505',
+                        marginTop: '-3px'
+                      }}>
+                        {userInfo.name}
+                        {userInfo.isCompany && (
+                          <span className="company-badge" style={{ 
+                            marginLeft: '5px', 
+                            fontSize: '0.7rem', 
+                            padding: '1px 4px', 
+                            backgroundColor: '#eaf3ff', 
+                            color: '#1877f2', 
+                            borderRadius: '3px', 
+                            display: 'inline-block',
+                            fontWeight: 'normal'
+                          }}>
+                            Công ty
+                          </span>
+                        )}
+                      </div>
+                      <div className="text">
+                        {comment.content || "Không có nội dung"}
+                      </div>
+                      <div className="comment-time">
+                        {comment.timeAgo || ""}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text">
-                    {reply.content || "Không có nội dung"}
-                  </div>
-                  <div className="comment-time">
-                    {reply.timeAgo || ""}
-                  </div>
+                  
+                  {/* Hiển thị các bình luận trả lời */}
+                  {replyMap[comment.id]?.map((reply, replyIndex) => {
+                    // Lấy thông tin người dùng trả lời từ hàm cải tiến
+                    const replyUserInfo = getUserInfoFromComment(reply);
+                    
+                    return (
+                      <div key={`reply-${reply.id || replyIndex}`} className="comment-item reply-comment">
+                        <div className="avatar" style={{ marginRight: '12px' }}>
+                          <img
+                            src={replyUserInfo.avatar}
+                            alt="Reply Avatar"
+                          />
+                        </div>
+                        <div className="comment-content">
+                          <div className="name" style={{ 
+                            fontWeight: 'bold', 
+                            color: '#050505',
+                            marginTop: '-3px'
+                          }}>
+                            {replyUserInfo.name}
+                            {replyUserInfo.isCompany && (
+                              <span className="company-badge" style={{ 
+                                marginLeft: '5px', 
+                                fontSize: '0.7rem', 
+                                padding: '1px 4px', 
+                                backgroundColor: '#eaf3ff', 
+                                color: '#1877f2', 
+                                borderRadius: '3px', 
+                                display: 'inline-block',
+                                fontWeight: 'normal'
+                              }}>
+                                Công ty
+                              </span>
+                            )}
+                          </div>
+                          <div className="text">
+                            {reply.content || "Không có nội dung"}
+                          </div>
+                          <div className="comment-time">
+                            {reply.timeAgo || ""}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
-            ))}
-          </div>
-        ))}
+              );
+            } catch (error) {
+              console.error("Error rendering comment:", error, comment);
+              return null; // Nếu có lỗi, bỏ qua hiển thị comment này
+            }
+          })}
+        </div>
 
-        {parentComments.length > 3 && (
-          <div className="view-more-comments" onClick={() => toggleComments(postId)}>
-            {isExpanded ? (
-              <div className="view-more-button">
-                <span>Ẩn bớt</span>
-                <FontAwesomeIcon icon={faChevronUp} />
-              </div>
-            ) : (
-              <div className="view-more-button">
-                <span>Xem thêm {parentComments.length - 3} bình luận</span>
+        {parentComments.length > 0 && (
+          <div className="view-more-comments" style={{ textAlign: 'center', marginTop: '5px', marginBottom: '5px' }}>
+            {displayMode === 'default' && parentComments.length > 3 && (
+              <div 
+                className="view-more-button" 
+                onClick={() => toggleComments(postId, 'more')}
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '5px', 
+                  cursor: 'pointer', 
+                  color: '#1877f2', 
+                  fontSize: '0.9rem', 
+                  fontWeight: 500,
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  transition: 'all 0.2s ease',
+                  backgroundColor: 'rgba(24, 119, 242, 0.05)'
+                }}
+              >
+                <span>Xem thêm bình luận</span>
                 <FontAwesomeIcon icon={faChevronDown} />
+              </div>
+            )}
+            
+            {displayMode === 'more' && hasMoreComments && (
+              <div 
+                className="view-more-button" 
+                onClick={() => toggleComments(postId, 'all')}
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '5px', 
+                  cursor: 'pointer', 
+                  color: '#1877f2', 
+                  fontSize: '0.9rem', 
+                  fontWeight: 500,
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  transition: 'all 0.2s ease',
+                  backgroundColor: 'rgba(24, 119, 242, 0.05)'
+                }}
+              >
+                <span>Xem tất cả {totalComments.length} bình luận</span>
+                <FontAwesomeIcon icon={faChevronDown} />
+              </div>
+            )}
+            
+            {displayMode !== 'default' && (
+              <div 
+                className="view-more-button" 
+                onClick={() => toggleComments(postId, 'hide')}
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '5px', 
+                  cursor: 'pointer', 
+                  color: '#1877f2', 
+                  fontSize: '0.9rem', 
+                  fontWeight: 500,
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  transition: 'all 0.2s ease',
+                  backgroundColor: 'rgba(24, 119, 242, 0.05)'
+                }}
+              >
+                <span>Thu gọn</span>
+                <FontAwesomeIcon icon={faChevronUp} />
               </div>
             )}
           </div>
@@ -910,15 +1247,20 @@ function InfoCompany() {
                               key={`post-${post.id}`}
                               className="post-item"
                             >
-                              <div className="post-header">
-                                <div className="avatar" style={{ cursor: 'pointer' }} onClick={() => window.location.reload()}>
+                              <div className="post-header" style={{ marginBottom: '10px' }}>
+                                <div className="avatar" style={{ cursor: 'pointer', marginRight: '12px' }} onClick={() => window.location.reload()}>
                                   <img
                                     src={recordItem?.logoCompany || "https://via.placeholder.com/40"}
                                     alt="Company Logo"
                                   />
                                 </div>
                                 <div className="info">
-                                  <div className="name" style={{ cursor: 'pointer' }} onClick={() => window.location.reload()}>
+                                  <div className="name" style={{ 
+                                    cursor: 'pointer', 
+                                    fontWeight: 'bold',
+                                    color: '#050505',
+                                    marginTop: '-3px'
+                                  }} onClick={() => window.location.reload()}>
                                     {post.companyName || recordItem?.companyName || "Công ty ẩn danh"}
                                   </div>
                                   <div className="time">
@@ -927,15 +1269,15 @@ function InfoCompany() {
                                 </div>
                               </div>
 
-                              <div className="post-content">
+                              <div className="post-content" style={{ marginBottom: '3px' }}>
                                 {post.caption && (
-                                  <div className="text">{post.caption}</div>
+                                  <div className="text" style={{ marginBottom: '0px' }}>{post.caption}</div>
                                 )}
                               </div>
 
                               {post.images && post.images.length > 0 && renderPostImages(post.id, post.images)}
 
-                              <div className="post-stats">
+                              <div className="post-stats" style={{ marginTop: '12px' }}>
                                 <span>{post.likes || 0} lượt thích</span>
                                 <span>{post.comments?.length || 0} bình luận</span>
                               </div>
@@ -961,10 +1303,7 @@ function InfoCompany() {
                               
                               <div className="post-comments">
                                 {post.comments?.length > 0 ? (
-                                  <div className="comments-wrapper" style={{ 
-                                    maxHeight: expandedComments[post.id] ? '400px' : 'auto',
-                                    overflowY: expandedComments[post.id] ? 'auto' : 'visible'
-                                  }}>
+                                  <div className="comments-wrapper">
                                     {renderComments(post.comments, post.id)}
                                   </div>
                                 ) : (
@@ -972,7 +1311,7 @@ function InfoCompany() {
                                 )}
                                 
                                 <div className="comment-form">
-                                  <div className="avatar">
+                                  <div className="avatar" style={{ marginRight: '12px' }}>
                                     <img
                                       src={authUser?.avatar || "https://via.placeholder.com/32"}
                                       alt="Current User Avatar"
