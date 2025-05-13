@@ -3,7 +3,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCalJ8E0X8hHFAlz5NXVdN_GVuVE1qv7kY",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "jobs-employment-utem.firebaseapp.com",
   projectId: "jobs-employment-utem",
   storageBucket: "jobs-employment-utem.firebasestorage.app",

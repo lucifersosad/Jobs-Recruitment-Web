@@ -4,38 +4,48 @@ import { convertFileCvDriverToUrl } from "../../../helpers/convertFileCvDriverTo
 import { Spin } from "antd";
 import catLoading from "./images/cat.gif";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { getMyCvFile } from "../../../services/clients/myCvsApi";
 
 function CvProfileUser({ record, setLinkCv, linkCv }) {
+  console.log("🚀 ~ CvProfileUser ~ linkCv:", linkCv)
   // dùng state linkCv để lưu trữ link cv cho đỡ bị render lại nhiều lần
   const [loadingCv, setLoadingCv] = useState(true);
 
-  const fetchApi = useCallback(async () => {
-    const cv = record?.cv[0] || "";
-    const idFile = cv?.idFile || "";
+  const fetchApi = async () => {
+    try {
+      if (Object.keys(record).length === 0) return;
 
-    if (idFile && linkCv === "") {
-      const result = await getPdfToDriver({ id_file: idFile });
+      const cv = record?.cv[0] || "";
+      const idFile = cv?.idFile || "";
+
+      if (idFile && linkCv === "") {
+        const result = await getMyCvFile(idFile)
+        console.log("🚀 ~ fetchApi ~ response:", result)
       if (result.code === 200) {
-        const url = convertFileCvDriverToUrl(result.data);
-        setLinkCv(url);
+          const url = convertFileCvDriverToUrl(result.data);
+          setLinkCv(url);
+        } else {
+          setLinkCv("")
+        }
       }
+    } catch (error) {
+      console.log("🚀 ~ fetchApi ~ error:", error)
+      setLinkCv("")
     }
+    setLoadingCv(false)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [linkCv]);
+  };
+
   useEffect(() => {
-    if (Object.keys(record).length > 0) {
-      if (record?.cv.length > 0) {
-        fetchApi();
-      } else {
-        setLoadingCv(false);
-      }
-    }
+    fetchApi()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [record]);
+  
 
   const handleDocumentLoad = () => {
     setLoadingCv(false);
   };
+
   return (
     <div>
       <div className="title mb-3">CV PROFILE USER</div>
@@ -55,7 +65,8 @@ function CvProfileUser({ record, setLinkCv, linkCv }) {
           }
           spinning={loadingCv}
         >
-          {linkCv ? (
+          {!loadingCv && (record?.cv?.length === 0 || linkCv === "") && <div>Người dùng chưa có CV</div>}
+          {linkCv && (
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
               <Viewer
                 defaultScale={1.2}
@@ -63,8 +74,6 @@ function CvProfileUser({ record, setLinkCv, linkCv }) {
                 fileUrl={linkCv}
               />
             </Worker>
-          ) : (
-            <div>{!loadingCv && <>Người dùng chưa có CV</>}</div>
           )}
         </Spin>
       </div>

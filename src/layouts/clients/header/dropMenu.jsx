@@ -159,7 +159,7 @@ const location = useLocation();
         >
           <li className="header__user-info">
             <div className="info-name">
-              <a href="#!">
+              <a href="#!" style={{display: "flex", alignItems: "center"}}>
                 <img src={infoUser?.avatar} alt="default" />
                 <span>{infoUser?.fullName}</span>
               </a>

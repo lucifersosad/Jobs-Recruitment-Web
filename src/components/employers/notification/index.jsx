@@ -3,7 +3,7 @@ import { Avatar, Badge, Flex, notification, Popover, Typography } from "antd";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
-import { onMessageListener, requestForToken } from "../../../helpers/firebase";
+// import { onMessageListener, requestForToken } from "../../../helpers/firebase";
 import ListNotification from "./listNotification";
 import "./notification.scss";
 import {
@@ -76,26 +76,26 @@ const NotificationEmployer = () => {
     setOpen(newOpen);
   };
 
-  useEffect(() => {
-    requestForToken();
-  }, []);
+  // useEffect(() => {
+  //   requestForToken();
+  // }, []);
 
-  onMessageListener(async (payload) => {
-    api.info({
-      message: payload.notification.title,
-      description: (
-        <>
-          <i>{payload.notification.body}</i>
-        </>
-      ),
-    });
-    const res = await getAllNotificationsEmployer();
-    const newNotification = res.data[0]
-    setNotifications([
-      newNotification,
-      ...notifications
-    ]);
-  });
+  // onMessageListener(async (payload) => {
+  //   api.info({
+  //     message: payload.notification.title,
+  //     description: (
+  //       <>
+  //         <i>{payload.notification.body}</i>
+  //       </>
+  //     ),
+  //   });
+  //   const res = await getAllNotificationsEmployer();
+  //   const newNotification = res.data[0]
+  //   setNotifications([
+  //     newNotification,
+  //     ...notifications
+  //   ]);
+  // });
 
   const listNotification = useMemo(
     () => (

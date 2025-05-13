@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Image, message, Upload } from "antd";
+import { DOMAIN } from "../../../utils/api-domain";
 
 const UploadImages = ({fileList, setFileList}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -83,7 +84,7 @@ const UploadImages = ({fileList, setFileList}) => {
 
   const props = {
     name: "file",
-    action: "http://localhost:8386/api/v1/client/users/upload-image",
+    action: `${DOMAIN}/api/v1/client/users/upload-image`,
     onChange: handleChange,
     onPreview: handlePreview,
     listType: "picture-card",

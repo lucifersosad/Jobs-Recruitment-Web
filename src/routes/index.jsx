@@ -1,5 +1,4 @@
 import LayoutMainClient from "../layouts/clients";
-
 import Home from "../pages/clients/home/index";
 import LayoutMainAdmin from "../layouts/admins";
 import CheckRoutes from "../components/admins/checkRoutes";
@@ -29,11 +28,9 @@ import SuggestedClientSettings from "../pages/clients/suggestedClientSettings";
 import Test from "../pages/clients/Test";
 import EmailSuggestions from "../pages/clients/emailSuggestions";
 import NewJob from "../pages/clients/newsJob";
-
 import HomeEmployers from "../pages/employers/home";
 import LoginEmployers from "../pages/employers/login";
 import RegisterEmployers from "../pages/employers/register";
-
 import ForgotPasswordEmployer from "../pages/employers/forgotPassword";
 import ResetPasswordEmployer from "../pages/employers/resetPassword";
 import InfoUserEmployer from "../components/employers/infoUser";
@@ -61,9 +58,15 @@ import AddAccounts from "../pages/admins/addAccounts";
 import ManagementAccounts from "../pages/admins/managementAccounts";
 import LayoutMainAdminNoHeaderAndNoFooter from "../layouts/admins/layout-login";
 import Profile from "../pages/clients/profile";
+import PreviewCv from "../pages/clients/previewCv";
+import LayoutClient from "../layouts/clients/LayoutClient";
+import CreateCv from "../pages/clients/createCv";
+import PostProfile from "../pages/clients/postProfile";
+import ManagementPost from "../pages/employers/managementPost";
+import FormCreatePost from "../pages/employers/managementPost/formCreatePost";
 
 export const routes = [
-  //client
+  // client
   {
     path: "/",
     element: <LayoutMainClient />,
@@ -75,12 +78,11 @@ export const routes = [
             index: true,
             element: <Home />,
           },
-          //Chi tiết công việc
+          // Chi tiết công việc
           {
             path: "tim-viec-lam/:slug",
             element: <JobSearch />,
           },
-
           {
             path: "viec-lam/tat-ca-viec-lam",
             element: <NewJob />,
@@ -94,18 +96,21 @@ export const routes = [
             element: <InfoCompany />,
           },
           {
+            path: "posts/:employerId",
+            element: <PostProfile />,
+          },
+          {
             path: "profile/:id",
             element: <SettingsAccount />,
             children: [
               {
                 index: true,
-                element: <Profile />
-              }
-            ]
-          }
+                element: <Profile />,
+              },
+            ],
+          },
         ],
       },
-
       {
         element: <CheckRoutesClient />,
         children: [
@@ -113,7 +118,6 @@ export const routes = [
             path: "login",
             element: <Login />,
           },
-
           {
             path: "register",
             element: <Register />,
@@ -170,7 +174,6 @@ export const routes = [
                 path: "cai-dat-thong-bao-email",
                 element: <EmailSuggestions />,
               },
-      
               {
                 path: "test",
                 element: <Test />,
@@ -181,7 +184,6 @@ export const routes = [
             path: "cv/upload-cv",
             element: <UploadCv />,
           },
-
           {
             path: "cv",
             element: <SettingsAccount />,
@@ -192,12 +194,25 @@ export const routes = [
               },
             ],
           },
+          {
+            path: "cv/tao-cv",
+            element: <CreateCv />,
+          },
         ],
       },
-
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+  {
+    path: "/xem-cv/:idCv",
+    element: <LayoutClient/>,
+    children: [
       {
-        path: "*",
-        element: <NotFound />,
+        element: <PreviewCv />,
+        index: true,
       },
     ],
   },
@@ -214,7 +229,7 @@ export const routes = [
       },
     ],
   },
-  //admin
+  // admin
   {
     path: "admin",
     element: <LayoutMainAdminNoHeaderAndNoFooter />,
@@ -228,7 +243,7 @@ export const routes = [
           },
         ],
       },
-    ]
+    ],
   },
   {
     path: "admin",
@@ -241,7 +256,7 @@ export const routes = [
             index: true,
             element: <DashBoard />,
           },
-          //Danh mục công việc
+          // Danh mục công việc
           {
             path: "add-categories",
             element: <AddCategories />,
@@ -250,7 +265,7 @@ export const routes = [
             path: "management-categories",
             element: <ManagementCategories />,
           },
-          //Quản lý công việc
+          // Quản lý công việc
           {
             path: "add-jobs",
             element: <AddJobs />,
@@ -259,7 +274,7 @@ export const routes = [
             path: "management-jobs",
             element: <MangaementJobs />,
           },
-          //Quyền
+          // Quyền
           {
             path: "add-group-permission",
             element: <AddGroupPermission />,
@@ -272,7 +287,7 @@ export const routes = [
             path: "set-permission",
             element: <SetPermission />,
           },
-          //Tài khoản
+          // Tài khoản
           {
             path: "add-accounts",
             element: <AddAccounts />,
@@ -285,8 +300,7 @@ export const routes = [
       },
     ],
   },
-
-  //employers
+  // employers
   {
     path: "/nha-tuyen-dung",
     element: <LayoutMainEmployersNoHeaderAndNoFooter />,
@@ -345,6 +359,10 @@ export const routes = [
             element: <ManagementJobsEmployer />,
           },
           {
+            path: "management-posts",
+            element: <ManagementPost />,
+          },
+          {
             path: "detail-jobs/:id",
             element: <DetailJob />,
           },
@@ -363,6 +381,10 @@ export const routes = [
           {
             path: "account/phone-verify",
             element: <PhoneVerify />,
+          },
+          {
+            path: "create-post",
+            element: <FormCreatePost />,
           },
         ],
       },

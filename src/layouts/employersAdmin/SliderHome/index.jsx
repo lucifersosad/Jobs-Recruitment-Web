@@ -10,6 +10,7 @@ import {
   faGear,
   faPlus,
   faShieldHalved,
+  faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser, faFileLines } from "@fortawesome/free-regular-svg-icons";
 import { useSelector } from "react-redux";
@@ -109,6 +110,16 @@ function SliderHome() {
             }
           >
             <Link to={LINK_URL + "management-jobs"}>Tin tuyển dụng</Link>
+          </Menu.Item>
+          <Menu.Item
+            key={LINK_URL + "management-posts"}
+            icon={
+              <span className="layout__sliderEmployer-item">
+                <FontAwesomeIcon icon={faNewspaper} />
+              </span>
+            }
+          >
+            <Link to={LINK_URL + "management-posts"}>Quản lý bài viết</Link>
           </Menu.Item>
           <Menu.Item
             key={LINK_URL + "add-jobs-employer"}
