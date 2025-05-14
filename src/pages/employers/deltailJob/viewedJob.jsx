@@ -25,6 +25,7 @@ import UserProfile from "../../../components/employers/userProfile";
 
 function ViewedJob({ record }) {
   const [data, setData] = useState([]);
+  console.log("🚀 ~ ViewedJob ~ data:", data)
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
   const fetchApi = async () => {
@@ -38,6 +39,13 @@ function ViewedJob({ record }) {
     }
   };
   const handleConfirm = async (idUser) => {
+    messageApi.open({
+      key: 'fetching',
+      type: 'loading',
+      content: 'Đang xử lý...',
+      duration: 0,
+    });
+
     try {
       const objectData = {
         idJob: record._id,
@@ -46,7 +54,9 @@ function ViewedJob({ record }) {
       const result = await buyUserPreviewJob(objectData);
       if (result.code === 200) {
         await UpdateDataAuthEmployer(dispatch);
+        await fetchApi();
         messageApi.open({
+          key: 'fetching',
           type: "success",
           content: result.success,
           icon: (
@@ -55,9 +65,9 @@ function ViewedJob({ record }) {
             </span>
           ),
         });
-        fetchApi();
       } else {
         messageApi.open({
+          key: 'fetching',
           type: "error",
           content: result.error,
           icon: (
@@ -69,6 +79,7 @@ function ViewedJob({ record }) {
       }
     } catch (error) {
       messageApi.open({
+        key: 'fetching',
         type: "error",
         content: "Lỗi không xác định",
         icon: (
@@ -87,8 +98,15 @@ function ViewedJob({ record }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [record]);
-
+    
   const saveProfileUser = async (idUser) => {
+    messageApi.open({
+      key: 'fetching',
+      type: 'loading',
+      content: 'Đang xử lý...',
+      duration: 0,
+    });
+    
     try {
       const objectNew = {
         idProfile: idUser,
@@ -96,7 +114,9 @@ function ViewedJob({ record }) {
       };
       const result = await followUserProfile(objectNew);
       if (result.code === 200) {
+        await fetchApi();
         messageApi.open({
+          key: 'fetching',
           type: "success",
           content: result.success,
           icon: (
@@ -107,6 +127,7 @@ function ViewedJob({ record }) {
         });
       } else {
         messageApi.open({
+          key: 'fetching',
           type: "error",
           content: result.error,
           icon: (
@@ -118,6 +139,7 @@ function ViewedJob({ record }) {
       }
     } catch (error) {
       messageApi.open({
+        key: 'fetching',
         type: "error",
         content: "Lỗi không xác định",
         icon: (
@@ -285,6 +307,7 @@ function ViewedJob({ record }) {
           <div className="box-action">
             <UserProfile record={record} />
             <button
+              disabled={record.followed}
               onClick={() => {
                 saveProfileUser(record?._id);
               }}

@@ -4,9 +4,10 @@ import { convertFileCvDriverToUrl } from "../../../helpers/convertFileCvDriverTo
 import { Spin } from "antd";
 import catLoading from "./images/cat.gif";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
-import { getMyCvFile } from "../../../services/clients/myCvsApi";
+import { getMyCvFile } from "../../../services/employers/myCvsApi";
 
-function CvProfileUser({ record, setLinkCv, linkCv }) {
+function CvProfileUser({ record }) {
+  const [linkCv, setLinkCv] = useState("");
   console.log("🚀 ~ CvProfileUser ~ linkCv:", linkCv)
   // dùng state linkCv để lưu trữ link cv cho đỡ bị render lại nhiều lần
   const [loadingCv, setLoadingCv] = useState(true);
@@ -18,7 +19,7 @@ function CvProfileUser({ record, setLinkCv, linkCv }) {
       const cv = record?.cv[0] || "";
       const idFile = cv?.idFile || "";
 
-      if (idFile && linkCv === "") {
+      if (idFile) {
         const result = await getMyCvFile(idFile)
         console.log("🚀 ~ fetchApi ~ response:", result)
       if (result.code === 200) {

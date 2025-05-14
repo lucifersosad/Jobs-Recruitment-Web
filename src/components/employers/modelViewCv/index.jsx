@@ -60,7 +60,9 @@ function ModelViewCv({ record, dataFull, fetchApi }) {
   };
 
   const handleCancel = () => {
-    fetchApi();
+    if (record?.countView === 0) {
+      fetchApi();
+    }
     setIsModalOpen(false);
   };
 
