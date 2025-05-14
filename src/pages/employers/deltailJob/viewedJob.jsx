@@ -115,6 +115,7 @@ function ViewedJob({ record }) {
       };
       const result = await followUserProfile(objectNew);
       if (result.code === 200) {
+        await fetchApi();
         messageApi.open({
           key: 'fetching',
           type: "success",
