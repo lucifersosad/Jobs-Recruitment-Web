@@ -192,7 +192,7 @@ function ApplyCv({ record, fetchApi, loading }) {
               <ModelViewCv
                 record={record}
                 dataFull={dataFull}
-                fetchApi={()=>{fetchApi(status)}}
+                fetchApi={fetchApi}
 
               />
             </div>
