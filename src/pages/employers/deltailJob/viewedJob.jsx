@@ -94,7 +94,6 @@ function ViewedJob({ record }) {
   useEffect(() => {
     if (!record) return;
     if (Object.keys(record).length > 0) {
-      console.log("🚀 ~ useEffect ~ record:", record)
       fetchApi();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,5 +1,5 @@
 import { Button, Menu, Modal, Rate } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { infoUserProfile } from "../../../services/employers/jobsApi";
 import { optionsSalary, optionsYearsOfExperience } from "./js/options";
 import "./userProfile.scss";
@@ -15,9 +15,9 @@ import CvProfileUser from "./cvProfileUser";
 import { useParams } from "react-router-dom";
 
 function UserProfile({ record }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [userProfileInfo, setUserProfileInfo] = useState({});
   const [selectedKeys, setSelectedKeys] = useState("info");
-  const [linkCv, setLinkCv] = useState("");
 
   const {id} = useParams();
   const fetchApi = async () => {
@@ -45,12 +45,17 @@ function UserProfile({ record }) {
     }
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  useEffect(() => {
+    if (!isModalOpen ) return;
+    fetchApi();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen])
+  
   const showModal = () => {
     setIsModalOpen(true);
-    if (userProfileInfo?._id === record._id) return;
+    // if (userProfileInfo?._id === record._id) return;
 
-    fetchApi();
+    // fetchApi();
   };
   const handleOk = () => {
     setIsModalOpen(false);
@@ -216,7 +221,7 @@ function UserProfile({ record }) {
                       <InfoProfileUser record={userProfileInfo} />
                     )}
                     {selectedKeys === "cv_user" && (
-                      <CvProfileUser record={userProfileInfo}  setLinkCv={setLinkCv} linkCv={linkCv}/>
+                      <CvProfileUser record={userProfileInfo} />
                     )}
                   </div>
                 </div>
