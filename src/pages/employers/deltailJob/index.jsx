@@ -1,7 +1,7 @@
 import { Link, useLocation, useParams } from "react-router-dom";
 import "./detailJob.scss";
 import banner from "./images/banner.png";
-import { Menu } from "antd";
+import { Menu, message } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faFile } from "@fortawesome/free-regular-svg-icons";
@@ -27,13 +27,13 @@ function DetailJob() {
   const [cv_open_contact, setCvOpenContact] = useState(0);
   const [countViewCv, setCountViewCv] = useState(0);
   const [loading, setLoading] = useState(false)
+  const [messageApi, contextHolder] = message.useMessage();
 
   const fetchApi = async (status="") => {
     setLoading(true)
     const result = await infoJobsEmployer(param.id,status);
     if (result.code === 200) {
       setLoading(false)
-      console.log("🚀 ~ fetchApi ~ decData(result.data):", decData(result.data))
       setData(decData(result.data));
     }    
   };
@@ -56,6 +56,37 @@ function DetailJob() {
       setCvOpenContact(lengthOpenContact);
     }
   }, [data]);
+
+  const messageHandlers = () => ({
+    fetching: () => {
+      messageApi.open({
+        key: 'fetching',
+        type: 'loading',
+        content: 'Đang xử lý...',
+        duration: 0,
+      });
+    },
+    success: () => {
+      messageApi.open({
+        key: 'fetching',
+        type: 'success',
+        content: 'Hoàn thành!',
+        duration: 2,
+      });
+    },
+    fail: () => {
+      messageApi.open({
+        key: 'fetching',
+        type: 'error',
+        content: 'Đã xảy ra lỗi!',
+        duration: 2,
+      });
+    },
+    final: () => {
+      messageApi.destroy('fetching')
+    }
+  });
+
   //job , apply_cv , viewed_job , followed_cv service
   const items = [
     {
@@ -82,6 +113,7 @@ function DetailJob() {
 
   return (
     <>
+      {contextHolder}
       <div className="container-fluid page-content mt-4 detail-job reset-button-employer">
         <div className="title title-employer-setting  mb-3 ">
           <h3>{data?.title || ""}</h3>
@@ -137,7 +169,7 @@ function DetailJob() {
           <div className="item-box">
             {queryGet === "job" && <MemoizedInfoJobEmployer record={data} />}
             {queryGet === "apply_cv" && (
-              <ApplyCv record={data} fetchApi={fetchApi} loading={loading}/>
+              <ApplyCv record={data} fetchApi={fetchApi} loading={loading} messageHandlers={messageHandlers}/>
             )}
             {queryGet === "viewed_job" && <ViewedJob record={data} />}
             {queryGet === "followed_cv" && <FollowedCv record={data} />}

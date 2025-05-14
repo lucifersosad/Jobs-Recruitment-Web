@@ -521,6 +521,10 @@
       background: #f76197;
       color: #fff;
       transition: all 0.3s ease-in-out;
+      &:disabled {
+        opacity: 0.2;
+        cursor: not-allowed;
+      }
       &:hover {
         background: #fd307b;
       }

@@ -18,36 +18,45 @@ import { removeAccents } from "../../../helpers/removeAccents";
 
 import { options } from "./js/options";
 
-function ApplyCv({ record, fetchApi, loading }) {
+function ApplyCv({ record, fetchApi, loading, messageHandlers }) {
   const [statusCheck, setStatus] = useState("");
   const [data, setData] = useState([]);
   const [dataFull, setDataFull] = useState([]);
+  const [loadingAccept, setLoadingAccept] = useState(false);
+  const [loadingRefuse, setLoadingRefuse] = useState(false);
+  const message = messageHandlers();
 
   useEffect(() => {
     if (Object.keys(record)?.length > 0) {
-  
       setData(record?.listProfileRequirement);
       setDataFull(record);
-    }else{
+    } else {
       setData([]);
     }
   }, [record]);
-  const handleActionCv = async (valueForm, status = "") => {
-    const idJob = dataFull?._id || "";
 
-    const email = valueForm?.email || "";
-    const objectNew = {
-      idJob,
-      status,
-      email,
-    };
-    const result = await actionCv(objectNew);
-    if (result.code === 200) {
-      
-      fetchApi(statusCheck);
+  const handleActionCv = async (valueForm, status = "") => {
+    message.fetching();
+    try {
+      const idJob = dataFull?._id || "";
+
+      const email = valueForm?.email || "";
+      const objectNew = {
+        idJob,
+        status,
+        email,
+      };
+      const result = await actionCv(objectNew);
+      if (result.code === 200) {
+        fetchApi(statusCheck);
+      }
+      message.success()
+    } catch (error) {
+      console.log("🚀 ~ handleActionCv ~ error:", error);
+      message.fail()
     }
   };
- 
+
   const columns = [
     {
       title: "Ứng viên",
@@ -193,7 +202,6 @@ function ApplyCv({ record, fetchApi, loading }) {
                 record={record}
                 dataFull={dataFull}
                 fetchApi={fetchApi}
-
               />
             </div>
 
@@ -222,7 +230,7 @@ function ApplyCv({ record, fetchApi, loading }) {
       },
     },
   ];
-  
+
   const handleChangeStatus = async (value) => {
     setStatus(value);
     fetchApi(value);
@@ -234,7 +242,7 @@ function ApplyCv({ record, fetchApi, loading }) {
           onChange={handleChangeStatus}
           className="select-management-job"
           defaultValue=""
-          style={{width:"200px"}}
+          style={{ width: "200px" }}
           options={options}
           dropdownRender={(menu) => {
             return (
