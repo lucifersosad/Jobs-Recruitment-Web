@@ -41,11 +41,12 @@ import ModelJobSearch from "./modelJobSearch";
 import { useSelector,useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { saveJob } from "../../../services/clients/user-userApi";
-import { message } from "antd";
+import { message, Skeleton } from "antd";
 import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updateDataClient";
 
 function InfoJob(props) {
-  const { record } = props;
+  const { record, loading } = props;
+  console.log("🚀 ~ InfoJob ~ loading:", loading)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [jobType, setJobType] = useState("");
@@ -148,8 +149,11 @@ function InfoJob(props) {
                 <strong>
                   <FontAwesomeIcon icon={faLocationDot} /> Địa Điểm
                 </strong>
-                <p>{record?.city?.name}</p>
-                {record.address && (
+                <Skeleton title={{style: {height: 15, marginTop: "4px"}}} loading={loading} style={{paddingLeft: "21px", marginBottom: "13px"}} active paragraph={false}>
+                    <p>{record?.city?.name}</p>
+                  </Skeleton>
+                {loading && <Skeleton.Button active style={{ height: 150, borderRadius: "10px", marginBottom: "13.5px", marginTop: "10px" }} block />}
+                {!loading && record.address && (
                   <BoxGoogleMap
                     latitude={record.address.linkMap[0]}
                     longitude={record.address.linkMap[1]}
@@ -164,15 +168,19 @@ function InfoJob(props) {
                 <li>
                   <strong>
                     <FontAwesomeIcon icon={faPenToSquare} /> Ngày Cập Nhật
+                  <Skeleton title={{style: {height: 15, marginTop: "4px"}}} loading={loading} style={{paddingLeft: "21px", marginBottom: "13px"}} active paragraph={false}>
                     <p>{moment(record.start_date).format("YYYY/MM/DD")}</p>
+                  </Skeleton>
+                    
                   </strong>
                 </li>
                 <li>
                   <strong>
                     <FontAwesomeIcon icon={faBriefcase} /> Ngành Nghề
                   </strong>
+                  <Skeleton title={{style: {height: 15, marginTop: "4px"}}} loading={loading} style={{paddingLeft: "21px", marginBottom: "13px"}} active paragraph={false} />
 
-                  {record && record.job_categories_title?.length > 0 && (
+                  {!loading && record && record.job_categories_title?.length > 0 && (
                     <pre>
                       {record.job_categories_title.map((item, index) => {
                         let icon = `, `;
@@ -193,7 +201,10 @@ function InfoJob(props) {
                   <strong>
                     <FontAwesomeIcon icon={faBusinessTime} /> Hình thức
                   </strong>
-                  <p>{jobType}</p>
+                  <Skeleton title={{style: {height: 15, marginTop: "4px"}}} loading={loading} style={{paddingLeft: "21px", marginBottom: "13px"}} active paragraph={false}>
+                    <p>{jobType}</p>
+                  </Skeleton>
+                  
                 </li>
               </ul>
             </div>
@@ -205,25 +216,37 @@ function InfoJob(props) {
                   <strong>
                     <FontAwesomeIcon icon={faDollar} /> Lương
                   </strong>
-                  <p>{slary}</p>
+                  <Skeleton title={{style: {height: 15, marginTop: "4px"}}} loading={loading} style={{paddingLeft: "21px", marginBottom: "13px"}} active paragraph={false}>
+                    <p>{slary}</p>
+                  </Skeleton>
+                  
                 </li>
                 <li>
                   <strong>
                     <FontAwesomeIcon icon={faPlus} /> Kinh Nghiệm
                   </strong>
-                  <p>{workExperience}</p>
+                  <Skeleton title={{style: {height: 15, marginTop: "4px"}}} loading={loading} style={{paddingLeft: "21px", marginBottom: "13px"}} active paragraph={false}>
+                    <p>{workExperience}</p>
+                  </Skeleton>
+                  
                 </li>
                 <li>
                   <strong>
                     <FontAwesomeIcon icon={faUser} /> Cấp Bậc
                   </strong>
-                  <p>{level}</p>
+                  <Skeleton title={{style: {height: 15, marginTop: "4px"}}} loading={loading} style={{paddingLeft: "21px", marginBottom: "13px"}} active paragraph={false}>
+                    <p>{level}</p>
+                  </Skeleton>
+                  
                 </li>
                 <li>
                   <strong>
                     <FontAwesomeIcon icon={faCalendarDays} /> Hết Hạn Nộp
                   </strong>
-                  <p>{moment(record.end_date).format("YYYY/MM/DD")}</p>
+                  <Skeleton title={{style: {height: 15, marginTop: "4px"}}} loading={loading} style={{paddingLeft: "21px", marginBottom: "13px"}} active paragraph={false}>
+                     <p>{moment(record.end_date).format("YYYY/MM/DD")}</p>
+                  </Skeleton>
+                 
                 </li>
               </ul>
             </div>
