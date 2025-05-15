@@ -11,6 +11,7 @@ import { dataNumberOfWorkers } from "./js/options";
 import JobByCompany from "../../../components/clients/jobByCompany";
 function OverviewCompany({ record }) {
   const [infoCompany, setInfoCompany] = useState({});
+  console.log("🚀 ~ OverviewCompany ~ infoCompany:", infoCompany)
   useEffect(() => {
     if (Object.keys(record).length > 0) {
       record.employerId.numberOfWorkers = dataNumberOfWorkers.find(
@@ -24,10 +25,12 @@ function OverviewCompany({ record }) {
     <div className="container">
       <div className="box-info-company">
         <div className="box-info mt-3 mb-3">
-          <h3 className="mb-3  title-all">{infoCompany?.companyName}</h3>
+          <a target="_blank" rel="noreferrer" href={`/cong-ty/${infoCompany?.slug}`}>
+            <h3 className="mb-3  title-all">{infoCompany?.companyName}</h3>
+          </a>
           <div className="box-flex">
             <div className="image-company">
-              <img src={infoCompany?.logoCompany} alt="" style={{objectFit: "contain"}}/>
+              <a target="_blank" rel="noreferrer" href={`/cong-ty/${infoCompany?.slug}`}><img src={infoCompany?.logoCompany} alt="" style={{objectFit: "contain"}}/></a>
             </div>
             <div className="content">
               <div className="address mb-2">
@@ -40,7 +43,7 @@ function OverviewCompany({ record }) {
                 <div className="col-6">
                   <div className="item">
                     <FontAwesomeIcon icon={faUser} />
-                    <span>Người liên hệ: Ms {infoCompany?.fullName}</span>
+                    <span>Người liên hệ: {infoCompany?.fullName}</span>
                   </div>
                 </div>
                 <div className="col-6">

@@ -80,7 +80,7 @@ function ItemBoxNews({
         recordItem.map((item, index) => (
           <div key={index} className="items-box__news-item ">
             <div className="items-box__avatar">
-              <a href={`/tim-viec-lam/${item?.slug}`}>
+              <a target="_blank" rel="noreferrer" href={`/tim-viec-lam/${item?.slug}`}>
                 <img
                   src={item?.logoCompany}
                   alt={item?.companyName}
@@ -92,7 +92,7 @@ function ItemBoxNews({
             <div className="items-box__body">
               <div className="title_all">
                 <h3 className="title">
-                  <a href={`/tim-viec-lam/${item?.slug}`}>{item.title}</a>
+                  <a target="_blank" rel="noreferrer" href={`/tim-viec-lam/${item?.slug}`}>{item.title}</a>
                 </h3>
                 <label className="title-salary">
                   {" "}
@@ -100,7 +100,7 @@ function ItemBoxNews({
                 </label>
               </div>
               <div className="company">
-                <a href={`/cong-ty/${item?.slugCompany}`}>Công ty {item?.companyName}</a>
+                <a target="_blank" rel="noreferrer" href={`/cong-ty/${item?.slugCompany}`}>Công ty {item?.companyName}</a>
               </div>
               <div className="updateAt">
                 Cập nhật {formatTimeDifferenceMongoDb(item.updatedAt)} trước

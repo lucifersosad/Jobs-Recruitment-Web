@@ -46,7 +46,6 @@ import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updat
 
 function InfoJob(props) {
   const { record, loading } = props;
-  console.log("🚀 ~ InfoJob ~ loading:", loading)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [jobType, setJobType] = useState("");

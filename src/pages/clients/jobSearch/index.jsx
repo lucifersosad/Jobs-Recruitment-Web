@@ -142,7 +142,7 @@ function JobSearch() {
                   <div className="job-search-one__content">
                     <div className="job-search-one__desc">
                       <h1>{recordMain.title}</h1>
-                      <a href={"/cong-ty/" + recordMain?.employerId?.slug}>
+                      <a target="_blank" rel="noreferrer" href={"/cong-ty/" + recordMain?.employerId?.slug}>
                         {recordMain.companyName}
                       </a>
                     </div>
@@ -178,26 +178,30 @@ function JobSearch() {
                               <div className="figure row">
                                 <div className="image col-5">
                                   <span title={item.employerId.companyName}>
-                                    <img
+                                    <a target="_blank" rel="noreferrer" href={`/tim-viec-lam/${item?.slug}`}>
+                                      <img
                                       className="lazy-bg"
                                       src={item.employerId.logoCompany}
                                       alt={item.employerId.companyName}
                                       style={{ objectFit: "contain" }}
                                     />
+                                    </a>
                                   </span>
                                 </div>
                                 <div className="figcaption col-7">
                                   <div className="title">
-                                    <Link
-                                      to={`/tim-viec-lam/${item.slug}`}
+                                    <a
+                                      target="_blank" rel="noreferrer"
+                                      href={`/tim-viec-lam/${item.slug}`}
                                       className="job_link"
                                       title={item.title}
                                     >
                                       {item.title}
-                                    </Link>
+                                    </a>
                                   </div>
                                   <div className="caption">
                                     <a
+                                      target="_blank" rel="noreferrer"
                                       className="company-name"
                                       href={`/cong-ty/${item.employerId.slug}`}
                                       title={item.employerId.companyName}
