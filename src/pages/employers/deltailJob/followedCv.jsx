@@ -33,12 +33,17 @@ function FollowedCv({ record }) {
     };
     const result = await followUserJob(objectNew);
     if (result.code === 200) {
-    
       setData(result?.data);
       //   setData(result.data);
     }
   };
   const handleConfirm = async (idUser) => {
+    messageApi.open({
+      key: "fetching",
+      type: "loading",
+      content: "Đang xử lý...",
+      duration: 0,
+    });
     try {
       const objectData = {
         idJob: record._id,
@@ -47,7 +52,9 @@ function FollowedCv({ record }) {
       const result = await buyUserPreviewJob(objectData);
       if (result.code === 200) {
         await UpdateDataAuthEmployer(dispatch);
+        await fetchApi();
         messageApi.open({
+          key: "fetching",
           type: "success",
           content: result.success,
           icon: (
@@ -55,10 +62,10 @@ function FollowedCv({ record }) {
               <FontAwesomeIcon icon={faCheck} />
             </span>
           ),
-        });
-        fetchApi();
+        }); 
       } else {
         messageApi.open({
+          key: "fetching",
           type: "error",
           content: result.error,
           icon: (
@@ -70,6 +77,7 @@ function FollowedCv({ record }) {
       }
     } catch (error) {
       messageApi.open({
+        key: "fetching",
         type: "error",
         content: "Lỗi không xác định",
         icon: (
@@ -88,16 +96,24 @@ function FollowedCv({ record }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [record]);
-  const deleteProfileUser = useCallback(async (idUser) => {
-    try {
 
+  const deleteProfileUser = async (idUser) => {
+    messageApi.open({
+      key: "fetching",
+      type: "loading",
+      content: "Đang xử lý...",
+      duration: 0,
+    });
+    try {
       const objectNew = {
         idProfile: idUser,
         idJob: record?._id,
       };
       const result = await deleteFollowProfile(objectNew);
       if (result.code === 200) {
+        await fetchApi();
         messageApi.open({
+          key: "fetching",
           type: "success",
           content: result.success,
           icon: (
@@ -105,10 +121,10 @@ function FollowedCv({ record }) {
               <FontAwesomeIcon icon={faCheck} />
             </span>
           ),
-        });
-        fetchApi();
+        }); 
       } else {
         messageApi.open({
+          key: "fetching",
           type: "error",
           content: result.error,
           icon: (
@@ -120,6 +136,7 @@ function FollowedCv({ record }) {
       }
     } catch (error) {
       messageApi.open({
+        key: "fetching",
         type: "error",
         content: "Lỗi không xác định",
         icon: (
@@ -129,7 +146,9 @@ function FollowedCv({ record }) {
         ),
       });
     }
-  },[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  };
+
   const columns = [
     {
       title: "Ứng viên",
@@ -331,5 +350,5 @@ function FollowedCv({ record }) {
   );
 }
 
-const MemoizedFollowedCv= memo(FollowedCv);
+const MemoizedFollowedCv = memo(FollowedCv);
 export default MemoizedFollowedCv;

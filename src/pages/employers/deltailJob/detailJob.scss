@@ -521,7 +521,11 @@
       background: #f76197;
       color: #fff;
       transition: all 0.3s ease-in-out;
-      &:hover {
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      &:not(:disabled):hover {
         background: #fd307b;
       }
       &:first-child {

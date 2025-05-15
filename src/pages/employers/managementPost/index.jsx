@@ -65,134 +65,114 @@ const isValidCommentData = (data) => {
 
 // Hàm để bình thường hóa dữ liệu bình luận từ nhiều cấu trúc khác nhau
 const normalizeCommentData = (dataFromApi) => {
-  if (!dataFromApi) {
-    console.warn("normalizeCommentData nhận dữ liệu rỗng");
+  if (!Array.isArray(dataFromApi)) {
+    console.error("Dữ liệu bình luận không phải là mảng:", dataFromApi);
     return [];
   }
   
   try {
-    console.log("normalizeCommentData nhận dữ liệu:", dataFromApi);
+    // Tách thành bình luận gốc và bình luận trả lời
+    const mainComments = dataFromApi.filter(comment => !comment.parentCommentId && !comment.parentId);
+    const replies = dataFromApi.filter(comment => comment.parentCommentId || comment.parentId);
     
-    // Nếu đã là mảng các comment
-    if (Array.isArray(dataFromApi) && dataFromApi.length > 0) {
-      console.log("Đang xử lý mảng bình luận với", dataFromApi.length, "phần tử");
-      
-      // Tạo một bản đồ các replies để xử lý
-      const replyMap = {};
-      const mainComments = [];
-      
-      // Bước 1: Phân loại comments và replies
-      dataFromApi.forEach(comment => {
-        try {
-          // Xác định xem đây là bình luận chính hay trả lời
-          if (comment.parentCommentId || comment.parentId) {
-            const parentId = comment.parentCommentId || comment.parentId;
-            if (!replyMap[parentId]) {
-              replyMap[parentId] = [];
-            }
-            replyMap[parentId].push(comment);
-          } else {
-            mainComments.push(comment);
-          }
-        } catch (error) {
-          console.error("Lỗi khi phân loại comment:", error, comment);
-          mainComments.push(comment); // Thêm vào main comments để không bị mất
-        }
-      });
-      
-      // Bước 2: Xử lý từng main comment và thêm replies vào
-      return mainComments.map(comment => {
-        try {
-          // Xác định id của comment
-          const commentId = comment.id || comment._id || `comment-${Math.random().toString(36).substr(2, 9)}`;
-          
-          // Xác định thông tin người dùng
-          let userId = comment.userId;
-          let userName = "";
-          let userAvatar = "";
-          
-          // Kiểm tra cấu trúc của userId
-          if (typeof userId === 'object' && userId !== null) {
-            // Trường hợp userId là object { _id, fullName, avatar }
-            userName = userId.fullName || userId.name || "Người dùng";
-            userAvatar = userId.avatar || DEFAULT_AVATAR;
-            userId = userId._id;
-          } else if (typeof userId === 'string') {
-            // Trường hợp userId chỉ là string ID
-            userName = comment.userName || "Người dùng";
-            userAvatar = comment.userAvatar || DEFAULT_AVATAR;
-          } else {
-            // Trường hợp không có userId
-            userName = comment.userName || "Người dùng";
-            userAvatar = comment.userAvatar || DEFAULT_AVATAR;
-            userId = commentId;
-          }
-          
-          // Lấy các replies cho comment này
-          const replies = replyMap[commentId] || comment.replies || [];
-          
-          // Chuẩn hóa các trường của comment
-          return {
-            id: commentId,
-            content: comment.content || "Không có nội dung",
-            userId: {
-              _id: userId,
-              fullName: userName,
-              avatar: userAvatar
-            },
-            timeAgo: comment.timeAgo || "Vừa xong",
-            parentCommentId: comment.parentCommentId || null,
-            replies: Array.isArray(replies) 
-              ? replies.map(reply => normalizeCommentReply(reply, commentId))
-              : []
-          };
-        } catch (error) {
-          console.error("Lỗi khi chuẩn hóa comment:", error, comment);
-          // Trả về một comment mặc định để tránh lỗi
-          return {
-            id: `error-${Math.random().toString(36).substr(2, 9)}`,
-            content: "Có lỗi khi tải bình luận này",
-            userId: {
-              _id: "error",
-              fullName: "Người dùng",
-              avatar: DEFAULT_AVATAR
-            },
-            timeAgo: "Vừa xong",
-            parentCommentId: null,
-            replies: []
-          };
-        }
-      });
-    }
+    // Tạo map để lưu trữ các trả lời theo ID của comment cha
+    const replyMap = {};
     
-    // Nếu API trả về { data: [...] }
-    if (dataFromApi.data && Array.isArray(dataFromApi.data)) {
-      console.log("Xử lý dữ liệu từ data:", dataFromApi.data.length, "bình luận");
-      return normalizeCommentData(dataFromApi.data);
-    }
+    replies.forEach(reply => {
+      const parentId = reply.parentCommentId || reply.parentId; 
+      if (!replyMap[parentId]) {
+        replyMap[parentId] = [];
+      }
+      replyMap[parentId].push(reply);
+    });
     
-    // Nếu API trả về { comments: [...] }
-    if (dataFromApi.comments && Array.isArray(dataFromApi.comments)) {
-      console.log("Xử lý dữ liệu từ comments:", dataFromApi.comments.length, "bình luận");
-      return normalizeCommentData(dataFromApi.comments);
-    }
-    
-    // Nếu dữ liệu không phải dạng mảng, thử tìm kiếm trong các trường
-    if (typeof dataFromApi === 'object' && !Array.isArray(dataFromApi)) {
-      for (const key in dataFromApi) {
-        if (Array.isArray(dataFromApi[key])) {
-          const possibleComments = dataFromApi[key];
-          if (possibleComments.length > 0) {
-            console.log(`Tìm thấy mảng trong trường '${key}' với ${possibleComments.length} phần tử`);
-            return normalizeCommentData(possibleComments);
-          }
-        }
+    // Debug để xem cấu trúc dữ liệu
+    if (process.env.NODE_ENV === 'development' && mainComments.length > 0) {
+      console.log("Sample main comment:", mainComments[0]);
+      if (Object.keys(replyMap).length > 0) {
+        const firstParentId = Object.keys(replyMap)[0];
+        console.log("Sample reply:", replyMap[firstParentId][0]);
       }
     }
     
-    // Trường hợp không tìm thấy dữ liệu phù hợp
-    console.warn("Không thể bình thường hóa dữ liệu:", dataFromApi);
-    return [];
+    // Chuẩn hóa mỗi bình luận gốc và đính kèm các trả lời của nó
+    return mainComments.map(comment => {
+      try {
+        // Xác định id của comment
+        const commentId = comment.id || comment._id || `comment-${Math.random().toString(36).substr(2, 9)}`;
+        
+        // Xác định thông tin người dùng
+        let userId = comment.userId;
+        let userName = "";
+        let userAvatar = "";
+        
+        // Kiểm tra cấu trúc của userId
+        if (typeof userId === 'object' && userId !== null) {
+          // Trường hợp userId là object { _id, fullName, avatar }
+          userName = userId.fullName || userId.name || "Người dùng";
+          userAvatar = userId.avatar || DEFAULT_AVATAR;
+          userId = userId._id;
+        } else if (typeof userId === 'string') {
+          // Trường hợp userId chỉ là string ID
+          userName = comment.userName || "Người dùng";
+          userAvatar = comment.userAvatar || DEFAULT_AVATAR;
+        } else {
+          // Trường hợp không có userId
+          userName = comment.userName || "Người dùng";
+          userAvatar = comment.userAvatar || DEFAULT_AVATAR;
+          userId = commentId;
+        }
+        
+        // Kiểm tra thêm các trường thông thường
+        if (userName === "Người dùng") {
+          if (comment.name) userName = comment.name;
+          else if (comment.fullName) userName = comment.fullName;
+          else if (comment.user && comment.user.name) userName = comment.user.name;
+          else if (comment.user && comment.user.fullName) userName = comment.user.fullName;
+        }
+        
+        if (userAvatar === DEFAULT_AVATAR) {
+          if (comment.avatar) userAvatar = comment.avatar;
+          else if (comment.avatarUrl) userAvatar = comment.avatarUrl;
+          else if (comment.user && comment.user.avatar) userAvatar = comment.user.avatar;
+          else if (comment.user && comment.user.avatarUrl) userAvatar = comment.user.avatarUrl;
+        }
+        
+        // Lấy các replies cho comment này
+        const replies = replyMap[commentId] || comment.replies || [];
+        
+        // Chuẩn hóa các trường của comment
+        return {
+          id: commentId,
+          content: comment.content || "Không có nội dung",
+          userId: {
+            _id: userId,
+            fullName: userName,
+            avatar: userAvatar
+          },
+          timeAgo: comment.timeAgo || "Vừa xong",
+          parentCommentId: comment.parentCommentId || comment.parentId || null,
+          replies: Array.isArray(replies) 
+            ? replies.map(reply => normalizeCommentReply(reply, commentId))
+            : []
+        };
+      } catch (error) {
+        console.error("Lỗi khi chuẩn hóa comment:", error, comment);
+        // Trả về một comment mặc định để tránh lỗi
+        return {
+          id: `error-${Math.random().toString(36).substr(2, 9)}`,
+          content: "Có lỗi khi tải bình luận này",
+          userId: {
+            _id: "error",
+            fullName: "Người dùng",
+            avatar: DEFAULT_AVATAR
+          },
+          timeAgo: "Vừa xong",
+          parentCommentId: null,
+          replies: []
+        };
+      }
+    });
   } catch (error) {
     console.error("Lỗi trong normalizeCommentData:", error);
     return [];
@@ -230,6 +210,27 @@ const normalizeCommentReply = (reply, parentId) => {
       userId = replyId;
     }
     
+    // Kiểm tra thêm các trường thông thường
+    if (userName === "Người dùng") {
+      if (reply.name) userName = reply.name;
+      else if (reply.fullName) userName = reply.fullName;
+      else if (reply.user && reply.user.name) userName = reply.user.name;
+      else if (reply.user && reply.user.fullName) userName = reply.user.fullName;
+    }
+    
+    if (userAvatar === DEFAULT_AVATAR) {
+      if (reply.avatar) userAvatar = reply.avatar;
+      else if (reply.avatarUrl) userAvatar = reply.avatarUrl;
+      else if (reply.user && reply.user.avatar) userAvatar = reply.user.avatar;
+      else if (reply.user && reply.user.avatarUrl) userAvatar = reply.user.avatarUrl;
+    }
+    
+    // Kiểm tra xem có phải reply từ công ty không
+    const isCompanyReply = 
+      reply.isCompanyReply === true || 
+      (!reply.userId && reply.fromCompany === true) ||
+      (reply.fromCompany === true);
+    
     return {
       id: replyId,
       content: reply.content || "Không có nội dung",
@@ -240,13 +241,13 @@ const normalizeCommentReply = (reply, parentId) => {
       },
       timeAgo: reply.timeAgo || "Vừa xong",
       parentCommentId: replyParentId,
-      isCompanyReply: reply.isCompanyReply || (!reply.userId && !reply.userName)
+      isCompanyReply: isCompanyReply
     };
   } catch (error) {
-    console.error("Lỗi khi xử lý reply:", error, reply);
+    console.error("Lỗi trong normalizeCommentReply:", error);
     return {
-      id: `error-reply-${Math.random().toString(36).substr(2, 9)}`,
-      content: "Có lỗi khi tải bình luận trả lời này",
+      id: `reply-error-${Math.random().toString(36).substr(2, 9)}`,
+      content: "Có lỗi khi tải bình luận phản hồi này",
       userId: {
         _id: "error",
         fullName: "Người dùng",
@@ -1451,13 +1452,28 @@ function ManagementPost() {
             if (typeof userId === 'object' && userId !== null) {
               // Cấu trúc mới: comment.userId là object
               userAvatar = userId.avatar || DEFAULT_AVATAR;
-              userName = userId.fullName || "Người dùng";
+              userName = userId.fullName || userId.name || "Người dùng";
               userId_id = userId._id;
             } else {
               // Cấu trúc cũ
               userAvatar = comment.userAvatar || DEFAULT_AVATAR;
               userName = comment.userName || "Người dùng";
               userId_id = comment.userId;
+            }
+            
+            // Thêm kiểm tra từ các trường khác nếu vẫn chưa tìm thấy thông tin
+            if (userName === "Người dùng") {
+              if (comment.name) userName = comment.name;
+              else if (comment.fullName) userName = comment.fullName;
+              else if (comment.user && comment.user.name) userName = comment.user.name;
+              else if (comment.user && comment.user.fullName) userName = comment.user.fullName;
+            }
+            
+            if (userAvatar === DEFAULT_AVATAR) {
+              if (comment.avatar) userAvatar = comment.avatar;
+              else if (comment.avatarUrl) userAvatar = comment.avatarUrl;
+              else if (comment.user && comment.user.avatar) userAvatar = comment.user.avatar;
+              else if (comment.user && comment.user.avatarUrl) userAvatar = comment.user.avatarUrl;
             }
             
             const commentId = comment.id || comment._id || `temp-${index}`;
@@ -1584,10 +1600,10 @@ function ManagementPost() {
                       {comment.replies.map((reply, replyIndex) => {
                         try {
                           // Xác định thông tin người dùng từ cấu trúc mới cho reply
-                          let replyUserAvatar, replyUserName;
+                          let replyUserAvatar, replyUserName, isCompanyReply;
                           
                           // Kiểm tra xem reply có phải là reply từ công ty không
-                          const isCompanyReply = !reply.userId || (reply.userId === null);
+                          isCompanyReply = reply.isCompanyReply || !reply.userId || (reply.userId === null);
                           
                           if (isCompanyReply) {
                             // Nếu là reply từ công ty, sử dụng thông tin công ty
@@ -1596,11 +1612,26 @@ function ManagementPost() {
                           } else if (typeof reply.userId === 'object' && reply.userId !== null) {
                             // Cấu trúc mới: reply.userId là object
                             replyUserAvatar = reply.userId.avatar || DEFAULT_AVATAR;
-                            replyUserName = reply.userId.fullName || "Người dùng";
+                            replyUserName = reply.userId.fullName || reply.userId.name || "Người dùng";
                           } else {
                             // Cấu trúc cũ
                             replyUserAvatar = reply.userAvatar || DEFAULT_AVATAR;
                             replyUserName = reply.userName || "Người dùng";
+                          }
+                          
+                          // Thêm kiểm tra từ các trường khác nếu vẫn chưa tìm thấy thông tin
+                          if (replyUserName === "Người dùng") {
+                            if (reply.name) replyUserName = reply.name;
+                            else if (reply.fullName) replyUserName = reply.fullName;
+                            else if (reply.user && reply.user.name) replyUserName = reply.user.name;
+                            else if (reply.user && reply.user.fullName) replyUserName = reply.user.fullName;
+                          }
+                          
+                          if (replyUserAvatar === DEFAULT_AVATAR) {
+                            if (reply.avatar) replyUserAvatar = reply.avatar;
+                            else if (reply.avatarUrl) replyUserAvatar = reply.avatarUrl;
+                            else if (reply.user && reply.user.avatar) replyUserAvatar = reply.user.avatar;
+                            else if (reply.user && reply.user.avatarUrl) replyUserAvatar = reply.user.avatarUrl;
                           }
                           
                           const replyId = reply.id || reply._id || `reply-${replyIndex}`;

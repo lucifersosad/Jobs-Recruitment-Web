@@ -12,6 +12,24 @@ export const getMyCv = async (idCv) => {
   return result;
 };
 
+export const getMyCvFile = async (idCv) => {
+  // const link = API_DOMAIN
+
+  // const path = `/my-cvs/${idCv}/file`
+
+  // const response = await fetch(link + path, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // });
+
+  // return response;
+
+  const result = await AuthPost(`/my-cvs/${idCv}/file`);
+  return result;
+};
+
 export const createMyCv = async (data) => {
   const result = await AuthPost(`/my-cvs/`, data, checkToken);
   return result;
