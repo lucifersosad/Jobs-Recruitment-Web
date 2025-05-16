@@ -43,11 +43,11 @@ function SettingEmployer() {
   ];
   return (
     <div className="container-fluid page-content mt-4 setting-employer">
-      <div className="title-employer-setting  ml-10 mb-4">
+      <div className="title-employer-setting mb-4">
         <h3>Cài đặt tài khoản</h3>
       </div>
       <div className="box-tab">
-        <Tabs tabPosition={"left"} type="card" items={itemsTab} />
+        <Tabs tabPosition={"left"} type="card" items={itemsTab}  style={{width: "100%"}}/>
       </div>
     </div>
   );
