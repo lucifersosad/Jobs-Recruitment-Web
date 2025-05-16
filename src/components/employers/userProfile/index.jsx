@@ -1,4 +1,4 @@
-import { Button, Menu, Modal, Rate } from "antd";
+import { Button, Menu, Modal, Rate, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import { infoUserProfile } from "../../../services/employers/jobsApi";
 import { optionsSalary, optionsYearsOfExperience } from "./js/options";
@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 function UserProfile({ record }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userProfileInfo, setUserProfileInfo] = useState({});
+  console.log("🚀 ~ UserProfile ~ userProfileInfo:", userProfileInfo)
   const [selectedKeys, setSelectedKeys] = useState("info");
 
   const {id} = useParams();
@@ -112,8 +113,7 @@ function UserProfile({ record }) {
                     <div className="mb-2">
                       Kinh nghiệm làm việc:{" "}
                       <span>
-                        {userProfileInfo?.yearsOfExperience ||
-                          "Thông tin chưa cập nhật"}
+                        {Object.keys(userProfileInfo).length > 0 && (userProfileInfo.yearsOfExperience || "Không có")}
                       </span>
                       <p className="experience-info">
                         Vui lòng xem xét thông tin về kinh nghiệm làm việc của
@@ -124,8 +124,7 @@ function UserProfile({ record }) {
                     <div>
                       Mức lương mong muốn:{" "}
                       <span>
-                        {userProfileInfo?.desiredSalary ||
-                          "Thông tin chưa cập nhật"}
+                        {Object.keys(userProfileInfo).length > 0 && (userProfileInfo.desiredSalary || "Không có")}
                       </span>
                       <p>
                         Chúng tôi rất quan tâm đến mức lương mà ứng viên mong
@@ -156,17 +155,17 @@ function UserProfile({ record }) {
               <div className="right-item">
                 <div className="head-info mb-4">
                   <div className="adddress-name">
-                    <h3>{userProfileInfo?.fullName}</h3>
+                    <h3>{record?.fullName}</h3>
                     <div>
                       <FontAwesomeIcon icon={faLocationDot} />
                       <span>
-                        {userProfileInfo?.address?.city.split("/")[1] ||
+                        {record?.address?.city.split("/")[1] ||
                           "Thông tin chưa cập nhật"}
                       </span>
                     </div>
                   </div>
                   <div className="job_categorie_title">
-                    {userProfileInfo?.job_categorie_id?.title ||
+                    {record?.job_categorie_id?.title ||
                       "Thông tin chưa cập nhật"}
                   </div>
                 </div>
@@ -174,7 +173,7 @@ function UserProfile({ record }) {
                   <div className="ranking mb-3">
                     <div className="title mb-2">AUTHENTICATION LEVEL</div>
                     <div className="content">
-                      <span>{userProfileInfo?.authentication_level}.0</span>
+                      <span>{userProfileInfo?.authentication_level || 0}.0</span>
                       <Rate
                         className="rate-rank"
                         style={{ color: "rgb(255 91 157) " }}

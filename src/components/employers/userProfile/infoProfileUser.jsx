@@ -1,6 +1,10 @@
 import moment from "moment";
 import banner from "./images/banner.png"
+import { Flex, Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 function InfoProfileUser({ record}) {
+
+  if (Object.keys(record).length === 0) return <Flex justify="center" align="center"><Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} /></Flex>
 
     //lấy phone và email từ props nếu đã xác nhận thì mới hiển thị
   return (

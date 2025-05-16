@@ -5,7 +5,7 @@ import { decData } from "../../../../helpers/decData";
 import { getJobSearch } from "../../../../services/clients/jobsApi";
 
 
-export const fetchApiJobSearch = async (setRecordMain,slug="",navigate="") => {
+export const fetchApiJobSearch = async (setRecordMain,slug="",navigate="", setLoading) => {
 
     //Cái valueStatus nếu người dùng muốn lọc theo status thì điền giá trị vào mặc định là 1
     //Nếu có tree thì nó mới tạo ra một cây không thì thôi
@@ -19,5 +19,6 @@ export const fetchApiJobSearch = async (setRecordMain,slug="",navigate="") => {
         // window.location.href="/not-found"
         navigate("/not-found")
     }
+    if (setLoading) setLoading(false)
 
 }
