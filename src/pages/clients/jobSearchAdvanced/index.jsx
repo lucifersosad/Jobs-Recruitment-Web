@@ -34,6 +34,7 @@ const buildQueryString = (params) => {
     .join("&");
 };
 function JobSearchAdvanced() {
+  const [loading, setLoading] = useState(true)
   const [form] = Form.useForm();
   const [hiden, setHiden] = useState(true);
   const query = useQuery();
@@ -95,7 +96,8 @@ function JobSearchAdvanced() {
       salary_max,
       city,
       workExperience,
-      setCoutJob
+      setCoutJob,
+      setLoading,
     );
   }, [
     city,
@@ -203,7 +205,7 @@ function JobSearchAdvanced() {
     navigate(`?${buildQueryString(params)}`);
   }
   return (
-    <div className="cb-section cb-section-padding-bottom">
+    <div className="cb-section">
       <div className="search-addvance">
         <div className="header-search-addvance ">
           <div className="container">
@@ -379,6 +381,7 @@ function JobSearchAdvanced() {
                   handleChangePagination={handleChangePagination}
                   defaultValue={page}
                   countPagination={coutJob}
+                  loading={loading}
                 />
                   <div className="suggested-job col-md-4">
                 <MemoizedMayBeInterested />

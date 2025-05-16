@@ -15,18 +15,21 @@ import {
   formatTimeRemainingMongoDb,
 } from "../../../helpers/formartDate";
 import { Link, useNavigate } from "react-router-dom";
-import { Pagination, message } from "antd";
+import { Pagination, Skeleton, message } from "antd";
 
 import { saveJob } from "../../../services/clients/user-userApi";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updateDataClient";
+import BoxNewSkeleton from "./boxNewSkeleton";
 function ItemBoxNews({
   colGrid = 'col-md-8',
   recordItem,
   handleChangePagination,
   countPagination = 1,
   defaultValue = 1,
+  loading,
 }) {
+  console.log("🚀 ~ recordItem:", recordItem)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [dataUser, setDataUser] = useState({}); //[1
@@ -73,10 +76,12 @@ function ItemBoxNews({
     }
   }, [authenMainClient?.infoUser]);
 
+  if (loading) return <BoxNewSkeleton colGrid={colGrid}/>
+
   return (
     <div className={`items-box__news ${colGrid}`}>
       {contextHolder}
-      {recordItem.length > 0 &&
+      {(recordItem.length > 0) ?
         recordItem.map((item, index) => (
           <div key={index} className="items-box__news-item ">
             <div className="items-box__avatar">
@@ -154,7 +159,7 @@ function ItemBoxNews({
               </div>
             </div>
           </div>
-        ))}
+        )) : <>Không có dữ liệu</>}
       <Pagination
         onChange={handleChangePagination}
         style={{

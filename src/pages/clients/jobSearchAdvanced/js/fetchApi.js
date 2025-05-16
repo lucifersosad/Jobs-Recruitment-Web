@@ -2,8 +2,8 @@ import { decData } from "../../../../helpers/decData";
 import { getJobAdvancedSearch } from "../../../../services/clients/jobsApi";
 import { getAllJobsCategories } from "../../../../services/clients/jobsCategoriesApi";
 
-export const fetchApi = async (setOptionCategories, setRecordItem, page, limit, sort_key, sort_value, keyword, job_categorie, job_type, job_level, salary_min, salary_max,city,workExperience,setCoutJob) => {
-
+export const fetchApi = async (setOptionCategories, setRecordItem, page, limit, sort_key, sort_value, keyword, job_categorie, job_type, job_level, salary_min, salary_max,city,workExperience,setCoutJob, setLoading) => {
+    setLoading(true)
   
     const [resultgetAllJobsCategories, resultgetJobAdvancedSearch] = await Promise.all([
       getAllJobsCategories(),
@@ -28,6 +28,8 @@ export const fetchApi = async (setOptionCategories, setRecordItem, page, limit, 
       setCoutJob(resultgetJobAdvancedSearch.countJobs);
 
       setRecordItem(convertDataRecord);
+
+      setLoading(false)
     }
   }
   
