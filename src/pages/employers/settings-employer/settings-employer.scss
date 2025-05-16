@@ -5,6 +5,8 @@
     }
   }
   .box-tab {
+    min-height: 100vh;
+    display: flex;
     background: #fff;
     border-radius: 10px;
     .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn,
