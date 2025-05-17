@@ -398,6 +398,10 @@ input[type="radio"] , .ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 .button-all:active {
   background: #8bd2f0;
 }
+.button-all.disabled{
+  background: #d9d9d9 !important;
+  cursor: not-allowed
+}
 .title-span-webkit{
          
          

@@ -29,10 +29,9 @@ function ItemBoxNews({
   defaultValue = 1,
   loading,
 }) {
-  console.log("🚀 ~ recordItem:", recordItem)
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [dataUser, setDataUser] = useState({}); //[1
+  const [dataUser, setDataUser] = useState({});
   const authenMainClient = useSelector(
     (status) => status.authenticationReducerClient
   );
@@ -130,7 +129,7 @@ function ItemBoxNews({
                 <div className="button-line">
                   <a
                     href={`/tim-viec-lam/${item?.slug}?modal=show`}
-                    className="button-all"
+                    className={`button-all${item?.listProfileRequirement?.some(item => item?.idUser === dataUser?.id) ? ' disabled' : ''}`}
                   >
                     Ứng tuyển
                   </a>
