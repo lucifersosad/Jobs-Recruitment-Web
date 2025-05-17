@@ -22,7 +22,7 @@ function SliderBanner(props) {
         autoplaySpeed: 5000,
     }
     const handlFormSearch = (valueForm) => {
-        navigate(`/viec-lam/tim-viec-lam?keywords=${valueForm.keyword}`)
+        navigate(`/viec-lam/tim-viec-lam?keywords=${valueForm.keyword || ""}`)
     };
     return (
         <div className="banner__slider">

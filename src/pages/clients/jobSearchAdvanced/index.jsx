@@ -99,6 +99,12 @@ function JobSearchAdvanced() {
       setCoutJob,
       setLoading,
     );
+    const newValues = {
+      workExperience,
+      salary: (salary_min && salary_max) ? `${salary_min}-${salary_max}` : ""
+    }
+    form.setFieldsValue(newValues)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     city,
     job_categorie,

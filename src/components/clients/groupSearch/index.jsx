@@ -9,7 +9,10 @@ import MemoizedSearchCustomVip from "../searchCustomVip";
 import { useEffect, useRef, useState } from "react";
 import { getCityApi } from "../../../services/clients/user-userApi";
 function GroupSearch({ onValueChange,valueCity="",valueKeyword="" }) {
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState([{
+          label: "Tất cả địa điểm",
+          value: "",
+        }]);
   const keywordRef = useRef("");
   useEffect(() => {
     keywordRef.current.value = valueKeyword;
@@ -66,7 +69,7 @@ function GroupSearch({ onValueChange,valueCity="",valueKeyword="" }) {
           onChange={handleChangeInput}
           ref={keywordRef}
           type="text"
-          placeholder="Vị trí tuyển dụng"
+          placeholder="Nhập từ khóa"
         />
       </div>
       <div className="item search-city">

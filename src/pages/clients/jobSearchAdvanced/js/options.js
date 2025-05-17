@@ -8,11 +8,6 @@ export const dataExperience  = [
         value:"no-required",
         label:"Không Yêu Cầu Kinh Nghiệm"
     },
-
-    {
-        value:"no-experience-yet",
-        label:"Chưa Có Kinh Nghiệm"
-    },
     {
         value:"duoi_1_nam",
         label:"Dưới 1 Năm"
@@ -71,18 +66,18 @@ export const dataLevel = [
         value:"manage",
         label:"Quản Lý"
     },
-    // {
-    //     value:"vice-director",
-    //     label:"Phó Giám Đốc"
-    // },
+    {
+        value:"vice-director",
+        label:"Phó Giám Đốc"
+    },
     // {
     //     value:"manager",
     //     label:"Giám Đốc"
     // },
-    // {
-    //     value:"general-manager",
-    //     label:"Tổng Giám Đốc"
-    // },
+    {
+        value:"general-manager",
+        label:"Tổng Giám Đốc"
+    },
     // {
     //     value:"president-vicepresident",
     //     label:"Chủ Tịch/Phó Chủ Tịch"
