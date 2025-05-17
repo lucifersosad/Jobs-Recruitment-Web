@@ -21,6 +21,7 @@ import { saveJob } from "../../../services/clients/user-userApi";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updateDataClient";
 import BoxNewSkeleton from "./boxNewSkeleton";
+import CustomEmpty from "../../alls/CustomEmpty";
 function ItemBoxNews({
   colGrid = 'col-md-8',
   recordItem,
@@ -80,7 +81,7 @@ function ItemBoxNews({
   return (
     <div className={`items-box__news ${colGrid}`}>
       {contextHolder}
-      {(recordItem.length > 0) ?
+      {recordItem.length > 0 ?
         recordItem.map((item, index) => (
           <div key={index} className="items-box__news-item ">
             <div className="items-box__avatar">
@@ -158,18 +159,21 @@ function ItemBoxNews({
               </div>
             </div>
           </div>
-        )) : <>Không có dữ liệu</>}
-      <Pagination
-        onChange={handleChangePagination}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "2rem",
-        }}
-        current={defaultValue}
-        total={countPagination * 10}
-      />
+        )) : <CustomEmpty description="Không tìm thấy việc làm" />}
+      {recordItem.length > 0 && (
+        <Pagination
+          onChange={handleChangePagination}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "2rem",
+          }}
+          current={defaultValue}
+          total={countPagination * 10}
+        />
+      )}
+      
     </div>
   );
 }
