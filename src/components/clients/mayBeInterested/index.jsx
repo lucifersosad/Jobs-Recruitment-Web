@@ -51,8 +51,8 @@ function MayBeInterested() {
     <>
       {recordItem.companyName && (
         <>
-          <h2 className="heading-title">Có thể bạn quan tâm</h2>
-          <div className="may-be-interested ">
+          <h2 className="heading-title ">Có thể bạn quan tâm</h2>
+          <div className="may-be-interested">
             <div className="may-be-interested__box">
               <div className="banner">
                 <img src={banner} alt="banner-maybe" />
@@ -60,15 +60,19 @@ function MayBeInterested() {
               <div className="padding-set">
                 <div className="header_box">
                   <div className="image">
-                    <a href="#!">
+                    <a 
+                      target="_blank" rel="noreferrer" 
+                      href={`/tim-viec-lam/${recordItem?.slug}`}
+                    >
                       <img src={recordItem?.logoCompany} alt="" style={{objectFit:"contain"}}/>
                     </a>
                   </div>
                   <div className="title">
-                    <a
+                    <a 
+                      target="_blank" rel="noreferrer" 
                       title={"Công ty " + recordItem?.companyName}
                       className="title-text title-span-webkit"
-                      href="#!"
+                      href={`/tim-viec-lam/${recordItem?.slug}`}
                     >
                       Công ty {recordItem?.companyName}
                     </a>
@@ -108,7 +112,7 @@ function MayBeInterested() {
                   <div className="body_box-item text-head">
                     <FontAwesomeIcon icon={faClock} />
                     <span className="title-span">
-                      Còn {formatTimeRemainingMongoDb(recordItem?.end_date)}
+                      Còn {formatTimeRemainingMongoDb(recordItem?.end_date)} để ứng tuyển
                     </span>
                   </div>
                   <hr />
