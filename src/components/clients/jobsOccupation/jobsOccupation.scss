@@ -1,17 +1,28 @@
 .job {
     &__occupation {
+        margin-bottom: 60px;
+        padding
         .item-box{
             display: flex;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
-            height: 503px;
+            height: "auto";
+            padding: 0 10px;
         }
         &-boxJob{
-            padding: 15px 10px;
-           &:nth-child(1) , &:nth-child(2){
-            border-bottom: 1px solid #EAEAEA;
-           }
+            
+            padding: 15px;
+            border: 1px solid #EAEAEA;
+            border-radius: 10px;
+
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            } 
+
+            &:nth-child(1) , &:nth-child(2){
+                border-bottom: 1px solid #EAEAEA;
+            }
         }
         &-title {
             display: flex;
@@ -31,11 +42,11 @@
             }
         }
         &-item{
-          
-            border-right: 1px solid #EAEAEA;
-            border-left: 1px solid #EAEAEA;
-            border-bottom: 1px solid #EAEAEA;
-            padding: 19px 23px 12px;
+            width: 100%;
+            // border-right: 1px solid #EAEAEA;
+            // border-left: 1px solid #EAEAEA;
+            // border-bottom: 1px solid #EAEAEA;
+            padding: 19px 12px 12px;
         }
         &-boxImage{
             padding: 20px 10px;

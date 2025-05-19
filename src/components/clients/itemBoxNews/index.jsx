@@ -30,6 +30,7 @@ function ItemBoxNews({
   defaultValue = 1,
   loading,
 }) {
+  console.log("🚀 ~ recordItem:", recordItem)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [dataUser, setDataUser] = useState({});
