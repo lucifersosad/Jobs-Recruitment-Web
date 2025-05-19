@@ -84,6 +84,7 @@ function JobsOccupation() {
                         <img
                           src={dataMapOne.employerId.logoCompany}
                           alt="testok"
+                          style={{objectFit: "contain"}}
                         ></img>
                       </div>
                       <div className="job__occupation-content col-9">
@@ -125,6 +126,7 @@ function JobsOccupation() {
                         <img
                           src={dataMapOne.employerId.logoCompany}
                           alt="testok"
+                          style={{objectFit: "contain"}}
                         ></img>
                       </div>
                       <div className="job__occupation-content col-9">
@@ -166,6 +168,7 @@ function JobsOccupation() {
                         <img
                           src={dataMapOne.employerId.logoCompany}
                           alt="testok"
+                          style={{objectFit: "contain"}}
                         ></img>
                       </div>
                       <div className="job__occupation-content col-9">
