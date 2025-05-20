@@ -15,21 +15,25 @@ import {
   formatTimeRemainingMongoDb,
 } from "../../../helpers/formartDate";
 import { Link, useNavigate } from "react-router-dom";
-import { Pagination, message } from "antd";
+import { Pagination, Skeleton, message } from "antd";
 
 import { saveJob } from "../../../services/clients/user-userApi";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updateDataClient";
+import BoxNewSkeleton from "./boxNewSkeleton";
+import CustomEmpty from "../../alls/CustomEmpty";
 function ItemBoxNews({
   colGrid = 'col-md-8',
   recordItem,
   handleChangePagination,
   countPagination = 1,
   defaultValue = 1,
+  loading,
 }) {
+  console.log("🚀 ~ recordItem:", recordItem)
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [dataUser, setDataUser] = useState({}); //[1
+  const [dataUser, setDataUser] = useState({});
   const authenMainClient = useSelector(
     (status) => status.authenticationReducerClient
   );
@@ -73,10 +77,12 @@ function ItemBoxNews({
     }
   }, [authenMainClient?.infoUser]);
 
+  if (loading) return <BoxNewSkeleton colGrid={colGrid}/>
+
   return (
     <div className={`items-box__news ${colGrid}`}>
       {contextHolder}
-      {recordItem.length > 0 &&
+      {recordItem.length > 0 ?
         recordItem.map((item, index) => (
           <div key={index} className="items-box__news-item ">
             <div className="items-box__avatar">
@@ -125,7 +131,7 @@ function ItemBoxNews({
                 <div className="button-line">
                   <a
                     href={`/tim-viec-lam/${item?.slug}?modal=show`}
-                    className="button-all"
+                    className={`button-all${item?.listProfileRequirement?.some(item => item?.idUser === dataUser?.id) ? ' disabled' : ''}`}
                   >
                     Ứng tuyển
                   </a>
@@ -154,18 +160,21 @@ function ItemBoxNews({
               </div>
             </div>
           </div>
-        ))}
-      <Pagination
-        onChange={handleChangePagination}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "2rem",
-        }}
-        current={defaultValue}
-        total={countPagination * 10}
-      />
+        )) : <CustomEmpty description="Không tìm thấy việc làm" />}
+      {recordItem.length > 0 && (
+        <Pagination
+          onChange={handleChangePagination}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "2rem",
+          }}
+          current={defaultValue}
+          total={countPagination * 10}
+        />
+      )}
+      
     </div>
   );
 }

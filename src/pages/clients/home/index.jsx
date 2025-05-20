@@ -44,7 +44,7 @@ function Home() {
         <JobsHot />
         <EmailForm />
         <hr></hr>
-        {/* <JobsOccupation /> */}
+        <JobsOccupation />
         <hr></hr>
         <CareerKey />
         <TalentNetwork />

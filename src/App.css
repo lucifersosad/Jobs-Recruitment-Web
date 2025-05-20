@@ -398,6 +398,10 @@ input[type="radio"] , .ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 .button-all:active {
   background: #8bd2f0;
 }
+.button-all.disabled{
+  background: #d9d9d9 !important;
+  cursor: not-allowed
+}
 .title-span-webkit{
          
          
@@ -530,6 +534,18 @@ body::-webkit-scrollbar-horizontal-thumb {
 }
 .icon-delete:hover {
   opacity: 60%
+}
+.slick-dots-custom {
+  li {
+    background: #fff; 
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+.slick-active .slick-dot-custom {
+  color: #fff !important;
+  background: #5dcaf9 !important;
+  border: 1px solid #5dcaf9 !important;
 }
 
 @keyframes typing {
