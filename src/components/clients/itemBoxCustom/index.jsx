@@ -145,7 +145,7 @@ function ItemBoxCustom() {
                 <div className="button-line">
                   <Link
                     to={`/tim-viec-lam/${item?.slug}?modal=show`}
-                    className="button-all"
+                    className={`button-all${item?.listProfileRequirement?.some(item => item.idUser === dataUser.id) ? ' disabled' : ''}`}
                   >
                     Ứng tuyển
                   </Link>

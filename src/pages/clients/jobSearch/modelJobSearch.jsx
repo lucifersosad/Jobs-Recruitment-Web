@@ -130,10 +130,11 @@ function ModelJobSearch({ record, infoUser, showModel }) {
       console.log(error);
     }
   };
+
   return (
     <div>
       {contextHolder}
-      <button onClick={showModal}>
+      <button onClick={showModal} disabled={(record?.listProfileRequirement?.some(item => item?.idUser === infoUser?.id))}>
         <a>Nộp Đơn Ứng Tuyển</a>
       </button>
       <Modal

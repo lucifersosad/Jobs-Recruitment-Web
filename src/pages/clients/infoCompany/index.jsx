@@ -50,7 +50,7 @@ function InfoCompany() {
   const [recordItem, setRecordItem] = useState([]);
   const [employersWithJobCounts, setEmployersWithJobCounts] = useState([]);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('posts');
+  const [activeTab, setActiveTab] = useState('intro');
   const [posts, setPosts] = useState([]);
   const [commentContent, setCommentContent] = useState({});
   const [postsLoading, setPostsLoading] = useState(false);
@@ -1147,15 +1147,15 @@ function InfoCompany() {
                   <div className="box-icon">
                     <div className="item">
                       <FontAwesomeIcon icon={faLink} />
-                      <span>{recordItem?.website}</span>
+                      <span>{recordItem?.website ? <a href={recordItem?.website} target="_blank" rel="noreferrer">{recordItem?.website}</a> : "Chưa cập nhật"}</span>
                     </div>
                     <div className="item">
                       <FontAwesomeIcon icon={faUserGroup} />
-                      <span>{recordItem?.numberOfWorkers} nhân viên</span>
+                      <span>{recordItem?.numberOfWorkers ? `${recordItem?.numberOfWorkers} nhân viên` : "Chưa cập nhật"}</span>
                     </div>
                     <div className="item">
                       <FontAwesomeIcon icon={faPhone} />
-                      <span>{recordItem?.phoneCompany}</span>
+                      <span>{recordItem?.phoneCompany ? `${recordItem?.phoneCompany}` : "Chưa cập nhật"}</span>
                     </div>
                   </div>
                 </div>
@@ -1192,7 +1192,8 @@ function InfoCompany() {
                   <h2>Giới thiệu công ty</h2>
                 </div>
                 <div className="box-item-content">
-                  <div
+                  {recordItem?.descriptionCompany ? (<>
+                    <div
                     className={"dest " + (isExpanded ? "expanded " : "")}
                     dangerouslySetInnerHTML={{
                       __html: recordItem?.descriptionCompany,
@@ -1213,6 +1214,7 @@ function InfoCompany() {
                       </div>
                     )}
                   </div>
+                  </>) : <div>Chưa cập nhật</div>}
                 </div>
               </div>
               )}

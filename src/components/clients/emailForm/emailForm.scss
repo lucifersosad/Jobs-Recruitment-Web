@@ -53,16 +53,24 @@
                 border-top-left-radius: 4px;
                 border-bottom-left-radius: 4px;
             }
+            .ant-input-outlined {
+                border: 0 !important;
+            }
             .ant-input-group-addon{
                 background: #bd9579;
                 overflow:hidden ;
+                transition: none;
                 &:hover{
                     background: #8f705a !important;
+                    button {
+                        background: #8f705a !important;
+                    }
                 }
                 button{
                     background: #bd9579;
-                    &:hover{
-                        background: #8f705a !important;
+                    transition: none !important;
+                    &:hover {
+                        background: none !important;
                     }
                 }
             }
