@@ -6,7 +6,7 @@ function EmailForm(props) {
   const { Search } = Input;
   const handleFormSearch = (value) => {};
   return (
-    <div className="cb-section" style={{marginBottom: 60}}>
+    <div className="cb-section" style={{paddingBottom: 60}}>
       <div className="email ">
         <div
           className="mbr-overlay"

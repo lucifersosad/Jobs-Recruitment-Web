@@ -24,7 +24,7 @@ const settingsliders = {
   appendDots: dots => (
       <div
         style={{
-          bottom: "-50px",
+          bottom: "-60px",
           borderRadius: "10px",
           padding: "10px"
         }}
@@ -112,7 +112,7 @@ function JobsOccupation() {
   }
 
   return (
-    <div className="cb-section" style={{marginBottom: 60}}>
+    <div className="cb-section" style={{paddingBottom: 60}}>
       <div className="job__occupation">
         <div className="container">
           <h2 className="text-center title-text">

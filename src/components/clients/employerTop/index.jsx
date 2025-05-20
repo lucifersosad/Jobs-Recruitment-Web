@@ -20,7 +20,7 @@ function EmployerTop(props) {
     nextArrow: true,
   };
   return (
-    <div className="employer__top cb-section" style={{marginBottom: 60}}>
+    <div className="employer__top cb-section" style={{paddingBottom: 60}}>
       <div className="container">
         <h2 className="text-center title-text">NHÀ TUYỂN DỤNG HÀNG ĐẦU</h2>
         <div className="row dir-line">

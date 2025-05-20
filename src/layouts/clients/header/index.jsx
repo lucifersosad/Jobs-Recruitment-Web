@@ -113,15 +113,15 @@ function Header() {
        
             {!authenMainClient.status ? (
               <>
-                <div className="header__boxUsers col-3 text-center">
+                <div className="header__boxUsers col-3 text-center row">
                   <div className="row col-12 justify-content-end align-items-center">
-                    <div className="header__boxUsers-user col-3">
+                    <div className="header__boxUsers-user col-4">
                       <NavLink className="mr-1" to={"/login"}>
                         Đăng nhập
                       </NavLink>
                       <div className="inner-dir "></div>
                     </div>
-                    <div className="header__boxUsers-user col-3">
+                    <div className="header__boxUsers-user col-4">
                       <NavLink className="ml-1" to={"/register"}>
                         Đăng ký
                       </NavLink>
@@ -130,7 +130,7 @@ function Header() {
                   </div>
                 </div>
                 <div
-                  style={{ padding: "24px" }}
+                  style={{ padding: "24px", marginRight: "-24px" }}
                   className="header__employer text-center col-2"
                 >
                   <a href={"/nha-tuyen-dung"}>Nhà tuyển dụng</a>
