@@ -5,7 +5,7 @@ import { Card, Form, Image, Input, InputNumber, Modal, Radio, Select, Spin, noti
 import TinyMce from '../../../components/admins/tinyEditor';
 import { LoadingOutlined } from '@ant-design/icons';
 import { editCategories, getTreeCategories } from '../../../services/admins/jobsCategoriesApi';
-import { SelectTree } from '../../../helpers/selectTree';
+import { SelectTree, SelectTreeAdmin } from '../../../helpers/selectTree';
 import { convertThumbUrl } from '../../../helpers/convertThumbUrl';
 import { decData } from '../../../helpers/decData';
 import { handleCancel, handleUpdateDataCategories } from '../../../helpers/modelHelper';
@@ -32,7 +32,7 @@ function FormEdit(props) {
         const record = await getTreeCategories();
         console.log("🚀 ~ fetchApi ~ record:", record)
         if (record.code === 200) {
-            setOptionsSelectTree(SelectTree(record.data))
+            setOptionsSelectTree(SelectTreeAdmin(record.data))
         }
     }
     useEffect(() => {
@@ -147,6 +147,7 @@ function FormEdit(props) {
                                 </Form.Item>
                                 <Form.Item label="Danh Mục Cha" name="parent_id">
                                     <Select
+                                        allowClear
                                         placeholder="Chọn Danh Mục Cha (Hoặc Để Trống)"
 
 
@@ -188,7 +189,7 @@ function FormEdit(props) {
                                 </Form.Item>
                                 <Form.Item>
                                     <button className='button-submit-admin' type="submit" >
-                                        Tạo Danh Mục Công Việc
+                                        Sửa Danh Mục Công Việc
                                     </button>
                                 </Form.Item>
                             </Form>

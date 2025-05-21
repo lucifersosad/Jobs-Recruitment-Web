@@ -13,6 +13,17 @@ export function SelectTree(items, level = 1, idOrigin = "", arr = []) {
     return arr
 }
 
+export function SelectTreeAdmin(items) {
+    const arr = [];
+    for (let item of items) {
+        arr.push({
+            value: item._doc._id,
+            label: `${item._doc.title}`,
+        })
+    }
+    return arr
+}
+
 
 export function SelectTreeArr(items, level = 1, arr = []) {
     for (let item of items) {
