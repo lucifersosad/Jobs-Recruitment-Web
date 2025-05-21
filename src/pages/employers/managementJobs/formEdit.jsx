@@ -47,6 +47,9 @@ import { getAllJobsCategories } from "../../../services/employers/jobsCategories
 import { editJobsEmployer } from "../../../services/employers/jobsApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { getTreeCategories } from "../../../services/admins/jobsCategoriesApi";
+import { FormatTree } from "../../../helpers/selectTree";
+import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
 
 function FormEdit(props) {
   const { record, fetchApiLoad, messageApi, dataStatus } = props;
@@ -89,7 +92,7 @@ function FormEdit(props) {
   const fetchApi = async () => {
     try {
       const [recordJobsCategory, recordCity] = await Promise.all([
-        getAllJobsCategories(),
+        getTreeCategories(),
         getCity(),
       ]);
       //Lấy danh mục công việc
@@ -98,7 +101,7 @@ function FormEdit(props) {
           value: item._id,
           label: item.title,
         }));
-        setOptionsSelectTree(convertData);
+        setOptionsSelectTree(FormatTree(recordJobsCategory.data));
       }
 
       if (recordCity.code === 200) {
@@ -307,8 +310,13 @@ function FormEdit(props) {
                       },
                     ]}
                   >
-                    <Select
+                    {/* <Select
                       mode="multiple"
+                      placeholder="Chọn Ngành Nghề"
+                      options={optionsSelectTreeJobCategories}
+                    /> */}
+
+                    <SelectJobCategoryV2
                       placeholder="Chọn Ngành Nghề"
                       options={optionsSelectTreeJobCategories}
                     />
