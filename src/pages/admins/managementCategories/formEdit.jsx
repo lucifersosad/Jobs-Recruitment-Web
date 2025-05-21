@@ -30,14 +30,15 @@ function FormEdit(props) {
     //Function fetch api
     const fetchApi = async () => {
         const record = await getTreeCategories();
+        console.log("🚀 ~ fetchApi ~ record:", record)
         if (record.code === 200) {
             setOptionsSelectTree(SelectTree(record.data))
         }
     }
     useEffect(() => {
-
-        fetchApi()
-    }, [])
+        if (isModal)
+            fetchApi()
+    }, [isModal])
 
 
 

@@ -42,6 +42,7 @@ import ModelMapAddress from "../../../components/admins/modelMapAddress";
 import { useSelector } from "react-redux";
 import NotFound from "../../../components/admins/notFound";
 import { removeAccents } from "../../../helpers/removeAccents";
+import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
 
 function AddJobs() {
   const { Search } = Input;
@@ -254,8 +255,7 @@ function AddJobs() {
                       },
                     ]}
                   >
-                    <Select
-                      mode="multiple"
+                    <SelectJobCategoryV2
                       placeholder="Chọn Ngành Nghề"
                       options={optionsSelectTreeJobCategories}
                     />

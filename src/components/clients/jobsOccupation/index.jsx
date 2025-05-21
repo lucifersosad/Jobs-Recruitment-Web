@@ -82,7 +82,7 @@ function JobsOccupation() {
   };
   const getListJobsThreed = async (page) => {
     const record = await getListJobsOccupation(
-      "dich-vu-khach-hang",
+      "dich-vu-khach-hang-123",
       page,
       "title salaryMax salaryMin city employerId slug"
     );

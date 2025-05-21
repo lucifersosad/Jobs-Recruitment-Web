@@ -25,3 +25,14 @@ export function SelectTreeArr(items, level = 1, arr = []) {
     }
     return arr
 }
+
+export function FormatTree (items) {
+  return items.map(item => {
+    const normalized = {
+      label: item._doc.title ?? '',
+      value: item._doc._id ?? '',
+      children: Array.isArray(item.children) ? FormatTree(item.children) : []
+    };
+    return normalized;
+  });
+}

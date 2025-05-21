@@ -28,6 +28,9 @@ import { getAllJobsCategories } from "../../../services/employers/jobsCategories
 import { getContentTiny } from "../../../helpers/getContentTinymce";
 import { useDebounce } from "use-debounce";
 import { loadCityFull } from "./js/loadCity";
+import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
+import { getTreeCategories } from "../../../services/admins/jobsCategoriesApi";
+import { FormatTree, SelectTreeArr } from "../../../helpers/selectTree";
 function FormOne({ setForm_one, next, form_one }) {
   const [optionsSelectTreeJobCategories, setOptionsSelectTree] = useState([]);
   const [fullAddressCompany, setfullAddressCompany] = useState([]);
@@ -50,19 +53,25 @@ function FormOne({ setForm_one, next, form_one }) {
   }, []);
   useEffect(() => {
     const fetchApi = async () => {
-      const recordJobsCategory = await getAllJobsCategories();
+      // const recordJobsCategory = await getAllJobsCategories();
+
+      // if (recordJobsCategory.code === 200) {
+      //   const convertData = recordJobsCategory.data.map((item) => {
+      //     return {
+      //       value: item._id,
+      //       label: item.title,
+      //     };
+      //   });
+      //   setOptionsSelectTree(convertData);
+      // }
+
+      const record = await getTreeCategories();
+
+      if (record.code === 200) {
+        setOptionsSelectTree(FormatTree(record.data))
+      }
 
       const recordCity = await getCity();
-
-      if (recordJobsCategory.code === 200) {
-        const convertData = recordJobsCategory.data.map((item) => {
-          return {
-            value: item._id,
-            label: item.title,
-          };
-        });
-        setOptionsSelectTree(convertData);
-      }
 
       if (recordCity.code === 200) {
         const options = recordCity.data.map((item) => {
@@ -178,6 +187,7 @@ function FormOne({ setForm_one, next, form_one }) {
       } catch (error) {
         console.log(error);
       }
+        
     },
     [tags, location, setForm_one, next]
   );
@@ -239,31 +249,11 @@ function FormOne({ setForm_one, next, form_one }) {
             },
           ]}
         >
-          <Select
-            showSearch
-            filterOption={(input, option) =>
-              removeAccents(option.label)
-                .toLowerCase()
-                .includes(removeAccents(input).toLowerCase()) ||
-              removeAccents(option.value)
-                .toLowerCase()
-                .includes(removeAccents(input).toLowerCase())
-            }
-            mode="multiple"
+          <SelectJobCategoryV2
             placeholder="Chọn Ngành Nghề"
             options={optionsSelectTreeJobCategories}
-            dropdownRender={(menu) => {
-              return (
-                <>
-                  <div className="search-custom-info-company">
-                    <span className="item">{menu}</span>
-                  </div>
-                </>
-              );
-            }}
           />
         </Form.Item>
-
         <Form.Item
           className="col-4"
           label="Tỉnh/Thành Phố"
