@@ -29,10 +29,9 @@ function FormEdit(props) {
 
     //Function fetch api
     const fetchApi = async () => {
-        const record = await getTreeCategories();
-        console.log("🚀 ~ fetchApi ~ record:", record)
-        if (record.code === 200) {
-            setOptionsSelectTree(SelectTreeAdmin(record.data))
+        const recordCate = await getTreeCategories();
+        if (recordCate.code === 200) {
+            setOptionsSelectTree(SelectTreeAdmin(recordCate.data, record._id))
         }
     }
     useEffect(() => {
