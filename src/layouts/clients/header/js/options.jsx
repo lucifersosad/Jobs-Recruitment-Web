@@ -19,11 +19,11 @@ import { Link } from "react-router-dom";
 export const searchJob = [
   {
     label: (
-      <Link
+      <a
         className="item-ok"
        
         rel="noopener noreferrer"
-        to={"/viec-lam/tim-viec-lam"}
+        href={"/viec-lam/tim-viec-lam"}
       >
         <div className="item-flex">
           <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -32,17 +32,17 @@ export const searchJob = [
         <div className="item-arrow">
           <FontAwesomeIcon icon={faArrowRight} />
         </div>
-      </Link>
+      </a>
     ),
     key: "/viec-lam/tim-viec-lam",
   },
   {
     label: (
-      <Link
+      <a
         className="item-ok"
        
         rel="noopener noreferrer"
-        to={"/viec-lam/tat-ca-viec-lam"}
+        href={"/viec-lam/tat-ca-viec-lam"}
       >
         <div className="item-flex">
         <FontAwesomeIcon icon={faCalendarPlus} />
@@ -51,7 +51,7 @@ export const searchJob = [
         <div className="item-arrow">
           <FontAwesomeIcon icon={faArrowRight} />
         </div>
-      </Link>
+      </a>
     ),
     key: "/viec-lam/tat-ca-viec-lam",
   },
@@ -81,11 +81,11 @@ export const searchJob = [
   
   {
     label: (
-      <Link
+      <a
         className="item-ok"
       
         rel="noopener noreferrer"
-        to="/viec-lam/viec-lam-da-luu"
+        href="/viec-lam/viec-lam-da-luu"
       >
         <div className="item-flex">
           <FontAwesomeIcon icon={faHeart} />
@@ -94,17 +94,17 @@ export const searchJob = [
         <div className="item-arrow">
           <FontAwesomeIcon icon={faArrowRight} />
         </div>
-      </Link>
+      </a>
     ),
     key: "/viec-lam/viec-lam-da-luu",
   },
   {
     label: (
-      <Link
+      <a
         className="item-ok"
       
         rel="noopener noreferrer"
-        to="/viec-lam/viec-lam-da-ung-tuyen"
+        href="/viec-lam/viec-lam-da-ung-tuyen"
       >
         <div className="item-flex">
         <FontAwesomeIcon icon={faSuitcaseMedical} />
@@ -113,7 +113,7 @@ export const searchJob = [
         <div className="item-arrow">
           <FontAwesomeIcon icon={faArrowRight} />
         </div>
-      </Link>
+      </a>
     ),
     key: "/viec-lam/viec-lam-da-ung-tuyen",
   },

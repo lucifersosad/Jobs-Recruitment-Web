@@ -17,7 +17,7 @@ import {
 import TinyMce from "../../../components/admins/tinyEditor";
 import { LoadingOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { getTreeCategories } from "../../../services/admins/jobsCategoriesApi";
-import { SelectTree } from "../../../helpers/selectTree";
+import { FormatTree, SelectTree } from "../../../helpers/selectTree";
 
 import { decData } from "../../../helpers/decData";
 import {
@@ -46,6 +46,7 @@ import Search from "antd/es/input/Search";
 import { getContentTiny } from "../../../helpers/getContentTinymce";
 import { editJobs } from "../../../services/admins/jobsApi";
 import { getCity } from "../../../services/admins/headerApi";
+import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
 
 function FormEdit(props) {
   const { record, fetchApiLoad } = props;
@@ -61,6 +62,7 @@ function FormEdit(props) {
   const [location, setLocation] = useState(record.address.linkMap);
   const [isModal, setIsModalOpen] = useState(false);
   const [optionsSelectTreeJobCategories, setOptionsSelectTree] = useState([]);
+  console.log("🚀 ~ FormEdit ~ optionsSelectTreeJobCategories:", optionsSelectTreeJobCategories)
   const [optionsEmployers, setOptionsEmployers] = useState([]);
   const [city, setCity] = useState([]);
   //Khai báo một biến ref để lấy dữ liệu cho tinymece
@@ -93,7 +95,7 @@ function FormEdit(props) {
 
       //Lấy danh mục công việc
       if (recordJobsCategory.code === 200) {
-        setOptionsSelectTree(SelectTree(recordJobsCategory.data));
+        setOptionsSelectTree(FormatTree(recordJobsCategory.data));
       }
       //Lấy thông tin công ty
       if (recordEmployers.code === 200) {
@@ -312,12 +314,12 @@ function FormEdit(props) {
                       },
                     ]}
                   >
-                    <Select
-                      mode="multiple"
+                    <SelectJobCategoryV2 
                       placeholder="Chọn Ngành Nghề"
                       options={optionsSelectTreeJobCategories}
                     />
                   </Form.Item>
+                  
                   <Form.Item
                    
                     label="Tỉnh/Thành Phố"

@@ -1,5 +1,5 @@
 import { decData } from "../../../../helpers/decData";
-import { SelectTree } from "../../../../helpers/selectTree";
+import { FormatTree, SelectTree } from "../../../../helpers/selectTree";
 import { getListEmployers } from "../../../../services/admins/employersApi";
 import { getCity } from "../../../../services/admins/headerApi";
 import { getTreeCategories } from "../../../../services/admins/jobsCategoriesApi";
@@ -11,7 +11,7 @@ export const fetchApi = async (setOptionsSelectTree, setOptionsEmployers, setOpt
   const recordCity = await getCity();
   //Lấy danh mục công việc
   if (recordJobsCategory.code === 200) {
-    setOptionsSelectTree(SelectTree(recordJobsCategory.data));
+    setOptionsSelectTree(FormatTree(recordJobsCategory.data));
   }
   //Lấy thông tin công ty
   if (recordEmployers.code === 200) {
