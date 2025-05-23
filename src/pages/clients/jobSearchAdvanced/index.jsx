@@ -25,6 +25,7 @@ import moment from "moment";
 import MemoizedItemBoxNews from "../../../components/clients/itemBoxNews";
 import MemoizedMayBeInterested from "../../../components/clients/mayBeInterested";
 import MemoizedCompanyOutstanding from "../../../components/clients/companyOutstanding";
+import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
 
 const buildQueryString = (params) => {
 
@@ -43,6 +44,7 @@ function JobSearchAdvanced() {
   const limit = query.get("limit") || 10;
   const sort_key = query.get("sort_key") || "createdAt";
   const sort_value = query.get("sort_value") || "desc";
+  const job_categorie_group = query.get("job_categorie_group") || "";
   const job_categorie = query.get("job_categorie") || "";
   const job_type = query.get("job_type") || "";
   const job_level = query.get("job_level") || "";
@@ -51,7 +53,6 @@ function JobSearchAdvanced() {
   const workExperience = query.get("workExperience") || "";
   const city = query.get("city") || "";
   const [optionCategories, setOptionCategories] = useState([]);
-
   const [recordItem, setRecordItem] = useState([]);
   const [coutJob, setCoutJob] = useState(0);
   const navigate = useNavigate();
@@ -82,6 +83,7 @@ function JobSearchAdvanced() {
   };
   useEffect(() => {
     fetchApi(
+      optionCategories,
       setOptionCategories,
       setRecordItem,
       page,
@@ -89,6 +91,7 @@ function JobSearchAdvanced() {
       sort_key,
       sort_value,
       keyword,
+      job_categorie_group,
       job_categorie,
       job_type,
       job_level,
@@ -107,6 +110,7 @@ function JobSearchAdvanced() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     city,
+    job_categorie_group,
     job_categorie,
     job_level,
     job_type,
@@ -119,19 +123,58 @@ function JobSearchAdvanced() {
     sort_value,
     workExperience,
   ]);
+
   const handleChangeHiden = () => {
     setHiden(!hiden);
   };
 
+  const getJobCategories = () => {
+    const allCategories = optionCategories.flatMap(item => item.children)
+    const categoryGroups = job_categorie_group ? job_categorie_group.split(",").map(item => [item]) : []
+
+    const ids = job_categorie.split(",")
+
+    const categories = allCategories
+      .filter((item) => ids.includes(item.value))
+      .map((item) => ([item.parent_id, item.value]));
+
+  let newCategories = []
+  if (categoryGroups.length > 0) {
+    newCategories = [
+      ...newCategories,
+      ...categoryGroups
+    ]
+  }
+
+  if (categories.length > 0) {
+    newCategories = [
+      ...newCategories,
+      ...categories
+    ]
+  }
+    return newCategories
+    
+  }
 
   const handleChangeJobCategories = (value) => {
+    const newValue = value.map(item => item)
+    
+    const job_categorie_group = newValue
+      .filter(item => item.length === 1)
+      .map(item => item[0]);
+
+    const job_categorie = newValue
+      .filter(item => item.length === 2)
+      .map(item => item[1]);
+
     const params = {
+      job_categorie_group,
+      job_categorie,
       keywords: keyword,
       page: 1,
       city: city,
       sort_key: sort_key,
       sort_value: sort_value,
-      job_categorie: value,
       job_type: job_type,
       job_level: job_level,
       limit: limit,
@@ -300,13 +343,15 @@ function JobSearchAdvanced() {
               >
                 <div className="row">
                   <div className="col-md-4">
-                    <div className="select">
-                      <MemoizedSearchCustomVip
-                        prefix={<FontAwesomeIcon icon={faBuilding} />}
-                        defaultValueOk={job_categorie}
-                        value={job_categorie}
+                    <div className="select" style={{height: "100%"}}>
+                      <SelectJobCategoryV2
+                        style={{width: "100%", height: "100%"}}
+                        multiple
+                        trigger="hover" 
                         options={optionCategories}
+                        size="large"
                         onChange={handleChangeJobCategories}
+                        value={getJobCategories()}
                       />
                     </div>
                   </div>

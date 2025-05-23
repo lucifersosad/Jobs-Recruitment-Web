@@ -195,16 +195,16 @@
   &__comment-input {
     flex: 1;
   }
-}
 
-// Bỏ bo tròn cho tất cả input, textarea của Ant Design trong trang này
-.ant-input,
-.ant-input-affix-wrapper,
-.ant-input-textarea-affix-wrapper,
-.ant-input-textarea-show-count,
-.ant-input-outlined,
-textarea.ant-input {
-  border-radius: 0 !important;
+  // Bỏ bo tròn cho tất cả input, textarea của Ant Design trong trang này
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-input-textarea-affix-wrapper,
+  .ant-input-textarea-show-count,
+  .ant-input-outlined,
+  textarea.ant-input {
+    border-radius: 0 !important;
+  }
 }
 
 .comments-section {
