@@ -31,4 +31,17 @@
       max-width: none;
     }
   }
+
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-horizontal {
+    width: 3px;
+    height: 3px;
+    background: none;
+  }
+
+  ::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-horizontal-thumb {
+    background: #b3e3f8;
+    border-radius: 50px;
+  }
 }

@@ -41,6 +41,7 @@ export function SelectTreeArr(items, level = 1, arr = []) {
 export function FormatTree (items) {
   return items.map(item => {
     const normalized = {
+      parent_id: item._doc?.parent_id || "",
       label: item._doc.title ?? '',
       value: item._doc._id ?? '',
       children: Array.isArray(item.children) ? FormatTree(item.children) : []

@@ -1,4 +1,4 @@
-import { Cascader, Divider } from "antd";
+import { Cascader, Divider, Typography } from "antd";
 import "./cascader.scss";
 import { removeAccents } from "../../../helpers/removeAccents";
 
@@ -6,27 +6,33 @@ const DisplayRender = (labels, selectedOptions = []) =>
   labels.map((label, i) => {
     const option = selectedOptions[i];
     if (i === labels.length - 1) {
-      return <span key={option.value}>{label}</span>;
+      return <span key={option?.value}>{label}</span>;
     }
     return (
-      <span key={option.value}>
+      <span key={option?.value}>
         {label} {" > "}{" "}
       </span>
     );
   });
+
+const OnChange = (value, selectedOptions) => {
+  value.flatMap(item => {
+    console.log("🚀 ~ onChange ~ item:", item)
+    
+  })
+};
 
 const SelectJobCategoryV2 = ({
   options = [],
   placeholder = "Vui lòng chọn",
   trigger = "click",
   displayRender = DisplayRender,
+  onChange = OnChange,
   ...rest
 }) => {
   const { SHOW_CHILD } = Cascader;
 
-  const onChange = (value, selectedOptions) => {
-    console.log(value, selectedOptions);
-  };
+  
 
   const onSearch = (value) => {
     // console.log(value)
@@ -41,7 +47,10 @@ const SelectJobCategoryV2 = ({
     );
 
   const dropdownRender = (menus) => (
-    <div className="ant-cascader-dropdown-custom">{menus}</div>
+    <div className="ant-cascader-dropdown-custom">
+      <Typography.Title level={5} style={{marginLeft: "8px", marginTop: "10px"}}>Ngành nghề</Typography.Title>
+      {menus}
+    </div>
   );
 
   return (
