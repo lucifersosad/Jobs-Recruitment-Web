@@ -101,7 +101,7 @@ export const handleUpdateDataCategories = (form, setIsModalOpen, record) => {
   const defaultValue = {
     title: record.title,
     status: record.status,
-    parent_id: record?.parent_id,
+    parent_id: record?.parent_id || undefined,
     description: record.description,
     position: record.position,
   };

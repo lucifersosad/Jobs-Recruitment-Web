@@ -13,6 +13,18 @@ export function SelectTree(items, level = 1, idOrigin = "", arr = []) {
     return arr
 }
 
+export function SelectTreeAdmin(items, idCate) {
+    const arr = [];
+    for (let item of items) {
+        arr.push({
+            value: item._doc._id,
+            label: `${item._doc.title}`,
+            disabled: item._doc._id === idCate
+        })
+    }
+    return arr
+}
+
 
 export function SelectTreeArr(items, level = 1, arr = []) {
     for (let item of items) {
@@ -24,4 +36,15 @@ export function SelectTreeArr(items, level = 1, arr = []) {
         }
     }
     return arr
+}
+
+export function FormatTree (items) {
+  return items.map(item => {
+    const normalized = {
+      label: item._doc.title ?? '',
+      value: item._doc._id ?? '',
+      children: Array.isArray(item.children) ? FormatTree(item.children) : []
+    };
+    return normalized;
+  });
 }

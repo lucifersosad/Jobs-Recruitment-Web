@@ -5,7 +5,7 @@ import { Card, Form, Image, Input, InputNumber, Modal, Radio, Select, Spin, noti
 import TinyMce from '../../../components/admins/tinyEditor';
 import { LoadingOutlined } from '@ant-design/icons';
 import { editCategories, getTreeCategories } from '../../../services/admins/jobsCategoriesApi';
-import { SelectTree } from '../../../helpers/selectTree';
+import { SelectTree, SelectTreeAdmin } from '../../../helpers/selectTree';
 import { convertThumbUrl } from '../../../helpers/convertThumbUrl';
 import { decData } from '../../../helpers/decData';
 import { handleCancel, handleUpdateDataCategories } from '../../../helpers/modelHelper';
@@ -29,15 +29,15 @@ function FormEdit(props) {
 
     //Function fetch api
     const fetchApi = async () => {
-        const record = await getTreeCategories();
-        if (record.code === 200) {
-            setOptionsSelectTree(SelectTree(record.data))
+        const recordCate = await getTreeCategories();
+        if (recordCate.code === 200) {
+            setOptionsSelectTree(SelectTreeAdmin(recordCate.data, record._id))
         }
     }
     useEffect(() => {
-
-        fetchApi()
-    }, [])
+        if (isModal)
+            fetchApi()
+    }, [isModal])
 
 
 
@@ -146,6 +146,7 @@ function FormEdit(props) {
                                 </Form.Item>
                                 <Form.Item label="Danh Mục Cha" name="parent_id">
                                     <Select
+                                        allowClear
                                         placeholder="Chọn Danh Mục Cha (Hoặc Để Trống)"
 
 
@@ -187,7 +188,7 @@ function FormEdit(props) {
                                 </Form.Item>
                                 <Form.Item>
                                     <button className='button-submit-admin' type="submit" >
-                                        Tạo Danh Mục Công Việc
+                                        Sửa Danh Mục Công Việc
                                     </button>
                                 </Form.Item>
                             </Form>

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { getContentTiny } from '../../../helpers/getContentTinymce';
 import { convertThumbUrl } from '../../../helpers/convertThumbUrl';
 import { getTreeCategories, uploadCategories } from '../../../services/admins/jobsCategoriesApi';
-import { SelectTree } from '../../../helpers/selectTree';
+import { SelectTree, SelectTreeAdmin } from '../../../helpers/selectTree';
 import { decData } from '../../../helpers/decData';
 import { handleFileChange } from '../../../helpers/imagesHelper';
 import { useSelector } from 'react-redux';
@@ -30,7 +30,7 @@ function AddCategories() {
   const fetchApi = async () => {
     const record = await getTreeCategories();
     if (record.code === 200) {
-      setOptionsSelectTree(SelectTree(record.data))
+      setOptionsSelectTree(SelectTreeAdmin(record.data))
 
     }
 
@@ -140,6 +140,7 @@ function AddCategories() {
                     </Form.Item>
                     <Form.Item label="Danh Mục Cha" name="parent_id">
                       <Select
+                        allowClear
                         placeholder="Chọn Danh Mục Cha (Hoặc Để Trống)"
 
 
