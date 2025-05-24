@@ -29,11 +29,16 @@ function EmployerTop(props) {
             custom={listEmployers.map((data, index) => (
               <div key={index} className="employer__top-item col-2">
                 <div className="image">
-                  <img
-                    style={{objectFit: "contain"}}
-                    src={data.logoCompany}
-                    alt={`Anh${data.companyName}`}
-                  ></img>
+                  <a
+                    target="_blank" rel="noreferrer" 
+                    href={`/cong-ty/${data?.slug}`}
+                  >
+                    <img
+                      style={{objectFit: "contain"}}
+                      src={data.logoCompany}
+                      alt={`Anh${data.companyName}`}
+                    ></img>
+                  </a>
                 </div>
               </div>
             ))}
