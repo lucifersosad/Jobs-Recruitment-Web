@@ -58,7 +58,7 @@ function CareerKey() {
                         <div className="career-key__card-des">
                           <h3>
                             <a
-                              href={`viec-lam/tim-viec-lam?job_categorie=${data?._id}`}
+                              href={`viec-lam/tim-viec-lam?job_categorie_group=${data?._id}`}
                             >
                               {data.title}
                             </a>
