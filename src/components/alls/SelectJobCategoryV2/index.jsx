@@ -23,6 +23,7 @@ const OnChange = (value, selectedOptions) => {
 };
 
 const SelectJobCategoryV2 = ({
+  type = "single",
   options = [],
   placeholder = "Vui lòng chọn",
   trigger = "click",
@@ -30,9 +31,8 @@ const SelectJobCategoryV2 = ({
   onChange = OnChange,
   ...rest
 }) => {
-  const { SHOW_CHILD } = Cascader;
-
   
+  const { SHOW_CHILD } = Cascader;
 
   const onSearch = (value) => {
     // console.log(value)
@@ -63,7 +63,8 @@ const SelectJobCategoryV2 = ({
       onSearch={onSearch}
       maxTagCount="responsive"
       dropdownRender={dropdownRender}
-      displayRender={displayRender}
+      displayRender={type !== "multiple" && displayRender}
+      multiple={type === "multiple"}
       {...rest}
     />
   );

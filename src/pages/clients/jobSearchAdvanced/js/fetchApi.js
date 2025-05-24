@@ -6,7 +6,7 @@ import { getAllJobsCategories } from "../../../../services/clients/jobsCategorie
 export const fetchApi = async (optionCategories, setOptionCategories, setRecordItem, page, limit, sort_key, sort_value, keyword, job_categorie_group, job_categorie, job_type, job_level, salary_min, salary_max,city,workExperience,setCoutJob, setLoading) => {
     setLoading(true)
 
-    const new_job_categorie = job_categorie_group ? job_categorie_group.concat(",", job_categorie) : job_categorie
+    const new_job_categorie = [job_categorie_group, job_categorie].filter(Boolean).join(",");
   
     const [resultgetAllJobsCategoriesTree, resultgetJobAdvancedSearch] = await Promise.all([
       // getAllJobsCategories(),
