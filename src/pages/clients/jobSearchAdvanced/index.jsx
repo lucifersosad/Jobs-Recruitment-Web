@@ -345,8 +345,9 @@ function JobSearchAdvanced() {
                   <div className="col-md-4">
                     <div className="select" style={{height: "100%"}}>
                       <SelectJobCategoryV2
+                        placeholder="Tìm kiếm ngành nghề"
                         style={{width: "100%", height: "100%"}}
-                        multiple
+                        type="multiple"
                         trigger="hover" 
                         options={optionCategories}
                         size="large"
