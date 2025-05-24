@@ -159,6 +159,7 @@ function JobsOccupation() {
                         <h2 title={dataMapOne.title}>{dataMapOne.title}</h2>
                       </a>
                         <a
+                          style={{display: "inline-flex", width: "fit-content"}}
                           href={`/cong-ty/${dataMapOne.employerId.slug}`} target="_blank" rel="noreferrer"
                         >
                           <h3 className="mt-1">
@@ -208,6 +209,7 @@ function JobsOccupation() {
                         <h2 title={dataMapOne.title}>{dataMapOne.title}</h2>
                       </a>
                         <a
+                          style={{display: "inline-flex", width: "fit-content"}}
                           href={`/cong-ty/${dataMapOne.employerId.slug}`} target="_blank" rel="noreferrer"
                         >
                           <h3 className="mt-1">
@@ -258,6 +260,7 @@ function JobsOccupation() {
                       </a>
                         
                         <a
+                          style={{display: "inline-flex", width: "fit-content"}}
                           href={`/cong-ty/${dataMapOne.employerId.slug}`} target="_blank" rel="noreferrer"
                         >
                           <h3 className="mt-1">

@@ -64,6 +64,8 @@
             }
          }
          &-content {
+            display: flex;
+            flex-direction: column;
              h2 {
                  overflow: hidden;
                  color: #172642;
@@ -86,7 +88,6 @@
                  color: #5d677a;
                  text-overflow: ellipsis;
                  font-weight: 500;
-                //  display: inline-block;
                  &:hover {
                     color: #FF7D55;
                  }
