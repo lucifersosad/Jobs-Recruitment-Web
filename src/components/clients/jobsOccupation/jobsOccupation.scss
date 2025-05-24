@@ -14,6 +14,11 @@
             border: 1px solid #EAEAEA;
             border-radius: 10px;
 
+            &:hover {
+                border-color: #CFE0FF;
+                background-color: #F9FBFF;
+            }
+
             &:not(:last-child) {
                 margin-bottom: 20px;
             } 
@@ -71,12 +76,20 @@
                  -webkit-box-orient: vertical;
                  display: -webkit-box;
                  overflow: hidden;
+
+                 &:hover {
+                    color: #FF7D55;
+                 }
              }
              h3{
                  overflow: hidden;
                  color: #5d677a;
                  text-overflow: ellipsis;
                  font-weight: 500;
+                //  display: inline-block;
+                 &:hover {
+                    color: #FF7D55;
+                 }
              }
              h4{
                  color: #0040d6 !important;
