@@ -29,7 +29,7 @@ import { getContentTiny } from "../../../helpers/getContentTinymce";
 import { useDebounce } from "use-debounce";
 import { loadCityFull } from "./js/loadCity";
 import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
-import { getTreeCategories } from "../../../services/admins/jobsCategoriesApi";
+
 import { FormatTree, SelectTreeArr } from "../../../helpers/selectTree";
 function FormOne({ setForm_one, next, form_one }) {
   const [optionsSelectTreeJobCategories, setOptionsSelectTree] = useState([]);
@@ -65,7 +65,7 @@ function FormOne({ setForm_one, next, form_one }) {
       //   setOptionsSelectTree(convertData);
       // }
 
-      const record = await getTreeCategories();
+      const record = await getAllJobsCategories("", "", "", "", true);
 
       if (record.code === 200) {
         setOptionsSelectTree(FormatTree(record.data))

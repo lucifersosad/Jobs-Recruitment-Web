@@ -92,15 +92,11 @@ function FormEdit(props) {
   const fetchApi = async () => {
     try {
       const [recordJobsCategory, recordCity] = await Promise.all([
-        getTreeCategories(),
+        getAllJobsCategories("", "", "", "", true),
         getCity(),
       ]);
       //Lấy danh mục công việc
       if (recordJobsCategory.code === 200) {
-        const convertData = recordJobsCategory.data.map((item) => ({
-          value: item._id,
-          label: item.title,
-        }));
         setOptionsSelectTree(FormatTree(recordJobsCategory.data));
       }
 
@@ -118,8 +114,9 @@ function FormEdit(props) {
     }
   };
   useEffect(() => {
-    fetchApi();
-  }, []);
+    if (!isModal) return;
+      fetchApi();
+  }, [isModal]);
 
   //Hàm này khi người dùng thêm tag thì sẽ chạy vào
   const addTag = (value) => {
