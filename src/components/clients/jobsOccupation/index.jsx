@@ -158,9 +158,14 @@ function JobsOccupation() {
                         <a  href={`/tim-viec-lam/${dataMapOne.slug}`} target="_blank" rel="noreferrer">
                         <h2 title={dataMapOne.title}>{dataMapOne.title}</h2>
                       </a>
-                        <h3 className="mt-1">
+                        <a
+                          style={{display: "inline-flex", width: "fit-content"}}
+                          href={`/cong-ty/${dataMapOne.employerId.slug}`} target="_blank" rel="noreferrer"
+                        >
+                          <h3 className="mt-1">
                           {dataMapOne.employerId.companyName}
                         </h3>
+                        </a>
                         <h4 className="mt-1">
                           Lương:{" "}
                           {formatSalaryNoVND(
@@ -203,9 +208,14 @@ function JobsOccupation() {
                         <a  href={`/tim-viec-lam/${dataMapOne.slug}`} target="_blank" rel="noreferrer">
                         <h2 title={dataMapOne.title}>{dataMapOne.title}</h2>
                       </a>
-                        <h3 className="mt-1">
+                        <a
+                          style={{display: "inline-flex", width: "fit-content"}}
+                          href={`/cong-ty/${dataMapOne.employerId.slug}`} target="_blank" rel="noreferrer"
+                        >
+                          <h3 className="mt-1">
                           {dataMapOne.employerId.companyName}
                         </h3>
+                        </a>
                         <h4 className="mt-1">
                           Lương:{" "}
                           {formatSalaryNoVND(
@@ -249,9 +259,14 @@ function JobsOccupation() {
                         <h2 title={dataMapOne.title}>{dataMapOne.title}</h2>
                       </a>
                         
-                        <h3 className="mt-1">
+                        <a
+                          style={{display: "inline-flex", width: "fit-content"}}
+                          href={`/cong-ty/${dataMapOne.employerId.slug}`} target="_blank" rel="noreferrer"
+                        >
+                          <h3 className="mt-1">
                           {dataMapOne.employerId.companyName}
                         </h3>
+                        </a>
                         <h4 className="mt-1">
                           Lương:{" "}
                           {formatSalaryNoVND(
