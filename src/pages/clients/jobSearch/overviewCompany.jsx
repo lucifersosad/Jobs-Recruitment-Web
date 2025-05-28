@@ -41,8 +41,8 @@ function OverviewCompany({ record }) {
             </div>
             <div className="content">
               <div className="address mb-2">
-                <strong>Địa điểm </strong>
-                {infoCompany?.specificAddressCompany?.split("-")[0]}
+                <strong>Địa điểm: </strong>
+                {infoCompany?.specificAddressCompany?.split("-")[0] || "Chưa cập nhật"}
               </div>
 
               <div className="title-info mb-2">Thông tin công ty</div>

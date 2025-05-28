@@ -1399,7 +1399,7 @@ function InfoCompany() {
                         <span>Địa chỉ công ty</span>
                       </div>
                       <div className="content-grid">
-                        {recordItem?.specificAddressCompany}
+                        {recordItem?.specificAddressCompany || "Chưa cập nhật"}
                       </div>
                     </div>
                     <hr />
