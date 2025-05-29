@@ -1,141 +1,58 @@
 import {
-  Button,
   Card,
-  Col,
   Flex,
-  Form,
-  Input,
-  message,
-  notification,
-  Row,
   Space,
   Typography,
-  Alert,
-  Spin,
   Divider,
   Avatar,
   Progress,
 } from "antd";
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  PlusSquareOutlined,
-  DeleteOutlined,
-  DeleteFilled,
   UserOutlined,
   CheckOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import MemoizedTinyMce from "../../../components/clients/tinyEditor";
-import { createMyCv } from "../../../services/clients/myCvsApi";
-import banner from "/images/banner-cv.png";
-import DropCvModal from "./DropCvModal";
 import "./reviewCv.scss"
-import { Spark, Spark2, Suggestion } from "../../../components/clients/customIcon";
+import { Company, Spark, Spark2, Suggestion } from "../../../components/clients/customIcon";
+import { getEvaluation } from "../../../services/clients/evaluateApi";
 
 const ReviewCv = () => {
-  const [api, contextHolder] = notification.useNotification();
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState()
   const { Text, Title, Link } = Typography;
+
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  const [open, setOpen] = useState(false);
-
-  const defaultValue = {
-    fullName: "",
-    email: "",
-    phone: "",
-    address: "",
-    position: "",
-    objective: "",
-    skills: [],
-    experiences: [],
-    educations: [],
-    awards: [],
-    certifications: [],
-    activities: [],
-    projects: [],
-  };
-
-  const handleForm = async (values) => {
-    console.log("🚀 ~ CreateCv ~ values:", values);
-    setLoadingSubmit(true);
-    try {
-      const result = await createMyCv(values);
-      if (result.code === 200) {
-        const idCv = result.data._id;
-
-        api.success({
-          message: `Success`,
-          description: (
-            <>
-              <i>{result.success}</i>
-            </>
-          ),
-        });
-
-        navigate(`/xem-cv/${idCv}`);
-      } else {
-        api.error({
-          message: <span style={{ color: "red" }}>Thất bại</span>,
-          description: (
-            <>
-              <i>{result.error}</i>
-            </>
-          ),
-        });
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const result = await getEvaluation(id)
+        console.log("🚀 ~ getData ~ result:", result)
+        if (result.code === 200) {
+          setData(result.data)
+        } else {
+          throw result
+        }
+        setLoading(false)
+      } catch (error) {
+        console.log("🚀 ~ getData ~ error:", error)
+        navigate("/404")
       }
-    } catch (error) {
-      console.log("🚀 ~ handleForm ~ error:", error);
     }
-    setLoadingSubmit(false);
+    getData()
+  }, [])
+
+  const conicColors = {
+    '0%': 'rgb(255, 98, 0)',
+    '40%': 'rgb(253, 185, 46)',
+    '70%': 'rgb(220, 30, 175)',
   };
-
-const handleImportCv = (values) => {
-  if (!values) return;
-
-  // Format skills
-  const skills = values.skills?.map(skill => ({
-    skill_name: skill
-  })) || [];
-
-  const newValues = { ...values, skills };
-
-  // Duyệt qua từng phần tử trong newValues
-  for (const key in newValues) {
-    newValues[key] = newValues[key]?.map?.(item => {
-      if (item?.description) {
-        const descriptions = item.description
-          .split(".")
-          .map(desc => desc.trim())
-          .filter(desc => desc);
-
-        const htmlList = `<ul>${descriptions.map(d => `<li>${d}</li>`).join("")}</ul>`;
-
-        return {
-          ...item,
-          description: htmlList
-        };
-      }
-      return item;
-    }) || newValues[key];
-  }
-
-  console.log("🚀 ~ handleImportCv ~ newValues:", newValues)
-
-  form.setFieldsValue(newValues);
-};
-
-const conicColors = {
-  '0%': 'rgb(255, 98, 0)',
-  '40%': 'rgb(253, 185, 46)',
-  '70%': 'rgb(220, 30, 175)',
-};
 
   return (
     <>
-      {contextHolder}
       <div className="section-review-cv cb-section cb-section-padding-bottom bg-grey2">
         <div className="container">
           <div style={{ maxWidth: 1000, margin: "0 auto"}}>
@@ -156,6 +73,7 @@ const conicColors = {
                   </div>
                 </div>
                 <Card
+                  loading={loading}
                   style={{
                     borderTopRightRadius: 0,
                     borderTopLeftRadius: 0,
@@ -166,11 +84,11 @@ const conicColors = {
                     <Flex vertical style={{width: "100%", marginBottom: 40}} gap={10}>
                       <Title level={5}>Thông tin hồ sơ</Title>
                       <Flex gap={12}>
-                        <Avatar style={{background: "#fff", color: "#c9c9c9", border: "2px solid #E1E3E8"}} shape="square" size={70} icon={undefined || <UserOutlined />} src={undefined}/>
+                        <Avatar style={{background: "#fff", color: "#c9c9c9", border: "1px solid #E1E3E8"}} shape="square" size={70} icon={<UserOutlined />} />
                         <Flex vertical style={{}}>
-                          <Text strong style={{fontSize: 18}}>Phat Dang</Text>
-                          <Text style={{fontSize: 16}}>LẬP TRÌNH VIÊN</Text>
-                          <Text style={{fontSize: 16}}>Nguyen Thi Tuyet Mai (CV).pdf</Text>
+                          <Text strong style={{fontSize: 18}}>{data?.fullName}</Text>
+                          <Text style={{fontSize: 16}}>{data?.email}</Text>
+                          <Text style={{fontSize: 16}}>{data?.nameFile}</Text>
                         </Flex>
                       </Flex>
                     </Flex>
@@ -180,16 +98,16 @@ const conicColors = {
                     <Flex vertical style={{width: "100%", marginLeft: 15}} gap={10}>
                       <Title level={5}>Đánh giá cho vị trí</Title>
                       <Flex gap={12}>
-                        <Avatar style={{background: "#fff", color: "#c9c9c9", border: "2px solid #E1E3E8"}} shape="square" size={70} icon={undefined || <UserOutlined />} src={undefined}/>
+                        <Avatar  style={{background: "#fff", color: "#c9c9c9", border: "1px solid #E1E3E8"}} shape="square" size={70} icon={<Company />}  src={data?.idJob?.employerId?.logoCompany && <img style={{objectFit: "contain"}} src={data?.idJob?.employerId?.logoCompany}/>}/>
                         <Flex vertical style={{}}>
-                          <Link style={{fontSize: 18}}>Entity Data Management Associate</Link>
-                          <Text style={{fontSize: 16}}>PwC (Vietnam) Ltd.</Text>
+                          <Link href={`/tim-viec-lam/${data?.idJob?.slug}`} target="_blank" rel="noreferrer" style={{fontSize: 18}}>{data?.idJob?.title}</Link>
+                          <Text style={{fontSize: 16}}>{data?.idJob?.employerId?.companyName}</Text>
                           <Text style={{fontSize: 16}}>Thương lượng</Text>
                         </Flex>
                       </Flex>
                     </Flex>
                   </Flex>
-                  <Title level={2} style={{fontSize: 28, fontWeight: 600}}>Đánh giá chung: 78% Cao</Title>
+                  <Title level={2} style={{fontSize: 28, fontWeight: 600}}>Đánh giá chung: {data?.overview?.score}% {data?.overview?.rankingScore}</Title>
                   <div style={{width: "100%", background: "#F8F9FA", padding: "15px 5px 0px", borderRadius: 14}}>
                     <Flex gap={5} style={{paddingLeft: 7}}>
                       <div><Spark color={"#FF7D55"}/></div>
@@ -197,15 +115,18 @@ const conicColors = {
                     </Flex>
                     <Space>
                       <ul>
-                        <li>Bạn có kỹ năng phân tích dữ liệu vững chắc và thành thạo SQL cùng các công cụ trực quan hóa dữ liệu như Tableau.</li>
-                        <li>Kinh nghiệm làm việc trong các vị trí nghiên cứu và quản lý tài khoản thể hiện khả năng xử lý dữ liệu và nghiên cứu thông tin. Kinh nghiệm làm việc trong các vị trí nghiên cứu và quản lý tài khoản thể hiện khả năng xử lý dữ liệu và nghiên cứu thông tin.</li>
+                        {data?.overview?.summary?.map((item, index) => (
+                          <li key={index} className="box-overview-cv__content-item">{item}</li>
+                        ))}
                       </ul>
                     </Space>
                   </div>
                 </Card>
               </Flex>
 
+              {/* Kĩ năng */}
               <Card
+                loading={loading}
                 className="box-review"
               >
                 <div className="box-review__title">
@@ -213,17 +134,21 @@ const conicColors = {
                 </div>
                 <Flex gap={10}>
                   <Flex style={{width: "45%"}} align="center" justify="center">
-                    <Progress strokeWidth={8} strokeColor={"#FF7D55"} strokeLinecap="round" size={200} type="circle" percent={75} format={(percent) => (<Flex vertical><span>{percent}%</span><Title level={5}>Phù hợp</Title></Flex>)}/>
+                    <Progress strokeWidth={8} strokeColor={"#FF7D55"} strokeLinecap="round" size={200} type="circle" percent={data?.skill?.score} format={(percent) => (<Flex vertical><span>{percent}%</span><Title level={5}>Phù hợp</Title></Flex>)}/>
                   </Flex>
                   <Space className="box-review__summary" direction="vertical" size={"middle"}>
-                    <Flex align="center" gap={7} className="box-review__summary-item">
-                      <CheckOutlined className="box-review__summary-icon--checked"/>
-                      <Text className="box-review__summary-text">Có bằng Cử nhân Quản trị Kinh doanh với chuyên ngành Quản lý Công nghệ và Đổi mới. Có bằng Cử nhân Quản trị Kinh doanh với chuyên ngành Quản lý Công nghệ và Đổi mới</Text>
-                    </Flex>
-                    <Flex align="center" gap={7} className="box-review__summary-item">
-                      <CloseOutlined className="box-review__summary-icon--unchecked"/>
-                      <Text className="box-review__summary-text">Có bằng Cử nhân Quản trị Kinh doanh với chuyên ngành Quản lý Công nghệ và Đổi mới</Text>
-                    </Flex>
+                    {data?.skill?.matched?.map((item, index) => (
+                      <Flex key={item} align="center" gap={7} className="box-review__summary-item">
+                        <CheckOutlined className="box-review__summary-icon--checked"/>
+                        <Text className="box-review__summary-text">{item}</Text>
+                      </Flex>
+                    ))}
+                    {data?.skill?.unmatched?.map((item, index) => (
+                      <Flex key={item} align="center" gap={7} className="box-review__summary-item">
+                        <CloseOutlined className="box-review__summary-icon--unchecked"/>
+                        <Text className="box-review__summary-text">{item}</Text>
+                      </Flex>
+                    ))}
                   </Space>
                 </Flex>
                 <div style={{width: "100%", background: "#F8F9FA", padding: "15px 0 15px 5px", borderRadius: 14, marginTop: 20}}>
@@ -234,16 +159,142 @@ const conicColors = {
                     <Title level={5}>Gợi ý</Title>
                   </Flex>
                   <ul className="box-review__suggestion">
-                      <li className="box-review__suggestion-item">Bạn có kỹ năng phân tích dữ liệu vững chắc và thành thạo SQL cùng các công cụ trực quan hóa dữ liệu như Tableau.</li>
-                      <li className="box-review__suggestion-item">Kinh nghiệm làm việc trong các vị trí nghiên cứu và quản lý tài khoản thể hiện khả năng xử lý dữ liệu và nghiên cứu thông tin. Kinh nghiệm làm việc trong các vị trí nghiên cứu và quản lý tài khoản thể hiện khả năng xử lý dữ liệu và nghiên cứu thông tin. thể hiện khả năng xử lý dữ liệu và nghiên cứu thông tin</li>
-                    </ul>
+                    {data?.skill?.suggestions?.map((item, index) => (
+                      <li key={index} className="box-review__suggestion-item">{item}</li>
+                    ))}
+                  </ul>
                 </div>
               </Card>
-          </Space>
+
+              {/* Kinh nghiệm */}
+              <Card
+                loading={loading}
+                className="box-review"
+              >
+                <div className="box-review__title">
+                  <Title level={1} className="box-review__title-text">Kinh nghiệm</Title>
+                </div>
+                <Flex gap={10}>
+                  <Flex style={{width: "45%"}} align="center" justify="center">
+                    <Progress strokeWidth={8} strokeColor={"#FF7D55"} strokeLinecap="round" size={200} type="circle" percent={data?.experience?.score} format={(percent) => (<Flex vertical><span>{percent}%</span><Title level={5}>Phù hợp</Title></Flex>)}/>
+                  </Flex>
+                  <Space className="box-review__summary" direction="vertical" size={"middle"}>
+                    {data?.experience?.matched?.map((item, index) => (
+                      <Flex key={item} align="center" gap={7} className="box-review__summary-item">
+                        <CheckOutlined className="box-review__summary-icon--checked"/>
+                        <Text className="box-review__summary-text">{item}</Text>
+                      </Flex>
+                    ))}
+                    {data?.experience?.unmatched?.map((item, index) => (
+                      <Flex key={item} align="center" gap={7} className="box-review__summary-item">
+                        <CloseOutlined className="box-review__summary-icon--unchecked"/>
+                        <Text className="box-review__summary-text">{item}</Text>
+                      </Flex>
+                    ))}
+                  </Space>
+                </Flex>
+                <div style={{width: "100%", background: "#F8F9FA", padding: "15px 0 15px 5px", borderRadius: 14, marginTop: 20}}>
+                  <Flex gap={5} style={{paddingLeft: 7}}>
+                  <div>
+                    <Suggestion />
+                  </div>
+                    <Title level={5}>Gợi ý</Title>
+                  </Flex>
+                  <ul className="box-review__suggestion">
+                    {data?.experience?.suggestions?.map((item, index) => (
+                      <li key={index} className="box-review__suggestion-item">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </Card>
+
+              {/* Chức danh */}
+              <Card
+                loading={loading}
+                className="box-review"
+              >
+                <div className="box-review__title">
+                  <Title level={1} className="box-review__title-text">Chức danh</Title>
+                </div>
+                <Flex gap={10}>
+                  <Flex style={{width: "45%"}} align="center" justify="center">
+                    <Progress strokeWidth={8} strokeColor={"#FF7D55"} strokeLinecap="round" size={200} type="circle" percent={data?.jobTitle?.score} format={(percent) => (<Flex vertical><span>{percent}%</span><Title level={5}>Phù hợp</Title></Flex>)}/>
+                  </Flex>
+                  <Space className="box-review__summary" direction="vertical" size={"middle"}>
+                    {data?.jobTitle?.matched?.map((item, index) => (
+                      <Flex key={item} align="center" gap={7} className="box-review__summary-item">
+                        <CheckOutlined className="box-review__summary-icon--checked"/>
+                        <Text className="box-review__summary-text">{item}</Text>
+                      </Flex>
+                    ))}
+                    {data?.jobTitle?.unmatched?.map((item, index) => (
+                      <Flex key={item} align="center" gap={7} className="box-review__summary-item">
+                        <CloseOutlined className="box-review__summary-icon--unchecked"/>
+                        <Text className="box-review__summary-text">{item}</Text>
+                      </Flex>
+                    ))}
+                  </Space>
+                </Flex>
+                <div style={{width: "100%", background: "#F8F9FA", padding: "15px 0 15px 5px", borderRadius: 14, marginTop: 20}}>
+                  <Flex gap={5} style={{paddingLeft: 7}}>
+                  <div>
+                    <Suggestion />
+                  </div>
+                    <Title level={5}>Gợi ý</Title>
+                  </Flex>
+                  <ul className="box-review__suggestion">
+                    {data?.jobTitle?.suggestions?.map((item, index) => (
+                      <li key={index} className="box-review__suggestion-item">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </Card>
+
+              {/* Học vấn */}
+              <Card
+                loading={loading}
+                className="box-review"
+              >
+                <div className="box-review__title">
+                  <Title level={1} className="box-review__title-text">Học vấn</Title>
+                </div>
+                <Flex gap={10}>
+                  <Flex style={{width: "45%"}} align="center" justify="center">
+                    <Progress strokeWidth={8} strokeColor={"#FF7D55"} strokeLinecap="round" size={200} type="circle" percent={data?.education?.score} format={(percent) => (<Flex vertical><span>{percent}%</span><Title level={5}>Phù hợp</Title></Flex>)}/>
+                  </Flex>
+                  <Space className="box-review__summary" direction="vertical" size={"middle"}>
+                    {data?.education?.matched?.map((item, index) => (
+                      <Flex key={item} align="center" gap={7} className="box-review__summary-item">
+                        <CheckOutlined className="box-review__summary-icon--checked"/>
+                        <Text className="box-review__summary-text">{item}</Text>
+                      </Flex>
+                    ))}
+                    {data?.education?.unmatched?.map((item, index) => (
+                      <Flex key={item} align="center" gap={7} className="box-review__summary-item">
+                        <CloseOutlined className="box-review__summary-icon--unchecked"/>
+                        <Text className="box-review__summary-text">{item}</Text>
+                      </Flex>
+                    ))}
+                  </Space>
+                </Flex>
+                <div style={{width: "100%", background: "#F8F9FA", padding: "15px 0 15px 5px", borderRadius: 14, marginTop: 20}}>
+                  <Flex gap={5} style={{paddingLeft: 7}}>
+                  <div>
+                    <Suggestion />
+                  </div>
+                    <Title level={5}>Gợi ý</Title>
+                  </Flex>
+                  <ul className="box-review__suggestion">
+                    {data?.education?.suggestions?.map((item, index) => (
+                      <li key={index} className="box-review__suggestion-item">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </Card>
+            </Space>
           </div>
         </div>
       </div>
-      <DropCvModal open={open} setOpen={setOpen} handleImportCv={handleImportCv}/>
     </>
   );
 };
