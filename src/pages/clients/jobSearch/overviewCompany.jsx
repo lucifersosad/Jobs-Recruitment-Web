@@ -3,6 +3,8 @@ import "./overViewCompany.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAddressCard,
+  faChevronDown,
+  faChevronUp,
   faLink,
   faUser,
   faUserGroup,
@@ -10,8 +12,13 @@ import {
 import { dataNumberOfWorkers } from "./js/options";
 import JobByCompany from "../../../components/clients/jobByCompany";
 function OverviewCompany({ record }) {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [infoCompany, setInfoCompany] = useState({});
-  console.log("🚀 ~ OverviewCompany ~ infoCompany:", infoCompany)
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   useEffect(() => {
     if (Object.keys(record).length > 0) {
       record.employerId.numberOfWorkers = dataNumberOfWorkers.find(
@@ -34,8 +41,8 @@ function OverviewCompany({ record }) {
             </div>
             <div className="content">
               <div className="address mb-2">
-                <strong>Địa điểm </strong>
-                {infoCompany?.specificAddressCompany?.split("-")[0]}
+                <strong>Địa điểm: </strong>
+                {infoCompany?.specificAddressCompany?.split("-")[0] || "Chưa cập nhật"}
               </div>
 
               <div className="title-info mb-2">Thông tin công ty</div>
@@ -49,19 +56,19 @@ function OverviewCompany({ record }) {
                 <div className="col-6">
                   <div className="item">
                     <FontAwesomeIcon icon={faUserGroup} />
-                    <span>Quy mô công ty: {infoCompany?.numberOfWorkers}</span>
+                    <span>Quy mô công ty: {infoCompany?.numberOfWorkers || "Chưa cập nhật"}</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="item">
                     <FontAwesomeIcon icon={faAddressCard} />
-                    <span>Loại hình hoạt động: Trách nhiệm hữu hạn</span>
+                    <span>Loại hình hoạt động: Chưa cập nhật</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="item">
                     <FontAwesomeIcon icon={faLink} />
-                    <span>Website: {infoCompany?.website}</span>
+                    <span>Website: {infoCompany?.website || "Chưa cập nhật"}</span>
                   </div>
                 </div>
               </div>
@@ -72,11 +79,39 @@ function OverviewCompany({ record }) {
           <h3 className="mb-3 title-all">GIỚI THIỆU VỀ CÔNG TY</h3>
           <hr />
           <div className="content">
-            <div
+            {/* <div
               dangerouslySetInnerHTML={{
                 __html: infoCompany?.descriptionCompany,
               }}
-            />
+            /> */}
+
+            {infoCompany?.descriptionCompany ? (
+              <>
+                <div
+                  className={"dest " + (isExpanded ? "expanded " : "")}
+                  dangerouslySetInnerHTML={{
+                    __html: infoCompany?.descriptionCompany,
+                  }}
+                />
+                {!isExpanded && <div className="filter-blue"></div>}
+
+                <div className="view" onClick={toggleExpand}>
+                {isExpanded ? (
+                  <div>
+                    <span>Thu gọn</span>
+                    <FontAwesomeIcon icon={faChevronUp} />
+                  </div>
+                ) : (
+                  <div>
+                    <span>Xem thêm</span>
+                    <FontAwesomeIcon icon={faChevronDown} />
+                  </div>
+                )}
+                </div>
+              </>) : (
+                <div>Chưa cập nhật</div>
+              )
+            }
           </div>
         </div>
         <div className="job-company">
