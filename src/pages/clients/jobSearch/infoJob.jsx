@@ -291,7 +291,7 @@ function InfoJob(props) {
           <li>
             Độ tuổi: {(record.ageMin >= 18 && record.ageMax) ? (<span>{record.ageMin} - {record.ageMax}</span>): "Không giới hạn tuổi"}
           </li>
-          <li>Lương: {slary}</li>
+          <li>Ngôn ngữ trình bày hồ sơ: {record?.presentationLanguage?.join(", ")}</li>
         </ul>
       </div>
       <div

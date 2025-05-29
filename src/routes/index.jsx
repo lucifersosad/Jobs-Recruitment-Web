@@ -64,6 +64,7 @@ import CreateCv from "../pages/clients/createCv";
 import PostProfile from "../pages/clients/postProfile";
 import ManagementPost from "../pages/employers/managementPost";
 import FormCreatePost from "../pages/employers/managementPost/formCreatePost";
+import ReviewCv from "../pages/clients/reviewCv";
 
 export const routes = [
   // client
@@ -197,6 +198,10 @@ export const routes = [
           {
             path: "cv/tao-cv",
             element: <CreateCv />,
+          },
+          {
+            path: "phan-tich-ho-so/:id",
+            element: <ReviewCv />,
           },
         ],
       },
