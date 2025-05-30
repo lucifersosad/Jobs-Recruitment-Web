@@ -71,10 +71,7 @@ function ManagementCv() {
       
         return (
           <Space className="box-button" size="middle">
-            <button className="seen">
-              <FontAwesomeIcon icon={faEye} />
-              <DemoCvProfile record={record} />
-            </button>
+            <DemoCvProfile record={record} />
             <button onClick={()=>{showModal(record)}} className="edit">
               <FontAwesomeIcon icon={faPenToSquare} />
               <span>Chỉnh sử CV</span>

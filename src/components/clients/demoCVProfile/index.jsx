@@ -9,6 +9,9 @@ import "./demoCVProfile.scss";
 import catLoading from "./images/cat.gif";
 import { getPdfToDriverClient } from "../../../services/clients/jobsApi";
 import { getMyCvFile } from "../../../services/clients/myCvsApi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+
 function DemoCvProfile({ record }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [linkPdf, setLinkPdf] = useState("");
@@ -31,12 +34,16 @@ function DemoCvProfile({ record }) {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const handleDocumentLoad = () => {
+  const handleDocumentLoad = () => {  
     setLoadingCv(false);
   };
   return (
     <>
-      <span onClick={showModal}>Xem CV</span>
+      <button onClick={showModal} className="seen">
+        <FontAwesomeIcon icon={faEye} />
+        <span >Xem CV</span>
+      </button>
+      
       <Modal
         title="CV Profile"
         open={isModalOpen}
