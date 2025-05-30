@@ -8,6 +8,7 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import "./demoCVProfile.scss";
 import catLoading from "./images/cat.gif";
 import { getPdfToDriverClient } from "../../../services/clients/jobsApi";
+import { getMyCvFile } from "../../../services/clients/myCvsApi";
 function DemoCvProfile({ record }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [linkPdf, setLinkPdf] = useState("");
@@ -19,7 +20,7 @@ function DemoCvProfile({ record }) {
     if (idFilBackup === idFile) return;
     if (idFile) {
       setIdFilBackup(idFile);
-      const result = await getPdfToDriverClient({ id_file: idFile });
+      const result = await getMyCvFile(idFile);
       if (result.code === 200) {
         const url = convertFileCvDriverToUrl(result.data);
         setLinkPdf(url);
