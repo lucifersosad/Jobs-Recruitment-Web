@@ -29,6 +29,12 @@
         margin-bottom: 10px;
       }
     }
+    &__titleCV {
+      cursor: pointer;
+      &:hover {
+        color: #FF7D55;
+      }
+    }
   }
 
   .box-review {

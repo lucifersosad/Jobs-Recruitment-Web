@@ -17,8 +17,10 @@ import {
 import "./reviewCv.scss"
 import { Company, Spark, Spark2, Suggestion } from "../../../components/clients/customIcon";
 import { getEvaluation } from "../../../services/clients/evaluateApi";
+import ModalPreviewCV from "../../../components/clients/modalPreviewCV";
 
 const ReviewCv = () => {
+  const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState()
   const { Text, Title, Link } = Typography;
@@ -88,7 +90,7 @@ const ReviewCv = () => {
                         <Flex vertical style={{}}>
                           <Text strong style={{fontSize: 18}}>{data?.fullName}</Text>
                           <Text style={{fontSize: 16}}>{data?.email}</Text>
-                          <Text style={{fontSize: 16}}>{data?.nameFile}</Text>
+                          <Text className="box-overview-cv__titleCV" style={{fontSize: 16}} onClick={() => setOpen(true)}>{data?.nameFile}</Text>
                         </Flex>
                       </Flex>
                     </Flex>
@@ -295,6 +297,7 @@ const ReviewCv = () => {
           </div>
         </div>
       </div>
+      {!loading && <ModalPreviewCV isModalOpen={open} setIsModalOpen={setOpen} record={{linkFile: data?.linkFile}}/>}
     </>
   );
 };
