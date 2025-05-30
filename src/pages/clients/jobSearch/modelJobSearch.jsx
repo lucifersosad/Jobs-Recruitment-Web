@@ -35,7 +35,7 @@ function ModelJobSearch({ record, infoUser, showModel }) {
   };
   useEffect(() => {
     if (showModel === "show") {
-      showModal();
+      // showModal();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -113,6 +113,7 @@ function ModelJobSearch({ record, infoUser, showModel }) {
           type: "error",
           content: result.success,
         });
+        handleOk()
       } else {
         messageApi.error({
           type: "error",

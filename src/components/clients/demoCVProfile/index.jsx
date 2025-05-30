@@ -43,7 +43,7 @@ function DemoCvProfile({ record }) {
         onOk={handleCancel}
         className="model-view-cv-client"
         onCancel={handleCancel}
-        width={780}
+        width={950}
         height={700}
         footer={[
           <Button
@@ -56,7 +56,7 @@ function DemoCvProfile({ record }) {
           </Button>,
         ]}
         style={{
-          top: "70px",
+          top: 20,
         }}
       >
         <div className="full-info">
@@ -89,7 +89,7 @@ function DemoCvProfile({ record }) {
                 >
                   <Viewer
                     style={{ width: "100%", height: "750px" }}
-                    defaultScale={1.2}
+                    defaultScale={1.5}
                     onDocumentLoad={handleDocumentLoad}
                     fileUrl={linkPdf}
                   />
