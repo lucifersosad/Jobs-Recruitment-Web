@@ -1,4 +1,4 @@
-import { Button, Modal, Spin } from "antd";
+import { Button, Modal, Spin, Tooltip } from "antd";
 import { useState } from "react";
 
 import { convertFileCvDriverToUrl } from "../../../helpers/convertFileCvDriverToUrl";
@@ -11,6 +11,7 @@ import { getPdfToDriverClient } from "../../../services/clients/jobsApi";
 import { getMyCvFile } from "../../../services/clients/myCvsApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { DeleteOutlined, EditOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons';
 
 function DemoCvProfile({ record }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,10 +40,14 @@ function DemoCvProfile({ record }) {
   };
   return (
     <>
-      <button onClick={showModal} className="seen">
+      {/* <button onClick={showModal} className="seen">
         <FontAwesomeIcon icon={faEye} />
         <span >Xem CV</span>
-      </button>
+      </button> */}
+
+      <Tooltip title="Xem CV">
+        <Button onClick={showModal} style={{background: "#5dcaf9"}} type="primary" shape="circle" icon={<EyeOutlined />} />
+      </Tooltip>
       
       <Modal
         title="CV Profile"
