@@ -1,7 +1,7 @@
 import { getCookie } from "../../helpers/cookie";
 import { DOMAIN } from "../../utils/api-domain";
 import { Get, Post } from "../../utils/clients/request";
-import { AuthGet, AuthPost } from "../../utils/clients/requestAuth";
+import { AuthGet, AuthPatch, AuthPost } from "../../utils/clients/requestAuth";
 
 const API_DOMAIN = `${DOMAIN}/api/v1/client`;
 
@@ -31,9 +31,14 @@ export const getMyCvFile = async (idCv) => {
 
   // return response;
 
-  const result = await AuthPost(`/my-cvs/${idCv}/file`, checkToken);
+  const result = await AuthGet(`/my-cvs/${idCv}/file`, checkToken);
   return result;
 };
+
+export const editMyCv = async (value) => {
+  const result = await AuthPatch(`/my-cvs/edit`, value, checkToken)
+  return result;
+}
 
 export const createMyCv = async (data) => {
   const result = await AuthPost(`/my-cvs/`, data, checkToken);

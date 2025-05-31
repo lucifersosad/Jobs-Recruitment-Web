@@ -19,7 +19,7 @@ function DemoCvProfile({ record }) {
   const [idFilBackup, setIdFilBackup] = useState("");
   const showModal = async () => {
     setIsModalOpen(true);
-    const idFile = record?.idFile || "";
+    const idFile = record?._id || "";
     if (idFilBackup === idFile) return;
     if (idFile) {
       setIdFilBackup(idFile);
