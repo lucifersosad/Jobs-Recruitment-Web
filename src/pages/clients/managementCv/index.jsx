@@ -10,12 +10,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import DemoCvProfile from "../../../components/clients/demoCVProfile";
 import MemoizedItemBoxCustom from "../../../components/clients/itemBoxCustom";
+import { editMyCv, getMyCvs } from "../../../services/clients/myCvsApi";
 function ManagementCv() {
   const [data, setData] = useState([]);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = (value) => {
-    form.setFieldsValue({nameFile:value.nameFile});
+    form.setFieldsValue({
+      idCv: value._id,
+      nameFile:value.nameFile.replace(".pdf", "")
+    });
     setIsModalOpen(true);
   };
   const handleOk = () => {
@@ -25,7 +29,7 @@ function ManagementCv() {
     setIsModalOpen(false);
   };
   const fetchApi = async () => {
-    const result = await getCvByUser();
+    const result = await getMyCvs();
     if (result.code === 200) {
       setData(result.data);
     }
@@ -34,13 +38,13 @@ function ManagementCv() {
     fetchApi();
   }, []);
 
-  const handleEditCv = async (valueForm, record) => {
-    const idFile = record.idFile;
-    if (idFile) {
-      valueForm.idFile = idFile;
-      valueForm.newNameCv = valueForm.nameFile;
+  const handleEditCv = async (valueForm) => {
+    if (valueForm.idCv && valueForm.nameFile) {
+      valueForm.newNameCv = valueForm.nameFile + ".pdf";
     }
-    const result = await editCvByUser(valueForm);
+    console.log("🚀 ~ handleEditCv ~ valueForm:", valueForm)
+    const result = await editMyCv(valueForm);
+    console.log("🚀 ~ handleEditCv ~ result:", result)
     if (result.code === 200) {
       fetchApi();
       handleCancel();
@@ -68,13 +72,10 @@ function ManagementCv() {
       key: "action",
       align: "center",
       render: (_, record) => {
-      
+   
         return (
           <Space className="box-button" size="middle">
-            <button className="seen">
-              <FontAwesomeIcon icon={faEye} />
-              <DemoCvProfile record={record} />
-            </button>
+            <DemoCvProfile record={record} />
             <button onClick={()=>{showModal(record)}} className="edit">
               <FontAwesomeIcon icon={faPenToSquare} />
               <span>Chỉnh sử CV</span>
@@ -92,16 +93,22 @@ function ManagementCv() {
                 className="form-controller"
                 layout="vertical"
                 onFinish={(valueForm) => {
-                  handleEditCv(valueForm, record);
+                  handleEditCv(valueForm);
                 }}
              
               >
+                <Form.Item
+                  hidden
+                  name="idCv"
+                >
+                  <Input size="large" suffix=".pdf" />
+                </Form.Item>
                 <Form.Item
                   label="Tên CV (thường là vị trí ứng tuyển)"
                   name="nameFile"
                   rules={[{ required: true, message: "Vui lòng nhập tên CV" }]}
                 >
-                  <Input size="large" />
+                  <Input size="large" suffix=".pdf"/>
                 </Form.Item>
 
                 <Form.Item

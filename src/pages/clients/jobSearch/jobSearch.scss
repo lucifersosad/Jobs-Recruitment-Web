@@ -70,6 +70,15 @@
         }
       }
     }
+    .button-review-ai {
+      background: #fff;
+      border: 1px solid #FF7D55;
+      color: #FF7D55!important;
+
+      &:hover {
+        background-color: #fff2f0;
+      }
+    }
   }
 }
 .deltail-job {

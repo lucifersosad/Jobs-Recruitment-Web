@@ -1,51 +1,54 @@
 import { Button, Modal, Spin } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { convertFileCvDriverToUrl } from "../../../helpers/convertFileCvDriverToUrl";
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-import "./demoCVProfile.scss";
-import catLoading from "./images/cat.gif";
+import catLoading from "/images/cat.gif";
 import { getPdfToDriverClient } from "../../../services/clients/jobsApi";
 import { getMyCvFile } from "../../../services/clients/myCvsApi";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-
-function DemoCvProfile({ record }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+function ModalPreviewCV({ isModalOpen, setIsModalOpen, record }) {
   const [linkPdf, setLinkPdf] = useState("");
   const [loadingCv, setLoadingCv] = useState(true);
   const [idFilBackup, setIdFilBackup] = useState("");
+
   const showModal = async () => {
-    setIsModalOpen(true);
-    const idFile = record?._id || "";
-    if (idFilBackup === idFile) return;
-    if (idFile) {
-      setIdFilBackup(idFile);
-      const result = await getMyCvFile(idFile);
-      if (result.code === 200) {
-        const url = convertFileCvDriverToUrl(result.data);
-        setLinkPdf(url);
+    try {
+      if (record.linkFile) {
+        setLinkPdf(record.linkFile)
+        return;
       }
+      const idFile = record?.idFile || "";
+      if (idFilBackup === idFile) return;
+      if (idFile) {
+        setIdFilBackup(idFile);
+        const result = await getMyCvFile(idFile);
+        if (result.code === 200) {
+          const url = convertFileCvDriverToUrl(result.data);
+          setLinkPdf(url);
+        }
+      }
+    } catch (error) {
+      console.log("🚀 ~ showModal ~ error:", error)
+      setLinkPdf(null) 
     }
   };
+
+  useEffect(() => {
+    showModal()
+  }, [isModalOpen])
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const handleDocumentLoad = () => {  
+  const handleDocumentLoad = () => {
     setLoadingCv(false);
   };
   return (
     <>
-      <button onClick={showModal} className="seen">
-        <FontAwesomeIcon icon={faEye} />
-        <span >Xem CV</span>
-      </button>
-      
       <Modal
-        title="CV Profile"
+        title="Xem CV"
         open={isModalOpen}
         onOk={handleCancel}
         className="model-view-cv-client"
@@ -59,7 +62,7 @@ function DemoCvProfile({ record }) {
             type="primary"
             onClick={handleCancel}
           >
-            Đã xem
+            Xong
           </Button>,
         ]}
         style={{
@@ -109,4 +112,4 @@ function DemoCvProfile({ record }) {
     </>
   );
 }
-export default DemoCvProfile;
+export default ModalPreviewCV;

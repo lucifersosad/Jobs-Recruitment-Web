@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchApiJobSearch } from "./js/fetchApi";
 import "./jobSearch.scss";
-import { Space, Tabs, Tooltip } from "antd";
+import { Flex, Space, Tabs, Tooltip } from "antd";
 import InfoJob from "./infoJob";
 import OverviewCompany from "./overviewCompany";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { userViewJob } from "../../../services/clients/jobsApi";
 import { useQuery } from "../../../helpers/getQuery";
 import JobSkeleton from "./jobSkeleton";
+import ModalReviewCV from "./modalReviewCV";
 
 function JobSearch() {
   const query = useQuery();
@@ -147,11 +148,18 @@ function JobSearch() {
                       </a>
                     </div>
                     <div className="job-search-one__apply">
-                      <ModelJobSearch
-                        showModel={showModel}
-                        infoUser={infoUserC}
-                        record={recordMain}
-                      />
+                      <Flex gap={10}>
+                        <ModalReviewCV
+                          showModel={showModel}
+                          infoUser={infoUserC}
+                          record={recordMain}
+                        />
+                        <ModelJobSearch
+                          showModel={showModel}
+                          infoUser={infoUserC}
+                          record={recordMain}
+                        />
+                      </Flex>
                     </div>
                   </div>
                 </div>

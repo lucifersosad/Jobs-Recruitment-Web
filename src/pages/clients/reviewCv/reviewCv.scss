@@ -2,7 +2,7 @@
   .box-overview-cv {
     &__banner {
       padding: 25px 0 25px 25px;
-      background: linear-gradient(269deg, rgb(185, 0, 246) 0.91%, rgb(220, 30, 175) 23.38%, rgb(255, 98, 0) 45.85%, rgb(253, 185, 46) 92.62%);;
+      background: linear-gradient(269deg, rgb(185, 0, 246) 0.91%, rgb(220, 30, 175) 23.38%, rgb(255, 98, 0) 45.85%, rgb(253, 185, 46) 92.62%);
       display: flex;
 
       .left {
@@ -27,6 +27,12 @@
         font-size: 17px;
         line-height: 1.4;
         margin-bottom: 10px;
+      }
+    }
+    &__titleCV {
+      cursor: pointer;
+      &:hover {
+        color: #FF7D55;
       }
     }
   }

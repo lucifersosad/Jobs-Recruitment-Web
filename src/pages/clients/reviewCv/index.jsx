@@ -17,8 +17,12 @@ import {
 import "./reviewCv.scss"
 import { Company, Spark, Spark2, Suggestion } from "../../../components/clients/customIcon";
 import { getEvaluation } from "../../../services/clients/evaluateApi";
+import ModalPreviewCV from "../../../components/clients/modalPreviewCV";
+import { formatSalary, formatSalaryNoVND } from "../../../helpers/salaryConvert";
+import LinearLoading from "../../../components/alls/LinearLoading";
 
 const ReviewCv = () => {
+  const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState()
   const { Text, Title, Link } = Typography;
@@ -50,6 +54,8 @@ const ReviewCv = () => {
     '40%': 'rgb(253, 185, 46)',
     '70%': 'rgb(220, 30, 175)',
   };
+
+  if (loading) return <LinearLoading />
 
   return (
     <>
@@ -88,7 +94,7 @@ const ReviewCv = () => {
                         <Flex vertical style={{}}>
                           <Text strong style={{fontSize: 18}}>{data?.fullName}</Text>
                           <Text style={{fontSize: 16}}>{data?.email}</Text>
-                          <Text style={{fontSize: 16}}>{data?.nameFile}</Text>
+                          <Text className="box-overview-cv__titleCV" style={{fontSize: 16}} onClick={() => setOpen(true)}>{data?.nameFile}</Text>
                         </Flex>
                       </Flex>
                     </Flex>
@@ -102,7 +108,7 @@ const ReviewCv = () => {
                         <Flex vertical style={{}}>
                           <Link href={`/tim-viec-lam/${data?.idJob?.slug}`} target="_blank" rel="noreferrer" style={{fontSize: 18}}>{data?.idJob?.title}</Link>
                           <Text style={{fontSize: 16}}>{data?.idJob?.employerId?.companyName}</Text>
-                          <Text style={{fontSize: 16}}>Thương lượng</Text>
+                          <Text style={{fontSize: 16}}>{formatSalary(data?.idJob?.salaryMin, data?.idJob?.salaryMax)}</Text>
                         </Flex>
                       </Flex>
                     </Flex>
@@ -295,6 +301,7 @@ const ReviewCv = () => {
           </div>
         </div>
       </div>
+      {!loading && <ModalPreviewCV isModalOpen={open} setIsModalOpen={setOpen} record={{linkFile: data?.linkFile}}/>}
     </>
   );
 };

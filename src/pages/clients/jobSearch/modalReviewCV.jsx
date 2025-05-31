@@ -1,6 +1,6 @@
 import { faFile, faFolder } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Alert, Flex, Form, Input, Modal, Spin, message } from "antd";
+import { Alert, Button, Flex, Form, Input, Modal, Radio, Skeleton, Space, Spin, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 import uploadCloud from "./images/upload-cloud.webp";
 import { phoneCheck } from "../../admins/addJobs/js/validate";
@@ -9,17 +9,37 @@ import { convertThumbUrl } from "../../../helpers/convertThumbUrl";
 
 import { useNavigate } from "react-router-dom";
 import { recruitmentJob } from "../../../services/clients/user-userApi";
+import { Spark } from "../../../components/clients/customIcon";
+import { getMyCvs } from "../../../services/clients/myCvsApi";
+import { checkEvaluate, evaluate } from "../../../services/clients/evaluateApi";
 
-function ModelJobSearch({ record, infoUser, showModel }) {
+function ModalReviewCV({ record, infoUser, showModel }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filePdf, setFilePdf] = useState(null); // [1
-  const [warning, setWarning] = useState(false); // [2
+  const [filePdf, setFilePdf] = useState(null);
+  const [warning, setWarning] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const [loading, setLoading] = useState(false); // [3
+  const [loading, setLoading] = useState(false);
+  const [initLoading, setInitLoading] = useState(true);
+  const [dataCvs, setDataCvs] = useState();
+  const [optionsMyCvs, setOptionsMyCvs] = useState();
+  const [status, setStatus] = useState(false);
+  const [idEvaluation, setIdEvaluation] = useState("");
   const refFile = useRef(null);
   const { TextArea } = Input;
   const [form] = Form.useForm();
   const naviagate = useNavigate();
+
+  const [valueMyCvs, setValueMyCvs] = useState();
+
+  const onChange = e => {
+    setValueMyCvs(e.target.value);
+  };
+
+  const style = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+  };
 
   const showModal = () => {
     if (!infoUser) {
@@ -30,15 +50,57 @@ function ModelJobSearch({ record, infoUser, showModel }) {
       naviagate("/login");
       return;
     }
+    if (status === true) {
+      naviagate(`/phan-tich-ho-so/${idEvaluation}`)
+      return;
+    }
     form.setFieldsValue(infoUser);
     setIsModalOpen(true);
   };
-  useEffect(() => {
-    if (showModel === "show") {
-      // showModal();
+
+  const getDataCvs = async () => {
+    try {
+      const result = await getMyCvs()
+      const options = result?.data?.map((item) => ({
+        value: JSON.stringify(item),
+        label: item?.nameFile
+      }))
+      setOptionsMyCvs(options)
+      // if (options?.length > 0) {
+      //   console.log("🚀 ~ getDataCvs ~ options[0]:", options[0])
+      //   setValueMyCvs(options[0].value)
+      // }
+    } catch (error) {
+      console.log("🚀 ~ getDataCvs ~ error:", error)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }
+
+  const getStatusEvaluate = async () => {
+    try {
+      const result = await checkEvaluate({idJob: record._id})
+      setStatus(result?.data?.status)
+      setIdEvaluation(result?.data?.id)
+    } catch (error) {
+      console.log("🚀 ~ getStatusEvaluate ~ error:", error)
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getDataCvs()
+      await getStatusEvaluate()
+      setInitLoading(false)
+    }
+    fetchData()
+  }, [])
+  
+  // useEffect(() => {
+  //   if (showModel === "show") {
+  //     showModal();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -132,11 +194,66 @@ function ModelJobSearch({ record, infoUser, showModel }) {
     }
   };
 
+  const handleEvaluate = async () => {
+    if (!valueMyCvs && !filePdf) {
+      messageApi.open({
+        type: "error",
+        content: "Vui lòng chọn CV để đánh giá!",
+      });
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true)
+    try {
+      const formData = new FormData();
+
+      if (filePdf) {
+        formData.append("file", filePdf);
+      }
+
+      if (valueMyCvs) {
+        const myCvs = JSON.parse(valueMyCvs)
+        formData.append("nameFile", myCvs.nameFile)
+        formData.append("linkFile", myCvs.linkFile)
+        formData.delete("file")
+      }
+
+      if (record?._id) {
+        formData.append("idJob", record._id)
+      }
+
+      const result = await evaluate(formData);
+      console.log("🚀 ~ handleEvaluate ~ result:", result)
+      if (result?.code === 200) {
+        const idEval = result?.data
+        naviagate(`/phan-tich-ho-so/${idEval}`)
+      }
+    } catch (error) {
+      console.log("🚀 ~ handleEvaluate ~ error:", error)
+    }
+    setLoading(false)
+  }
+
+  if (initLoading) return (
+    <div style={{ width: "250px" }}>
+      <Skeleton.Button
+        active
+        size={35}
+        block
+        style={{ width: "100%" }}
+      />
+    </div>
+  );
+
   return (
     <div>
       {contextHolder}
-      <button onClick={showModal} disabled={(record?.listProfileRequirement?.some(item => item?.idUser === infoUser?.id))}>
-        <a>Nộp Đơn Ứng Tuyển</a>
+      <button className="button-review-ai" onClick={showModal}>
+        <a style={{display: "flex", gap: 7, alignItems: "center"}} >
+          <Spark />
+          {status ? "Xem kết quả đánh giá" : "Đánh giá CV với AI"}
+        </a>
       </button>
       <Modal
         open={isModalOpen}
@@ -197,7 +314,13 @@ function ModelJobSearch({ record, infoUser, showModel }) {
                 </div>
               </div>
             </div>
-            <div className="form-post">
+            <Radio.Group
+              style={style}
+              onChange={onChange}
+              value={valueMyCvs}
+              options={optionsMyCvs}
+            />
+            {/* <div className="form-post">
               <div className="content">
                 <span>Vui lòng nhập đầy đủ thông tin chi tiết</span>
                 <span>(*) Thông tin bắt buộc</span>
@@ -272,13 +395,19 @@ function ModelJobSearch({ record, infoUser, showModel }) {
                   </Form.Item>
                 </div>
               </Form>
-            </div>
+            </div> */}
           </div>
         </Spin>
 
         <hr />
+        <Flex>
+          <Space gap={10} style={{marginLeft: "auto"}}>
+            <Button disabled={loading} onClick={handleCancel}>Hủy</Button>
+            <Button disabled={loading} type="primary" onClick={handleEvaluate}>Xem kết quả</Button>
+          </Space>
+        </Flex>
       </Modal>
     </div>
   );
 }
-export default ModelJobSearch;
+export default ModalReviewCV;
