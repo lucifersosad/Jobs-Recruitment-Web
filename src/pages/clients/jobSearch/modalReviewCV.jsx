@@ -111,7 +111,7 @@ function ModalReviewCV({ record, infoUser, showModel }) {
   const handleChanges = (e) => {
     if (e.target.files.length === 0) return;
     if (
-      e.target.files[0].type !== "application/pdf" &&
+      e.target.files[0].type !== "application/pdf" ||
       e.target.files[0].size > 5 * 1024 * 1024
     ) {
       setWarning(true);

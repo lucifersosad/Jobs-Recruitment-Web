@@ -67,7 +67,7 @@ function ManagementCv() {
     },
 
     {
-      title: "Action",
+      title: "Chức năng",
       dataIndex: "action",
       key: "action",
       align: "center",
