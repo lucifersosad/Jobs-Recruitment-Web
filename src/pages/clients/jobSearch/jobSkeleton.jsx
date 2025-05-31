@@ -85,12 +85,20 @@ const JobSkeleton = () => {
                   </Flex>
                 </div>
                 <div className="job-search-one__apply">
-                  <Skeleton.Button
-                    active
-                    size={35}
-                    block
-                    style={{ width: "200px" }}
-                  />
+                  <Flex gap={10}>
+                    <Skeleton.Button
+                      active
+                      size={35}
+                      block
+                      style={{ width: "250px" }}
+                    />
+                    <Skeleton.Button
+                      active
+                      size={35}
+                      block
+                      style={{ width: "200px" }}
+                    />
+                  </Flex>
                 </div>
               </div>
             </div>

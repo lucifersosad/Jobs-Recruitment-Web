@@ -1,6 +1,18 @@
 import { DOMAIN } from "../api-domain";
 
 const API_DOMAIN = `${DOMAIN}/api/v1/client`;
+export const AuthPostForm = async (path, options, token, link = API_DOMAIN) => {
+  const response = await fetch(link + path, {
+    method: "POST",
+    headers: {
+      'Authorization': `Bearer ${token}`, // Thêm token vào header Authorization
+    },
+    body: options,
+  });
+  const result = await response.json();
+  return result;
+};
+
 export const AuthPost = async (path, options, token, link = API_DOMAIN) => {
   const response = await fetch(link + path, {
     method: "POST",

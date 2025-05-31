@@ -69,7 +69,15 @@ function ItemBoxCustom() {
   };
 
   useEffect(() => {
+    if (authenMainClient?.infoUser) {
+      setJobByCategories(authenMainClient?.infoUser?.job_categorie_id);
+      setDataUser(authenMainClient?.infoUser);
+    }
+  }, [authenMainClient?.infoUser]);
+
+  useEffect(() => {
     const fetchApi = async () => {
+      console.log("🚀 ~ fetchApi ~ jobByCategories:", jobByCategories)
       const result = await getJobAdvancedSearch(
         "1",
         "6",
@@ -78,8 +86,10 @@ function ItemBoxCustom() {
         "",
         jobByCategories
       );
+        
       if (result.code === 200) {
         const convertData = decData(result.data);
+        console.log("🚀 ~ fetchApi ~ convertData:", convertData)
         setRecordItem(convertData);
       }
     };
@@ -87,12 +97,7 @@ function ItemBoxCustom() {
     fetchApi();
   }, [jobByCategories]);
 
-  useEffect(() => {
-    if (authenMainClient?.infoUser) {
-      setJobByCategories(authenMainClient?.infoUser?.job_categorie_id);
-      setDataUser(authenMainClient?.infoUser);
-    }
-  }, [authenMainClient?.infoUser]);
+  
 
   return (
     <div className="items-box__newscustom col-md-12">
