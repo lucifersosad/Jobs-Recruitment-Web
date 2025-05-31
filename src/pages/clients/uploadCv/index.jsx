@@ -13,6 +13,7 @@ import {
   faEnvelope,
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
+import { uploadMyCv } from "../../../services/clients/myCvsApi";
 
 function UploadCv() {
   const [filePdf, setFilePdf] = useState(null); // [1
@@ -22,8 +23,9 @@ function UploadCv() {
   const refFile = useRef(null);
   const handleChanges = (e) => {
     if (e.target.files.length === 0) return;
+    console.log("🚀 ~ handleChanges ~ e.target.files[0].type:", e.target.files[0].type)
     if (
-      e.target.files[0].type !== "application/pdf" &&
+      e.target.files[0].type !== "application/pdf" ||
       e.target.files[0].size > 5 * 1024 * 1024
     ) {
       setWarning(true);
@@ -62,7 +64,7 @@ function UploadCv() {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      let objectNew = {};
+
       if (!filePdf) {
         messageApi.open({
           type: "error",
@@ -71,14 +73,14 @@ function UploadCv() {
         setLoading(false);
         return;
       }
+
+      const formData = new FormData()
+
       if (filePdf) {
-        const fileToBase64 = await handleFileChangeCustom(filePdf);
-        const base64Convert = await convertThumbUrl(fileToBase64);
-        objectNew.file = base64Convert;
-        objectNew.fileName = filePdf.name;
+        formData.append("file", filePdf)
       }
 
-      const result = await uploadCV(objectNew);
+      const result = await uploadMyCv(formData);
       if (result.code === 200) {
         messageApi.success({
           type: "success",
@@ -90,6 +92,7 @@ function UploadCv() {
           content: result.error,
         });
       }
+      setFilePdf(null)
       setLoading(false);
     } catch (error) {
       setLoading(false);
