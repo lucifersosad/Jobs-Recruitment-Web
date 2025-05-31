@@ -1,6 +1,6 @@
 import { faFile, faFolder } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Alert, Button, Flex, Form, Input, Modal, Radio, Space, Spin, message } from "antd";
+import { Alert, Button, Flex, Form, Input, Modal, Radio, Skeleton, Space, Spin, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 import uploadCloud from "./images/upload-cloud.webp";
 import { phoneCheck } from "../../admins/addJobs/js/validate";
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { recruitmentJob } from "../../../services/clients/user-userApi";
 import { Spark } from "../../../components/clients/customIcon";
 import { getMyCvs } from "../../../services/clients/myCvsApi";
+import { checkEvaluate, evaluate } from "../../../services/clients/evaluateApi";
 
 function ModalReviewCV({ record, infoUser, showModel }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,8 +19,11 @@ function ModalReviewCV({ record, infoUser, showModel }) {
   const [warning, setWarning] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
+  const [initLoading, setInitLoading] = useState(true);
   const [dataCvs, setDataCvs] = useState();
   const [optionsMyCvs, setOptionsMyCvs] = useState();
+  const [status, setStatus] = useState(false);
+  const [idEvaluation, setIdEvaluation] = useState("");
   const refFile = useRef(null);
   const { TextArea } = Input;
   const [form] = Form.useForm();
@@ -46,6 +50,10 @@ function ModalReviewCV({ record, infoUser, showModel }) {
       naviagate("/login");
       return;
     }
+    if (status === true) {
+      naviagate(`/phan-tich-ho-so/${idEvaluation}`)
+      return;
+    }
     form.setFieldsValue(infoUser);
     setIsModalOpen(true);
   };
@@ -58,16 +66,32 @@ function ModalReviewCV({ record, infoUser, showModel }) {
         label: item?.nameFile
       }))
       setOptionsMyCvs(options)
-      if (options?.length > 0) {
-        setValueMyCvs(options[0])
-      }
+      // if (options?.length > 0) {
+      //   console.log("🚀 ~ getDataCvs ~ options[0]:", options[0])
+      //   setValueMyCvs(options[0].value)
+      // }
     } catch (error) {
       console.log("🚀 ~ getDataCvs ~ error:", error)
     }
   }
 
+  const getStatusEvaluate = async () => {
+    try {
+      const result = await checkEvaluate({idJob: record._id})
+      setStatus(result?.data?.status)
+      setIdEvaluation(result?.data?.id)
+    } catch (error) {
+      console.log("🚀 ~ getStatusEvaluate ~ error:", error)
+    }
+  }
+
   useEffect(() => {
-    getDataCvs()
+    const fetchData = async () => {
+      await getDataCvs()
+      await getStatusEvaluate()
+      setInitLoading(false)
+    }
+    fetchData()
   }, [])
   
   // useEffect(() => {
@@ -171,24 +195,64 @@ function ModalReviewCV({ record, infoUser, showModel }) {
   };
 
   const handleEvaluate = async () => {
-    console.log("🚀 ~ ModalReviewCV ~ valueMyCvs:", valueMyCvs)
-    if (!valueMyCvs) {
+    if (!valueMyCvs && !filePdf) {
       messageApi.open({
         type: "error",
-        content: "Vui lòng chọn ít nhất 1 CV để đánh giá!",
+        content: "Vui lòng chọn CV để đánh giá!",
       });
       setLoading(false);
       return;
     }
+
+    setLoading(true)
+    try {
+      const formData = new FormData();
+
+      if (filePdf) {
+        formData.append("file", filePdf);
+      }
+
+      if (valueMyCvs) {
+        const myCvs = JSON.parse(valueMyCvs)
+        formData.append("nameFile", myCvs.nameFile)
+        formData.append("linkFile", myCvs.linkFile)
+        formData.delete("file")
+      }
+
+      if (record?._id) {
+        formData.append("idJob", record._id)
+      }
+
+      const result = await evaluate(formData);
+      console.log("🚀 ~ handleEvaluate ~ result:", result)
+      if (result?.code === 200) {
+        const idEval = result?.data
+        naviagate(`/phan-tich-ho-so/${idEval}`)
+      }
+    } catch (error) {
+      console.log("🚀 ~ handleEvaluate ~ error:", error)
+    }
+    setLoading(false)
   }
+
+  if (initLoading) return (
+    <div style={{ width: "250px" }}>
+      <Skeleton.Button
+        active
+        size={35}
+        block
+        style={{ width: "100%" }}
+      />
+    </div>
+  );
 
   return (
     <div>
       {contextHolder}
-      <button className="button-review-ai" onClick={showModal} disabled={(record?.listProfileRequirement?.some(item => item?.idUser === infoUser?.id))}>
-        <a style={{display: "flex", gap: 7, alignItems: "center"}}>
+      <button className="button-review-ai" onClick={showModal}>
+        <a style={{display: "flex", gap: 7, alignItems: "center"}} >
           <Spark />
-          Đánh giá CV với AI
+          {status ? "Xem kết quả đánh giá" : "Đánh giá CV với AI"}
         </a>
       </button>
       <Modal
@@ -338,8 +402,8 @@ function ModalReviewCV({ record, infoUser, showModel }) {
         <hr />
         <Flex>
           <Space gap={10} style={{marginLeft: "auto"}}>
-            <Button>Hủy</Button>
-            <Button type="primary" onClick={handleEvaluate}>Xem kết quả</Button>
+            <Button disabled={loading} onClick={handleCancel}>Hủy</Button>
+            <Button disabled={loading} type="primary" onClick={handleEvaluate}>Xem kết quả</Button>
           </Space>
         </Flex>
       </Modal>
