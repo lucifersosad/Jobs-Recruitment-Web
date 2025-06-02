@@ -31,6 +31,7 @@ import { loadCityFull } from "./js/loadCity";
 import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
 
 import { FormatTree, SelectTreeArr } from "../../../helpers/selectTree";
+import SelectSkillDebounce from "../../../components/alls/SelectSkillDebounce";
 function FormOne({ setForm_one, next, form_one }) {
   const [optionsSelectTreeJobCategories, setOptionsSelectTree] = useState([]);
   const [fullAddressCompany, setfullAddressCompany] = useState([]);
@@ -98,6 +99,7 @@ function FormOne({ setForm_one, next, form_one }) {
           title: form_one.title,
           status: form_one.status,
           jobType: form_one.jobType,
+          skills: form_one.skills
         };
         if (form_one?.listTagName) {
           setTags(form_one.listTagName);
@@ -457,6 +459,12 @@ function FormOne({ setForm_one, next, form_one }) {
               current && current < moment().startOf("day")
             }
           />
+        </Form.Item>
+        <Form.Item
+          label="Kĩ năng"
+          name="skills"
+        >
+          <SelectSkillDebounce />
         </Form.Item>
         <Form.Item
           label={<MemoizedTourCustom color={"#fda4c8"} tourData={tourData} />}
