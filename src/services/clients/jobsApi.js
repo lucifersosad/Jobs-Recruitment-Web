@@ -9,18 +9,18 @@ export const getListJobs = async () => {
 }
 
 export const getListJobsFeatured = async (page = 1, select = "") => {
-    const result = await Get(`/jobs?page=${page}&limit=8&featured=true&selectItem=${select}`);
+    const result = await Get(`/jobs?page=${page}&limit=6&featured=true&selectItem=${select}`);
     return result;
 }
 
 
 export const getListJobsSalarys = async (page = 1, select = "") => {
-    const result = await Get(`/jobs?page=${page}&limit=8&salaryKey=gt&salaryValue=20000000&sortKey=salaryMax&sortValue=desc&selectItem=${select}`);
+    const result = await Get(`/jobs?page=${page}&limit=6&salaryKey=gt&salaryValue=20000000&sortKey=salaryMax&sortValue=desc&selectItem=${select}`);
     return result;
 }
 
 export const getListJobsLevels = async (page = 1, select = "") => {
-    const result = await Get(`/jobs?page=${page}&limit=8&workExperience=no-required&sortKey=salary&sortValue=desc&selectItem=${select}`);
+    const result = await Get(`/jobs?page=${page}&limit=6&workExperience=no-required&sortKey=salary&sortValue=desc&selectItem=${select}`);
     return result;
 }
 

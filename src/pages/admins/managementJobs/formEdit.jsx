@@ -123,8 +123,9 @@ function FormEdit(props) {
     }
   };
   useEffect(() => {
+    if (!isModal) return;
     fetchApi();
-  }, []);
+  }, [isModal]);
 
   const handleChangeCompany = async (value) => {
     const response = await getListEmployers(value);

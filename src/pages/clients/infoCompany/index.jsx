@@ -1138,7 +1138,7 @@ function InfoCompany() {
               </div>
               <div className="comapany-logo">
                 <div className="company-image-logo">
-                  <img src={recordItem?.logoCompany} alt="logo" />
+                  <img src={recordItem?.logoCompany} alt="logo" style={{objectFit: "contain"}}/>
                 </div>
               </div>
               <div className="company-detail">
