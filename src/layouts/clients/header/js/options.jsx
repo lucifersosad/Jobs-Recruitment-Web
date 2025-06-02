@@ -26,8 +26,8 @@ export const searchJob = [
         href={"/viec-lam/tim-viec-lam"}
       >
         <div className="item-flex">
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
-          <span>Tìm việc làm</span>
+        <FontAwesomeIcon icon={faCalendarPlus} />
+          <span>Việc làm mới nhất</span>
         </div>
         <div className="item-arrow">
           <FontAwesomeIcon icon={faArrowRight} />
@@ -45,8 +45,8 @@ export const searchJob = [
         href={"/viec-lam/tat-ca-viec-lam"}
       >
         <div className="item-flex">
-        <FontAwesomeIcon icon={faCalendarPlus} />
-          <span>Việc làm mới nhất</span>
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+          <span>Tìm việc làm</span>
         </div>
         <div className="item-arrow">
           <FontAwesomeIcon icon={faArrowRight} />

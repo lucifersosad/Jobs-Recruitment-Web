@@ -8,7 +8,8 @@ importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js');
 
 // Initialize the Firebase app in the service worker by passing the generated config
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  // apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  apiKey: "AIzaSyCalJ8E0X8hHFAlz5NXVdN_GVuVE1qv7kY",
   authDomain: "jobs-employment-utem.firebaseapp.com",
   projectId: "jobs-employment-utem",
   storageBucket: "jobs-employment-utem.firebasestorage.app",
