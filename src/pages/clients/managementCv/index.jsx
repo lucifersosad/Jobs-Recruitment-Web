@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Space, Table } from "antd";
+import { Button, Form, Input, Modal, Popconfirm, Space, Switch, Table, Tooltip, Typography } from "antd";
 import banner from "./images/banner.png";
 import "./managementCv.scss";
 import { useEffect, useState } from "react";
@@ -11,14 +11,18 @@ import { faEye, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import DemoCvProfile from "../../../components/clients/demoCVProfile";
 import MemoizedItemBoxCustom from "../../../components/clients/itemBoxCustom";
 import { editMyCv, getMyCvs } from "../../../services/clients/myCvsApi";
+import { DeleteOutlined, EditOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons';
 function ManagementCv() {
   const [data, setData] = useState([]);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false)
+  const { Link } = Typography
   const showModal = (value) => {
     form.setFieldsValue({
       idCv: value._id,
-      nameFile:value.nameFile.replace(".pdf", "")
+      nameFile:value.nameFile.replace(".pdf", ""),
+      is_primary: value.is_primary,
     });
     setIsModalOpen(true);
   };
@@ -39,35 +43,51 @@ function ManagementCv() {
   }, []);
 
   const handleEditCv = async (valueForm) => {
-    if (valueForm.idCv && valueForm.nameFile) {
-      valueForm.newNameCv = valueForm.nameFile + ".pdf";
-    }
-    console.log("🚀 ~ handleEditCv ~ valueForm:", valueForm)
-    const result = await editMyCv(valueForm);
-    console.log("🚀 ~ handleEditCv ~ result:", result)
-    if (result.code === 200) {
-      fetchApi();
-      handleCancel();
-    }
-    if (result.code === 201) {
-      handleCancel();
+    try {
+      if (valueForm.idCv && valueForm.nameFile) {
+        valueForm.newNameCv = valueForm.nameFile + ".pdf";
+      }
+      const result = await editMyCv(valueForm);
+      if (result.code === 200) {
+        fetchApi();
+        handleCancel();
+      }
+    } catch (error) {
+      console.log("🚀 ~ handleEditCv ~ error:", error)
     }
   };
+
+  const handleDeleteCv = async (idCv) => {
+    try {
+      const data = {
+        idCv,
+        is_deleted: true
+      }
+      const result = await editMyCv(data);
+      if (result.code === 200) {
+        fetchApi();
+      }
+    } catch (error) {
+      console.log("🚀 ~ handleDeleteCv ~ error:", error)
+    }
+  };
+
   const columns = [
     {
       title: "Tên CV",
       dataIndex: "nameFile",
       key: "nameFile",
       align: "center",
-      render: (text) => (
+      render: (text, record) => (
         <span title={text} className="label-ok">
-          {text}
+          {text}{" "}
+          {record?.is_primary && <Link>{"("}Chính{")"}</Link>}
         </span>
       ),
     },
 
     {
-      title: "Chức năng",
+      title: "Thao tác",
       dataIndex: "action",
       key: "action",
       align: "center",
@@ -76,10 +96,26 @@ function ManagementCv() {
         return (
           <Space className="box-button" size="middle">
             <DemoCvProfile record={record} />
-            <button onClick={()=>{showModal(record)}} className="edit">
+            
+            <Tooltip title="Chỉnh sửa">
+              <Button onClick={()=>{showModal(record)}} shape="circle" icon={<EditOutlined />} style={{background: "#ddd"}} type="primary"/>
+            </Tooltip>
+            <Popconfirm
+              okButtonProps={{ danger: true, loading: loadingDelete }}
+              title="Xóa CV"
+              description="Bạn Có Muốn Xóa CV Này Không ?"
+              okText="Xác nhận"
+              cancelText="Hủy"
+              onConfirm={() => {
+                handleDeleteCv(record?._id)
+              }}
+            >
+              <Button color="danger" danger type="primary" shape="circle" icon={<DeleteOutlined />} />
+            </Popconfirm>
+            {/* <button onClick={()=>{showModal(record)}} className="edit">
               <FontAwesomeIcon icon={faPenToSquare} />
               <span>Chỉnh sử CV</span>
-            </button>
+            </button> */}
             <Modal
               title="Chỉnh sửa CV Upload"
               className="modal-edit-cv"
@@ -110,11 +146,16 @@ function ManagementCv() {
                 >
                   <Input size="large" suffix=".pdf"/>
                 </Form.Item>
+                <Form.Item
+                  label="Đặt làm CV chính"
+                  name="is_primary"
+                >
+                  <Switch />
+                </Form.Item>
 
                 <Form.Item
                   className="form-submit"
                   style={{ textAlign: "right" }}
-                  rules={[{ required: true, message: "Vui lòng nhập tên CV" }]}
                 >
                   <span onClick={handleCancel}>Hủy</span>
                   <button type="submit">Cập nhật</button>

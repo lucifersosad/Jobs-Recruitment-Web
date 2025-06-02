@@ -252,7 +252,7 @@ function ModalReviewCV({ record, infoUser, showModel }) {
       <button className="button-review-ai" onClick={showModal}>
         <a style={{display: "flex", gap: 7, alignItems: "center"}} >
           <Spark />
-          {status ? "Xem kết quả đánh giá" : "Đánh giá CV với AI"}
+          {status ? "Xem kết quả đánh giá" : "Đánh giá mức độ phù hợp"}
         </a>
       </button>
       <Modal

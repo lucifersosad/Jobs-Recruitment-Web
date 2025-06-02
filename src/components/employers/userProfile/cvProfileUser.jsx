@@ -16,7 +16,9 @@ function CvProfileUser({ record }) {
     try {
       if (Object.keys(record).length === 0) return;
 
-      const cv = record?.cv[0] || "";
+      const cvPrimary = record?.cv?.find(item => item?.is_primary) || record?.cv[0]
+
+      const cv = cvPrimary || "";
       const idFile = cv?.idFile || "";
 
       if (idFile) {
