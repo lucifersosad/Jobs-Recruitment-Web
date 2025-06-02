@@ -2,7 +2,6 @@
 import { Modal, notification } from "antd";
 import { useEffect, useState } from "react";
 import FormExperience from "./FormExperience";
-import { getSkillList } from "../../../../services/clients/skillApi";
 
 const ExperienceModal = ({
   open,
@@ -11,17 +10,7 @@ const ExperienceModal = ({
   experience,
   experiences,
 }) => {
-  const [skills, setSkills] = useState();
   const [api, contextHolder] = notification.useNotification();
-
-  const getDataDropdown = async () => {
-    const skills = await getSkillList();
-    setSkills(skills)
-  }
-
-  useEffect(() => {
-    getDataDropdown()
-  }, [])
 
   return (
     <>
@@ -36,7 +25,6 @@ const ExperienceModal = ({
         footer={null}
       >
         <FormExperience
-          skills={skills}
           getData={getData}
           experience={experience}
           experiences={experiences}
