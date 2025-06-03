@@ -18,6 +18,7 @@ import {
   dataExperience,
   dataJobType,
   dataLevel,
+  dataProfileRequirement,
   dataWelfare,
 } from "./js/dataJobsSearch";
 import { memo, useEffect, useState } from "react";
@@ -31,6 +32,7 @@ function InfoJobEmployer(props) {
   const [level, setLevel] = useState("");
   const [listWalare, setListWalare] = useState([]);
   const [educationalLevel, setEducationalLevel] = useState("");
+  const [languageProfile, setLanguageProfile] = useState("");
 
   useEffect(() => {
     //Chuyển đổi jobType từ value sang label
@@ -68,6 +70,12 @@ function InfoJobEmployer(props) {
         (item) => item.value === record.educationalLevel
       )?.label;
       setEducationalLevel(educational_Level);
+
+      const languageProfile = dataProfileRequirement
+        .filter((item) => record?.presentationLanguage?.includes(item.value))
+        ?.map((dataMap) => dataMap?.label)
+        .join(", ")
+      setLanguageProfile(languageProfile)
     }
   }, [record]);
 
@@ -191,6 +199,21 @@ function InfoJobEmployer(props) {
         />
       </div>
       <hr />
+      {record?.skills?.length > 0 && (
+        <>
+          <div className="info-job__detailOther detail-row">
+            <h2>Kỹ Năng</h2>
+            <ul style={{ paddingLeft: "15px" }}>
+              {record?.skills?.map((item, index) => (
+                <li key={index}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <hr />
+        </>
+      )}
       <div className="info-job-employer__detailOther detail-row">
         <h2>THÔNG TIN KHÁC</h2>
         <ul style={{ paddingLeft: "15px" }}>
@@ -206,7 +229,7 @@ function InfoJobEmployer(props) {
           <li>
             Độ tuổi: {(record?.ageMin >= 18 && record?.ageMax) ? (<span>{record?.ageMin} - {record?.ageMax}</span>): "Không giới hạn tuổi"}
           </li>
-          <li>Lương: {slary}</li>
+          <li>Ngôn ngữ trình bày hồ sơ: {languageProfile || "Chưa cập nhật"}</li>
         </ul>
       </div>
       
