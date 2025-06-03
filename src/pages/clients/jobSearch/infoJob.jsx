@@ -276,10 +276,22 @@ function InfoJob(props) {
           dangerouslySetInnerHTML={{ __html: record?.detailWorkExperience }}
         />
       </div>
+      {record?.skills?.length > 0 && (
+        <div className="info-job__detailOther detail-row">
+          <h2>Kỹ Năng</h2>
+          <ul style={{ paddingLeft: "15px" }}>
+            {record?.skills?.map((item, index) => (
+              <li key={index}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="info-job__detailOther detail-row">
         <h2>THÔNG TIN KHÁC</h2>
         <ul style={{ paddingLeft: "15px" }}>
-          <li>Bắng cấp: {educationalLevel}</li>
+          <li>Bắng cấp: {educationalLevel || "Chưa cập nhật"}</li>
           <li>
             Giới Tính:{" "}
             {record.gender === "all"
