@@ -194,7 +194,7 @@ function InfoJobEmployer(props) {
       <div className="info-job-employer__detailOther detail-row">
         <h2>THÔNG TIN KHÁC</h2>
         <ul style={{ paddingLeft: "15px" }}>
-          <li>Bắng cấp: {educationalLevel}</li>
+          <li>Bằng cấp: {educationalLevel || "Chưa cập nhật"}</li>
           <li>
             Giới Tính:{" "}
             {record?.gender === "all"

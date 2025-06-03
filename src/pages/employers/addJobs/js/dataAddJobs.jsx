@@ -3,6 +3,7 @@ import { faSuitcaseMedical,faPlane,faUsd,faUserMd,faGraduationCap,faLineChart,fa
     faTaxi,faUserTie,faBriefcase,faHeartbeat
 } from '@fortawesome/free-solid-svg-icons'
 import { JOB_EDUCATION_LEVEL, JOB_EXPERIENCE, JOB_LEVEL, JOB_TYPE } from '../../../../common/constants'
+
 export const dataJobType = [
     {
         value: JOB_TYPE.OFFICIAL_EMPLOYEE,
@@ -56,8 +57,6 @@ export const dataExperience  = [
         value: JOB_EXPERIENCE.OVER_FIVE_YEAR,
         label:"Trên 5 Năm"
     },
-
-
 ]
 
 export const dataReceiveEmail  = [
@@ -73,9 +72,7 @@ export const dataReceiveEmail  = [
         value:"no-email",
         label:"Không Nhận Email"
     },
-   
 ]
-
 
 export const dataDegree  = [
     {
@@ -172,8 +169,6 @@ export const dataWelfare = [
         </>),
        
     },
-  
-   
     {
         value:"bonus",
         label:(<>
@@ -182,8 +177,7 @@ export const dataWelfare = [
         </>),
        
        
-    },
-   
+    }, 
     {
         value:"health-care",
 
@@ -278,5 +272,4 @@ export const dataWelfare = [
             <span>Câu Lạc Bộ Thể Thao</span>
         </>),
     },
-    
 ]

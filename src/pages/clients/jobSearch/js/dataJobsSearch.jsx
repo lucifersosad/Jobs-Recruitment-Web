@@ -13,68 +13,62 @@ import {
   faBriefcase,
   faHeartbeat,
 } from "@fortawesome/free-solid-svg-icons";
+import { JOB_EDUCATION_LEVEL, JOB_EXPERIENCE, JOB_LEVEL, JOB_TYPE } from "../../../../common/constants";
+
 export const dataJobType = [
-  {
-    value: "official-employee",
-    label: "Nhân Viên Chính Thức",
-  },
-  {
-    value: "part-time",
-    label: "Bán Thời Gian",
-  },
-  {
-    value: "seasonal-freelance",
-    label: "Thời Vụ - Nghề Tự Do",
-  },
-  {
-    value: "intern",
-    label: "Thực Tập",
-  },
-];
+    {
+        value: JOB_TYPE.OFFICIAL_EMPLOYEE,
+        label:"Nhân Viên Chính Thức"
+    },
+    {
+        value: JOB_TYPE.PART_TIME,
+        label:"Bán Thời Gian"
+    },
+    {
+        value: JOB_TYPE.SEASONAL_FREELANCE,
+        label:"Thời Vụ - Nghề Tự Do"
+    },
+    {
+        value: JOB_TYPE.INTERN,
+        label:"Thực Tập"
+    }
+]
 
-export const dataExperience = [
-  {
-    value: "no-required",
-    label: "Không Yêu Cầu Kinh Nghiệm",
-  },
-  {
-    value: "experienced",
-    label: "Có Kinh Nghiệm",
-  },
-  {
-    value: "no-experience-yet",
-    label: "Chưa Có Kinh Nghiệm",
-  },
-  {
-    value: "duoi_1_nam",
-    label: "Dưới 1 Năm",
-  },
-  {
-    value: "1_nam",
-    label: "1 Năm",
-  },
-  {
-    value: "2_nam",
-    label: "2 Năm",
-  },
-  {
-    value: "3_nam",
-    label: "3 Năm",
-  },
-  {
-    value: "4_nam",
-    label: "4 Năm",
-  },
-  {
-    value: "5_nam",
-    label: "5 Năm",
-  },
-
-  {
-    value: "tren_5_nam",
-    label: "Trên 5 Năm",
-  },
-];
+export const dataExperience  = [
+    {
+        value: JOB_EXPERIENCE.NO_REQUIRED,
+        label:"Không Yêu Cầu Kinh Nghiệm"
+    },
+    {
+        value: JOB_EXPERIENCE.UNDER_ONE_YEAR,
+        label:"Dưới 1 Năm"
+    },
+    {
+        value: JOB_EXPERIENCE.ONE_YEAR,
+        label:"1 Năm"
+    },
+    {
+        value: JOB_EXPERIENCE.TWO_YEAR,
+        label:"2 Năm"
+    },
+    {
+        value: JOB_EXPERIENCE.THREE_YEAR,
+        label:"3 Năm"
+    },
+    {
+        value: JOB_EXPERIENCE.FOUR_YEAR,
+        label:"4 Năm"
+    },
+    {
+        value: JOB_EXPERIENCE.FIVE_YEAR,
+        label:"5 Năm"
+    },
+ 
+    {
+        value: JOB_EXPERIENCE.OVER_FIVE_YEAR,
+        label:"Trên 5 Năm"
+    },
+]
 
 export const dataReceiveEmail = [
   {
@@ -91,71 +85,63 @@ export const dataReceiveEmail = [
   },
 ];
 
-export const dataDegree = [
-  {
-    value: "high-school",
-    label: "Trung Học",
-  },
-  {
-    value: "intermediate-level",
-    label: "Trung Cấp",
-  },
-  {
-    value: "college",
-    label: "Cao Đẳng",
-  },
-  {
-    value: "university",
-    label: "Đại Học",
-  },
-  {
-    value: "after-university",
-    label: "Cao Đẳng",
-  },
-  {
-    value: "other",
-    label: "Khác",
-  },
-];
+export const dataDegree  = [
+    {
+        value: JOB_EDUCATION_LEVEL.NO_REQUIRED,
+        label: "Không giới hạn"
+    },
+    {
+        value: JOB_EDUCATION_LEVEL.HIGH_SCHOOL,
+        label:"Trung Học"
+    },
+    {
+        value: JOB_EDUCATION_LEVEL.INTERMEDIATE,
+        label:"Trung Cấp"
+    },
+    {
+        value: JOB_EDUCATION_LEVEL.COLLEGE,
+        label:"Cao Đẳng"
+    },
+    {
+        value: JOB_EDUCATION_LEVEL.UNIVERSITY,
+        label:"Đại Học"
+    },
+    {
+        value: JOB_EDUCATION_LEVEL.POSTGRADUATE,
+        label:"Thạc Sĩ/Tiến Sĩ"
+    },
+]
 
 export const dataLevel = [
-  {
-    value: "student-intern",
-    label: "Sinh Viên/Thực Tập Sinh",
-  },
-  {
-    value: "just-have-graduated",
-    label: "Mới Tốt Nghiệp",
-  },
-  {
-    value: "staff",
-    label: "Nhân Viên",
-  },
-  {
-    value: "teamleader-supervisor",
-    label: "Trường Nhóm/Giám Sát",
-  },
-  {
-    value: "manage",
-    label: "Quản Lý",
-  },
-  {
-    value: "vice-director",
-    label: "Phó Giám Đốc",
-  },
-  {
-    value: "manager",
-    label: "Giám Đốc",
-  },
-  {
-    value: "general-manager",
-    label: "Tổng Giám Đốc",
-  },
-  {
-    value: "president-vicepresident",
-    label: "Chủ Tịch/Phó Chủ Tịch",
-  },
-];
+    {
+        value: JOB_LEVEL.STUDENT_INTERN,
+        label:"Sinh Viên/Thực Tập Sinh"
+    },
+    {
+        value: JOB_LEVEL.JUST_HAVE_GRADUATED,
+        label:"Mới Tốt Nghiệp"
+    },
+    {
+        value: JOB_LEVEL.STAFF,
+        label:"Nhân Viên"
+    },
+    {
+        value: JOB_LEVEL.TEAMLEADER_SUPERVISOR,
+        label:"Trường Nhóm/Giám Sát"
+    },
+    {
+        value: JOB_LEVEL.MANAGER,
+        label:"Quản Lý"
+    },
+    {
+        value: JOB_LEVEL.VICE_DIRECTOR,
+        label:"Phó Giám Đốc"
+    },
+    {
+        value: JOB_LEVEL.GENERAL_DIRECTOR,
+        label:"Tổng Giám Đốc"
+    },
+]
 
 export const dataProfileRequirement = [
   {

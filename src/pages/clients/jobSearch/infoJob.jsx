@@ -33,6 +33,7 @@ import {
   dataExperience,
   dataJobType,
   dataLevel,
+  dataProfileRequirement,
   dataWelfare,
 } from "./js/dataJobsSearch";
 import { useEffect, useState } from "react";
@@ -54,6 +55,7 @@ function InfoJob(props) {
   const [level, setLevel] = useState("");
   const [listWalare, setListWalare] = useState([]);
   const [educationalLevel, setEducationalLevel] = useState("");
+  const [languageProfile, setLanguageProfile] = useState("");
   const [infoUserC, setInfoUserC] = useState(null);
   const authenMainClient = useSelector(
     (status) => status.authenticationReducerClient
@@ -101,6 +103,12 @@ function InfoJob(props) {
         (item) => item.value === record.educationalLevel
       )?.label;
       setEducationalLevel(educational_Level);
+
+      const languageProfile = dataProfileRequirement
+        .filter((item) => record?.presentationLanguage?.includes(item.value))
+        ?.map((dataMap) => dataMap?.label)
+        .join(", ")
+      setLanguageProfile(languageProfile)
     }
   }, [record,authenMainClient]);
   const handleSaveJob = async (value, action = "save") => {
@@ -303,7 +311,7 @@ function InfoJob(props) {
           <li>
             Độ tuổi: {(record.ageMin >= 18 && record.ageMax) ? (<span>{record.ageMin} - {record.ageMax}</span>): "Không giới hạn tuổi"}
           </li>
-          <li>Ngôn ngữ trình bày hồ sơ: {record?.presentationLanguage?.join(", ")}</li>
+          <li>Ngôn ngữ trình bày hồ sơ: {languageProfile || "Chưa cập nhật"}</li>
         </ul>
       </div>
       <div
