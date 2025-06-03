@@ -42,7 +42,7 @@ export const getJobSearchPosition = async (value) => {
 }
 export const getJobAdvancedSearch = async (page = 1, limit = 10, sort_key = "", sort_value = "", keyword = "", job_categorie = "", job_type = "", job_level = "", salary_min = "", salary_max = "",city="",workExperience="",select="") => {
 
-    const result = await Get(`/jobs/advanced-search?page=${page}&limit=${limit}&sort_key=${sort_key}&sort_value=${sort_value}&keyword=${keyword}&job_categories=${job_categorie}&job_type=${job_type}&job_level=${job_level}&salary_min=${salary_min}&salary_max=${salary_max}&workExperience=${workExperience}&city=${city}&selectItem=${select}`);
+    const result = await Get(`/jobs/advanced-search?page=${page}&limit=${limit}&sort_key=${sort_key}&sort_value=${sort_value}&keyword=${encodeURIComponent(keyword)}&job_categories=${job_categorie}&job_type=${job_type}&job_level=${job_level}&salary_min=${salary_min}&salary_max=${salary_max}&workExperience=${workExperience}&city=${city}&selectItem=${select}`);
     return result;
 }
 export const getMayBeInterested = async (value) => {

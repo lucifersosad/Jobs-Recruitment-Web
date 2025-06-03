@@ -63,10 +63,13 @@ function JobSearchAdvanced() {
       values.groupDataSearch = { city: "", keyword: "" };
     }
     const { keyword, city } = values.groupDataSearch;
+
+    const encodeKeyword = encodeURIComponent(keyword)
+
     const { workExperience, salary } = values;
     //city
     const params = {
-      keywords: keyword,
+      keywords: encodeKeyword,
       page: 1,
       city,
       sort_key: sort_key,
