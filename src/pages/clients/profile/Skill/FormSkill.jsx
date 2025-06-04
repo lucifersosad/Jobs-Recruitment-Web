@@ -11,42 +11,76 @@ import {
   Modal,
   Rate,
   Row,
+  Spin,
   Typography,
 } from "antd";
 
-import { DeleteOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
+import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import { removeAccents } from "../../../../helpers/removeAccents";
 import { companies, positions } from "../../../../helpers/mockData";
 import UploadImages from "../../../../components/alls/UploadImage";
 import { updateSkill } from "../../../../services/clients/user-userApi";
+import { getListSkill } from "../../../../services/common";
 
-const FormSkill = ({ getData, skill, skills, closeModal, api, skillOptions }) => {
+const FormSkill = ({ getData, skill, skills, closeModal, api }) => {
   const [openAlert, setOpenAlert] = useState(false)
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [optionsSkill, setOptionsSkill] = useState([]);
+  const [loading, setLoading] = useState(false)
+  const debounceRef = useRef(null);
 
   const [form] = Form.useForm();
 
   const { TextArea } = Input;
 
-  const handleSearchSkills = async (searchText) => {
-    if (!searchText) {
+  const handleSearchSkills = async (searchText) => {    
+    setLoading(true)
+
+    if (!searchText || searchText.trim() === "") {
       setOptionsSkill([]);
+      setLoading(false)
       return;
     }
+    
+    const result = await getListSkill(searchText)
+    console.log("🚀 ~ handleSearchSkills ~ result:", result)
+    
+    const valueUniversity = result.data.map((item) => ({ key: item._id, value: item.title }));
+    const options = valueUniversity.length === 0 ? [] : valueUniversity;
 
-    const filterSkill = skillOptions.filter((item) =>
-      removeAccents(item.title.toLowerCase()).includes(
-        removeAccents(searchText.toLowerCase())
-      )
-    );
-    const valueSkill = filterSkill.map((item) => ({ value: item.title }));
-    const options = valueSkill.length === 0 ? [] : valueSkill;
     setOptionsSkill(options);
+    setLoading(false)
   };
+
+  const handleSearchDebounce = (searchText) => {
+    
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      handleSearchSkills(searchText);
+    }, 500);
+  }
+
+  // const handleSearchSkills = async (searchText) => {
+  //   if (!searchText) {
+  //     setOptionsSkill([]);
+  //     return;
+  //   }
+
+  //   const filterSkill = skillOptions.filter((item) =>
+  //     removeAccents(item.title.toLowerCase()).includes(
+  //       removeAccents(searchText.toLowerCase())
+  //     )
+  //   );
+  //   const valueSkill = filterSkill.map((item) => ({ value: item.title }));
+  //   const options = valueSkill.length === 0 ? [] : valueSkill;
+  //   setOptionsSkill(options);
+  // };
 
   const defaultValue = {
     title: skill ? skill.title : "",
@@ -155,10 +189,11 @@ const FormSkill = ({ getData, skill, skills, closeModal, api, skillOptions }) =>
                 },
               ]}>
               <AutoComplete
+                autoFocus
                 options={optionsSkill}
-                onSearch={handleSearchSkills}
+                onSearch={handleSearchDebounce}
               >
-                <Input placeholder="Nhập kỹ năng" />
+                <Input placeholder="Nhập kỹ năng" suffix={loading && <Spin indicator={<LoadingOutlined spin />} />}/>
               </AutoComplete>
             </Form.Item>
           </Col>

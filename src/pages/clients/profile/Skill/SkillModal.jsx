@@ -11,17 +11,7 @@ const SkillModal = ({
   skill,
   skills,
 }) => {
-  const [skillOptions, setSkillOptions] = useState();
   const [api, contextHolder] = notification.useNotification();
-
-  const getDataDropdown = async () => {
-    const result = await getSkillList();
-    setSkillOptions(result.skills)
-  }
-
-  useEffect(() => {
-    getDataDropdown()
-  }, [])
 
   return (
     <>
@@ -36,7 +26,6 @@ const SkillModal = ({
         footer={null}
       >
         <FormSkill
-          skillOptions={skillOptions}
           getData={getData}
           skill={skill}
           skills={skills}

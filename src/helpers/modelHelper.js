@@ -82,6 +82,7 @@ export const handleUpdateDataJobs = (form, setIsModalOpen, record) => {
     receiveEmail: record.receiveEmail,
     detailWorkExperience: record.detailWorkExperience,
     welfare: record.welfare,
+    skills: record?.skills || []
   };
 
   if (record?.city) {

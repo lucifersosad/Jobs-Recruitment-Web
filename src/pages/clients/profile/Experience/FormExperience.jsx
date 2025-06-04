@@ -21,7 +21,7 @@ import { companies, positions } from "../../../../helpers/mockData";
 import UploadImages from "../../../../components/alls/UploadImage";
 import { updateExperience } from "../../../../services/clients/user-userApi";
 
-const FormExperience = ({ getData, experience, experiences, closeModal, api, skills }) => {
+const FormExperience = ({ getData, experience, experiences, closeModal, api }) => {
   const [openAlert, setOpenAlert] = useState(false)
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);

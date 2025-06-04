@@ -31,7 +31,7 @@ function GroupSearch({ onValueChange,valueCity="",valueKeyword="" }) {
     setValue(value);
   };
   const handleChangeInput = () => {
-    const keyword = keywordRef.current.value || "";
+    const keyword = keywordRef.current.value.trim() || "";
     if (onValueChange) {
       onValueChange({
         keyword,
@@ -65,7 +65,7 @@ function GroupSearch({ onValueChange,valueCity="",valueKeyword="" }) {
         <FontAwesomeIcon icon={faMagnifyingGlass} />
         <input
         
-        defaultValue={keywordRef}
+        defaultValue={keywordRef.current.value}
           onChange={handleChangeInput}
           ref={keywordRef}
           type="text"

@@ -1,7 +1,6 @@
 
 import { Modal, notification } from "antd";
 import { useEffect, useState } from "react";
-import { getSkillList } from "../../../../services/clients/skillApi";
 import FormEducation from "./FormEducation";
 
 const EducationModal = ({
@@ -11,17 +10,7 @@ const EducationModal = ({
   education,
   educations,
 }) => {
-  const [skills, setSkills] = useState();
   const [api, contextHolder] = notification.useNotification();
-
-  const getDataDropdown = async () => {
-    const skills = await getSkillList();
-    setSkills(skills)
-  }
-
-  useEffect(() => {
-    getDataDropdown()
-  }, [])
 
   return (
     <>
@@ -36,7 +25,6 @@ const EducationModal = ({
         footer={null}
       >
         <FormEducation
-          skills={skills}
           getData={getData}
           education={education}
           educations={educations}

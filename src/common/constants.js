@@ -31,8 +31,17 @@ export const JOB_LEVEL = {
   JUST_HAVE_GRADUATED: "just-have-graduated",
   STAFF: "staff",
   TEAMLEADER_SUPERVISOR: "teamleader-supervisor",
-  MANAGE: "manage",
+  MANAGER: "manager",
   VICE_DIRECTOR: "vice-director",
-  GENERAL_MANAGER: "general-manager",
+  GENERAL_DIRECTOR: "general-director",
+}
+
+export const JOB_EDUCATION_LEVEL = {
+  NO_REQUIRED: "no-required",
+  HIGH_SCHOOL: "high-school",
+  INTERMEDIATE: "intermediate-level",
+  COLLEGE: "college",
+  UNIVERSITY: "university",
+  POSTGRADUATE: "postgraduate",
 }
 

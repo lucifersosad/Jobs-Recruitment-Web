@@ -41,6 +41,9 @@ function SuggestedClientSettings() {
 
   useEffect(() => {
     fetchApi(setCity, setSkill, setJobCategories);
+  }, [])
+
+  useEffect(() => {
     //Lấy ra trạng thái của authenMainClient false là chưa đăng nhập true là đã đăng nhập
     const { infoUser } = authenMainClient;
     //Nếu đã đăng nhập thì sẽ set giá trị mặc định cho form

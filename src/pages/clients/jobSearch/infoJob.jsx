@@ -23,6 +23,7 @@ import {
   faLinkedinIn,
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
+import {TagsOutlined} from "@ant-design/icons"
 
 import iconCV from "./images/icon-cv.webp";
 import "./jobSearch.scss";
@@ -33,6 +34,7 @@ import {
   dataExperience,
   dataJobType,
   dataLevel,
+  dataProfileRequirement,
   dataWelfare,
 } from "./js/dataJobsSearch";
 import { useEffect, useState } from "react";
@@ -54,6 +56,7 @@ function InfoJob(props) {
   const [level, setLevel] = useState("");
   const [listWalare, setListWalare] = useState([]);
   const [educationalLevel, setEducationalLevel] = useState("");
+  const [languageProfile, setLanguageProfile] = useState("");
   const [infoUserC, setInfoUserC] = useState(null);
   const authenMainClient = useSelector(
     (status) => status.authenticationReducerClient
@@ -101,6 +104,12 @@ function InfoJob(props) {
         (item) => item.value === record.educationalLevel
       )?.label;
       setEducationalLevel(educational_Level);
+
+      const languageProfile = dataProfileRequirement
+        .filter((item) => record?.presentationLanguage?.includes(item.value))
+        ?.map((dataMap) => dataMap?.label)
+        .join(", ")
+      setLanguageProfile(languageProfile)
     }
   }, [record,authenMainClient]);
   const handleSaveJob = async (value, action = "save") => {
@@ -276,10 +285,22 @@ function InfoJob(props) {
           dangerouslySetInnerHTML={{ __html: record?.detailWorkExperience }}
         />
       </div>
+      {record?.skills?.length > 0 && (
+        <div className="info-job__detailOther detail-row">
+          <h2>Kỹ Năng</h2>
+          <ul style={{ paddingLeft: "15px" }}>
+            {record?.skills?.map((item, index) => (
+              <li key={index}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="info-job__detailOther detail-row">
         <h2>THÔNG TIN KHÁC</h2>
         <ul style={{ paddingLeft: "15px" }}>
-          <li>Bắng cấp: {educationalLevel}</li>
+          <li>Bắng cấp: {educationalLevel || "Chưa cập nhật"}</li>
           <li>
             Giới Tính:{" "}
             {record.gender === "all"
@@ -291,10 +312,10 @@ function InfoJob(props) {
           <li>
             Độ tuổi: {(record.ageMin >= 18 && record.ageMax) ? (<span>{record.ageMin} - {record.ageMax}</span>): "Không giới hạn tuổi"}
           </li>
-          <li>Ngôn ngữ trình bày hồ sơ: {record?.presentationLanguage?.join(", ")}</li>
+          <li>Ngôn ngữ trình bày hồ sơ: {languageProfile || "Chưa cập nhật"}</li>
         </ul>
       </div>
-      <div
+      {/* <div
         className="info-job__detailOther detail-row"
         style={{ marginBottom: "40px" }}
       >
@@ -325,19 +346,20 @@ function InfoJob(props) {
             </a>
           </li>
         </ul>
-      </div>
+      </div> */}
       <div
         className="info-job__listTag detail-row"
         style={{ marginTop: "30px" }}
       >
         <h2 style={{ fontSize: "15px", marginBottom: "15px" }}>
-          JOB TAGS / SKILLS
+          <TagsOutlined style={{marginRight: 4}}/>
+          Từ Khoá
         </h2>
         <ul>
           {record?.listTagName?.length > 0 &&
             record?.listTagName.map((item, index) => (
               <li key={index}>
-                <a href="#!">{item}</a>
+                <a href={record?.listTagSlug[index] && `/viec-lam/tim-viec-lam?keywords=${encodeURIComponent(record.listTagSlug[index])}`}>{item}</a>
               </li>
             ))}
         </ul>

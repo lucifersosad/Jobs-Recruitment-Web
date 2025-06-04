@@ -45,7 +45,7 @@ function SliderHome() {
             key={"avatar"}
             icon={
               <span className="layout__sliderEmployer-item">
-                <img src={infoUserEmployer?.image} alt="" />
+                <img src={infoUserEmployer?.image} alt="" style={{objectFit: "contain"}}/>
               </span>
             }
           >
