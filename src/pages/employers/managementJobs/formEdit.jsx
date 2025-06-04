@@ -50,6 +50,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { getTreeCategories } from "../../../services/admins/jobsCategoriesApi";
 import { FormatTree } from "../../../helpers/selectTree";
 import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
+import SelectSkillDebounce from "../../../components/alls/SelectSkillDebounce";
 
 function FormEdit(props) {
   const { record, fetchApiLoad, messageApi, dataStatus } = props;
@@ -476,7 +477,12 @@ function FormEdit(props) {
                       col={8}
                     />
                   </Form.Item>
-
+                  <Form.Item
+                    label="Kĩ năng"
+                    name="skills"
+                  >
+                    <SelectSkillDebounce />
+                  </Form.Item>
                   <Form.Item
                     label={<TourCustom color={"#f77bac"} tourData={tourData} />}
                   >

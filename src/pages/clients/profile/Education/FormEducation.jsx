@@ -21,10 +21,9 @@ import { removeAccents } from "../../../../helpers/removeAccents";
 import {  majors } from "../../../../helpers/mockData";
 import UploadImages from "../../../../components/alls/UploadImage";
 import { updateEducation, updateExperience } from "../../../../services/clients/user-userApi";
-import { getSkillList } from "../../../../services/clients/skillApi";
 import { getListSchool } from "../../../../services/common";
 
-const FormEducation = ({ getData, education, educations, closeModal, api, skills }) => {
+const FormEducation = ({ getData, education, educations, closeModal, api }) => {
   const [openAlert, setOpenAlert] = useState(false)
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
