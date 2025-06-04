@@ -6,6 +6,6 @@ export async function getListSchool(keyword = "") {
 }
 
 export async function getListSkill(keyword = "") {
-    const result = await Get(`/skills?keyword=${keyword}`);
+    const result = await Get(`/skills?keyword=${encodeURIComponent(keyword)}`);
     return result;
 }

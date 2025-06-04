@@ -239,7 +239,7 @@ function InfoJobEmployer(props) {
         style={{ marginTop: "30px" }}
       >
         <h2 style={{ fontSize: "15px", marginBottom: "15px" }}>
-          JOB TAGS / SKILLS
+          Từ Khoá
         </h2>
         <ul>
           {record?.listTagName?.length > 0 &&

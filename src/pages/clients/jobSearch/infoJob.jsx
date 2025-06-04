@@ -23,6 +23,7 @@ import {
   faLinkedinIn,
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
+import {TagsOutlined} from "@ant-design/icons"
 
 import iconCV from "./images/icon-cv.webp";
 import "./jobSearch.scss";
@@ -314,7 +315,7 @@ function InfoJob(props) {
           <li>Ngôn ngữ trình bày hồ sơ: {languageProfile || "Chưa cập nhật"}</li>
         </ul>
       </div>
-      <div
+      {/* <div
         className="info-job__detailOther detail-row"
         style={{ marginBottom: "40px" }}
       >
@@ -345,19 +346,20 @@ function InfoJob(props) {
             </a>
           </li>
         </ul>
-      </div>
+      </div> */}
       <div
         className="info-job__listTag detail-row"
         style={{ marginTop: "30px" }}
       >
         <h2 style={{ fontSize: "15px", marginBottom: "15px" }}>
-          JOB TAGS / SKILLS
+          <TagsOutlined style={{marginRight: 4}}/>
+          Từ Khoá
         </h2>
         <ul>
           {record?.listTagName?.length > 0 &&
             record?.listTagName.map((item, index) => (
               <li key={index}>
-                <a href="#!">{item}</a>
+                <a href={record?.listTagSlug[index] && `/viec-lam/tim-viec-lam?keywords=${encodeURIComponent(record.listTagSlug[index])}`}>{item}</a>
               </li>
             ))}
         </ul>
