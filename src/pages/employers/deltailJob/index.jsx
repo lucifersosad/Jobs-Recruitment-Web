@@ -6,10 +6,12 @@ import { MailOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faFile } from "@fortawesome/free-regular-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Spark } from "../../../components/clients/customIcon";
 
 import ApplyCv from "./appllyCv";
 import ViewedJob from "./viewedJob";
 import FollowedCv from "./followedCv";
+import SuggestedCv from "./suggestedCv";
 import { useEffect, useState } from "react";
 import { infoJobsEmployer } from "../../../services/employers/jobsApi";
 import { decData } from "../../../helpers/decData";
@@ -109,6 +111,11 @@ function DetailJob() {
       key: "followed_cv",
       icon: <FontAwesomeIcon icon={faPlus} />,
     },
+    {
+      label: <Link  to={"./?active_tab=suggested_cv"}>Ứng viên đề xuất</Link>,
+      key: "suggested_cv",
+      icon: <Spark size={18} style={{display: "inline-block"}}/>
+    },
   ];
 
   return (
@@ -173,6 +180,7 @@ function DetailJob() {
             )}
             {queryGet === "viewed_job" && <ViewedJob record={data} />}
             {queryGet === "followed_cv" && <FollowedCv record={data} />}
+            {queryGet === "suggested_cv" && <SuggestedCv record={data} />}
           </div>
         </div>
       </div>
