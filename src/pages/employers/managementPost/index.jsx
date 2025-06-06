@@ -335,7 +335,8 @@ function ManagementPost() {
   const authenMainEmployer = useSelector(state => state.authenticationReducerEmployer);
   const [companyInfo, setCompanyInfo] = useState({
     name: "Công ty của bạn",
-    avatar: DEFAULT_AVATAR
+    avatar: DEFAULT_AVATAR,
+    id: null // Thêm ID để kiểm tra
   });
   
   // Cập nhật thông tin công ty khi Redux store thay đổi
@@ -344,8 +345,10 @@ function ManagementPost() {
       const employerInfo = authenMainEmployer.infoUserEmployer;
       setCompanyInfo({
         name: employerInfo.companyName || "Công ty của bạn",
-        avatar: employerInfo.logoCompany || DEFAULT_AVATAR
+        avatar: employerInfo.logoCompany || DEFAULT_AVATAR,
+        id: employerInfo._id || employerInfo.id || null // Lấy ID của nhà tuyển dụng
       });
+      console.log("Thông tin nhà tuyển dụng:", employerInfo);
     }
   }, [authenMainEmployer]);
 
@@ -1480,46 +1483,126 @@ function ManagementPost() {
             const content = comment.content || "Không có nội dung";
             const hasReplies = comment.replies && Array.isArray(comment.replies) && comment.replies.length > 0;
             
+            // Kiểm tra xem đây có phải là bình luận của công ty không
+            const isCompanyReply = comment.isCompanyReply || !comment.userId || (comment.userId === null);
+            
             return (
               <div key={`comment-${commentId}`} className="mb-4 comment-thread">
                 {/* Bình luận chính */}
                 <div className="flex items-start space-x-2">
-                  <img
-                    src={userAvatar}
-                    alt={`${userName} Avatar`}
-                    className="w-8 h-8 rounded-full border border-gray-200"
-                    onError={(e) => {
-                      if (e.target.src !== DEFAULT_AVATAR) {
-                        e.target.src = DEFAULT_AVATAR;
-                      }
-                      e.target.onerror = null; // Tránh vòng lặp vô hạn
-                    }}
-                  />
-                  <div className="flex-1">
-                    <div className="bg-gray-100 rounded-lg p-2">
-                      <div className="font-semibold text-sm text-gray-800">
-                        {userName}
+                  {/* Log thông tin debug để tìm ID */}
+                  {console.log("Thông tin bình luận:", {
+                    commentId,
+                    userId_id,
+                    postCompanyId: post.companyId,
+                    postEmployerId: post.employerId,
+                    companyInfoId: companyInfo.id,
+                    userName,
+                    companyName: companyInfo.name,
+                    isMatch: userId_id === companyInfo.id || userId_id === post.companyId || userId_id === post.employerId || userName === companyInfo.name
+                  })}
+                  
+                  {/* Kiểm tra xem đây có phải là bình luận của công ty chủ bài post không */}
+                  {isCompanyReply || 
+                   (typeof userId === 'object' && userId && userId._id === 'company') ||
+                   userId_id === 'company' ||
+                   userId_id === companyInfo.id || // Kiểm tra trùng với ID công ty lấy từ Redux
+                   (post.companyId && userId_id === post.companyId) ||
+                   (post.employerId && userId_id === post.employerId) ||
+                   comment.isCompanyComment === true || // Thêm flag đánh dấu
+                   userName === companyInfo.name ? ( // Kiểm tra tên người dùng trùng với tên công ty
+                    <>
+                      <img
+                        src={userAvatar}
+                        alt={`${userName} Avatar`}
+                        className="w-8 h-8 rounded-full border border-gray-200"
+                        onError={(e) => {
+                          if (e.target.src !== DEFAULT_AVATAR) {
+                            e.target.src = DEFAULT_AVATAR;
+                          }
+                          e.target.onerror = null; // Tránh vòng lặp vô hạn
+                        }}
+                      />
+                      <div className="flex-1">
+                        <div className="bg-gray-100 rounded-lg p-2">
+                          <div className="font-semibold text-sm text-gray-800">
+                            {userName}
+                          </div>
+                          <div className="text-gray-700 text-sm">
+                            {content}
+                          </div>
+                        </div>
+                        <div className="flex items-center mt-1 text-xs text-gray-500 space-x-3">
+                          <span>{comment.timeAgo || "Vừa xong"}</span>
+                          <button
+                            onClick={() => setReplyContent(prev => ({ 
+                              ...prev, 
+                              [`${post.id}-${commentId}`]: "" 
+                            }))}
+                            className="text-blue-500 hover:underline"
+                          >
+                            Trả lời
+                          </button>
+                          {hasReplies && (
+                            <span>{comment.replies.length} phản hồi</span>
+                          )}
+                        </div>
                       </div>
-                      <div className="text-gray-700 text-sm">
-                        {content}
-                      </div>
-                    </div>
-                    <div className="flex items-center mt-1 text-xs text-gray-500 space-x-3">
-                      <span>{comment.timeAgo || "Vừa xong"}</span>
-                      <button
-                        onClick={() => setReplyContent(prev => ({ 
-                          ...prev, 
-                          [`${post.id}-${commentId}`]: "" 
-                        }))}
-                        className="text-blue-500 hover:underline"
+                    </>
+                  ) : (
+                    <>
+                      <a 
+                        href={`http://localhost:3000/profile/${userId_id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cursor-pointer"
                       >
-                        Trả lời
-                      </button>
-                      {hasReplies && (
-                        <span>{comment.replies.length} phản hồi</span>
-                      )}
-                    </div>
-                  </div>
+                        <img
+                          src={userAvatar}
+                          alt={`${userName} Avatar`}
+                          className="w-8 h-8 rounded-full border border-gray-200"
+                          onError={(e) => {
+                            if (e.target.src !== DEFAULT_AVATAR) {
+                              e.target.src = DEFAULT_AVATAR;
+                            }
+                            e.target.onerror = null; // Tránh vòng lặp vô hạn
+                          }}
+                        />
+                      </a>
+                      <div className="flex-1">
+                        <div className="bg-gray-100 rounded-lg p-2">
+                          <div className="font-semibold text-sm text-gray-800">
+                            <a 
+                              href={`http://localhost:3000/profile/${userId_id}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-blue-500 cursor-pointer"
+                            >
+                              {userName}
+                            </a>
+                          </div>
+                          <div className="text-gray-700 text-sm">
+                            {content}
+                          </div>
+                        </div>
+                        <div className="flex items-center mt-1 text-xs text-gray-500 space-x-3">
+                          <span>{comment.timeAgo || "Vừa xong"}</span>
+                          <button
+                            onClick={() => setReplyContent(prev => ({ 
+                              ...prev, 
+                              [`${post.id}-${commentId}`]: "" 
+                            }))}
+                            className="text-blue-500 hover:underline"
+                          >
+                            Trả lời
+                          </button>
+                          {hasReplies && (
+                            <span>{comment.replies.length} phản hồi</span>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Phần hiển thị form trả lời và các replies - đều cùng là con của comment-thread */}
@@ -1637,25 +1720,74 @@ function ManagementPost() {
                           const replyId = reply.id || reply._id || `reply-${replyIndex}`;
                           const replyContent = reply.content || "Không có nội dung";
                           
+                          // Lấy userId để tạo liên kết đến trang profile
+                          let replyUserId = null;
+                          if (typeof reply.userId === 'object' && reply.userId !== null) {
+                            replyUserId = reply.userId._id;
+                          } else if (typeof reply.userId === 'string') {
+                            replyUserId = reply.userId;
+                          }
+                          
                           return (
                             <div key={`reply-${replyId}`} className="ml-8 pl-3 border-l-2 border-gray-200 mb-2 reply-item">
                               <div className="flex items-start space-x-2">
-                                <img
-                                  src={replyUserAvatar}
-                                  alt={`${replyUserName} Avatar`}
-                                  className="w-7 h-7 rounded-full border border-gray-200"
-                                  onError={(e) => {
-                                    if (e.target.src !== DEFAULT_AVATAR) {
-                                      e.target.src = DEFAULT_AVATAR;
-                                    }
-                                    e.target.onerror = null; // Tránh vòng lặp vô hạn
-                                  }}
-                                />
+                                {isCompanyReply || 
+                                 replyUserId === 'company' || 
+                                 replyUserId === companyInfo.id || 
+                                 (post.companyId && replyUserId === post.companyId) ||
+                                 (post.employerId && replyUserId === post.employerId) ||
+                                 reply.isCompanyComment === true || 
+                                 replyUserName === companyInfo.name ? (
+                                  <img
+                                    src={replyUserAvatar}
+                                    alt={`${replyUserName} Avatar`}
+                                    className="w-7 h-7 rounded-full border border-gray-200"
+                                    onError={(e) => {
+                                      if (e.target.src !== DEFAULT_AVATAR) {
+                                        e.target.src = DEFAULT_AVATAR;
+                                      }
+                                      e.target.onerror = null; // Tránh vòng lặp vô hạn
+                                    }}
+                                  />
+                                ) : (
+                                  <a 
+                                    href={`http://localhost:3000/profile/${replyUserId}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="cursor-pointer"
+                                  >
+                                    <img
+                                      src={replyUserAvatar}
+                                      alt={`${replyUserName} Avatar`}
+                                      className="w-7 h-7 rounded-full border border-gray-200"
+                                      onError={(e) => {
+                                        if (e.target.src !== DEFAULT_AVATAR) {
+                                          e.target.src = DEFAULT_AVATAR;
+                                        }
+                                        e.target.onerror = null; // Tránh vòng lặp vô hạn
+                                      }}
+                                    />
+                                  </a>
+                                )}
                                 <div className="flex-1">
                                   <div className="bg-gray-100 rounded-lg p-2">
                                     <div className="font-semibold text-sm text-gray-800">
-                                      {replyUserName}
-                                      {isCompanyReply && <span className="ml-1 text-xs text-blue-500">(Công ty)</span>}
+                                      {isCompanyReply || 
+                                       replyUserId === 'company' || 
+                                       replyUserId === companyInfo.id || 
+                                       (post.companyId && replyUserId === post.companyId) ||
+                                       (post.employerId && replyUserId === post.employerId) ||
+                                       reply.isCompanyComment === true || 
+                                       replyUserName === companyInfo.name ? (
+                                        <>
+                                          {replyUserName}
+                                          <span className="ml-1 text-xs text-blue-500">(Công ty)</span>
+                                        </>
+                                      ) : (
+                                        <span className="text-gray-800">
+                                          {replyUserName}
+                                        </span>
+                                      )}
                                     </div>
                                     <div className="text-gray-700 text-sm">
                                       {replyContent}
@@ -2049,18 +2181,27 @@ function ManagementPost() {
           <div className="max-h-96 overflow-y-auto">
             {currentLikeList.map((user, index) => (
               <div key={`like-${index}`} className="flex items-center py-2 border-b">
-                <img
-                  src={user.avatar || DEFAULT_AVATAR}
-                  alt={`${user.fullName || 'User'} Avatar`}
-                  className="w-10 h-10 rounded-full mr-3 border border-gray-200"
-                  onError={(e) => {
-                    if (e.target.src !== DEFAULT_AVATAR) {
-                      e.target.src = DEFAULT_AVATAR;
-                    }
-                    e.target.onerror = null; // Tránh vòng lặp vô hạn
-                  }}
-                />
-                <div className="font-medium">{user.fullName || user.name || "Người dùng"}</div>
+                <a 
+                  href={`http://localhost:3000/profile/${user._id || user.id}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center cursor-pointer"
+                >
+                  <img
+                    src={user.avatar || DEFAULT_AVATAR}
+                    alt={`${user.fullName || 'User'} Avatar`}
+                    className="w-10 h-10 rounded-full mr-3 border border-gray-200"
+                    onError={(e) => {
+                      if (e.target.src !== DEFAULT_AVATAR) {
+                        e.target.src = DEFAULT_AVATAR;
+                      }
+                      e.target.onerror = null; // Tránh vòng lặp vô hạn
+                    }}
+                  />
+                  <div className="font-medium hover:text-blue-500">
+                    {user.fullName || user.name || "Người dùng"}
+                  </div>
+                </a>
               </div>
             ))}
           </div>
