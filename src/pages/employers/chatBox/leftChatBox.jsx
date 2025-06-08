@@ -76,7 +76,7 @@ function LeftChatBox({ historyChat, idUser }) {
                       }`}
                     >
                       <div className="logo-chat">
-                        <img src={item?.avatar} alt="" />
+                        <img src={item?.avatar} alt="" style={{objectFit: "contain"}}/>
                       </div>
                       <div className="content-chat">
                         <div className="name">
