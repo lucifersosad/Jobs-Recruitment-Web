@@ -5,6 +5,7 @@ import {
   EllipsisOutlined,
   SettingOutlined,
   ShareAltOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import "./profile.scss";
 import { getProfile } from "../../../services/clients/user-userApi";
@@ -16,13 +17,17 @@ import MemoizedNewsJobHeader from "../../../components/clients/newsJobHeader";
 import AwardCard from "./Award/AwardCard";
 import CertificationCard from "./Certification/CertificationCard";
 import ProjectCard from "./Project/ProjectCard";
+import { useParams } from "react-router-dom";
+import InfoModal from "./Info/InfoModal";
 
 const Profile = () => {
+  const { id } = useParams();
   const [loadingProfile, setLoadingProfile] = useState(true);
+  const [open, setOpen] = useState(false)
   const [profile, setProfile] = useState();
 
   const getData = async () => {
-    const result = await getProfile("67585c031a46cc7de695328b");
+    const result = await getProfile(id);
     setProfile(result?.data);
   };
 
@@ -42,7 +47,7 @@ const Profile = () => {
             bordered={false}
             cover={<MemoizedNewsJobHeader />}
             actions={[
-              <Space key="edit" align="center">
+              <Space key="edit" align="center" onClick={() => setOpen(true)}>
                 <EditOutlined />
                 <Typography.Text strong>Chỉnh sửa</Typography.Text> 
               </Space>,
@@ -71,16 +76,16 @@ const Profile = () => {
                         boxShadow: "0 3px 12px -8px rgba(0,0,0,.75)",
                         borderRadius: "50%",
                       }}
-                      src="https://static.topcv.vn/avatars/79523b7ead5d51646909902953e80160-67d693e974ad7.jpg"
-                      alt="avatar default"
+                      src={profile?.avatar || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"}
+                      alt="avatar"
                     />
                   }
                 />
               }
-              title="Đặng Tiến Phát"
-              description="Fullstack Developer"
+              title={profile?.fullName}
+              description={profile?.jobTitle || "[Chưa cập nhật]"}
             />
-            <Typography.Paragraph style={{marginTop: "20px"}}>I have the ability to develop user interfaces and experiences and can quickly adapt to learning many other programming languages when needed.</Typography.Paragraph>
+            <Typography.Paragraph style={{marginTop: "20px"}}>{profile?.jobObjective}</Typography.Paragraph>
           </Card>
           <EducationCard
             getData={getData}
@@ -111,6 +116,7 @@ const Profile = () => {
           />
         </Space>
       </div>
+      <InfoModal open={open} setOpen={setOpen} getData={getData} profile={profile}/>
     </>
   );
 };

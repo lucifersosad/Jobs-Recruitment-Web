@@ -45,7 +45,7 @@ function InfoCompany() {
               <div className="info__company-banner ">
                 <div className="item-1">
                   <div className="image">
-                    <img src={banner} alt="icon" />
+                    <img src={banner} alt="icon"/>
                   </div>
                   <div className="dest">
                     <p>Xác thực tài khoản điện tử</p>
@@ -78,6 +78,7 @@ function InfoCompany() {
                   <div className="d-flex align-items-center">
                     <div className="image">
                       <img
+                        style={{objectFit: "contain"}}
                         src={imageLogo}
                         alt="logo"
                       />

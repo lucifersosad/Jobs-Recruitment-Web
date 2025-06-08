@@ -64,3 +64,7 @@ export const deleteFollowProfile = async (data)=>{
     const result = await AuthPost(`/jobs/delete-follow-profile`,data,checkToken);
     return result;
 }
+export const userSuggestedJob = async (data)=>{
+    const result = await AuthPost(`/jobs/suggest-user`,data,checkToken);
+    return result;
+}

@@ -13,13 +13,14 @@ import {
   faArrowRightFromBracket,
   faGears,
   faLock,
+  faFile,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Link, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 function DropMenu(props) {
   const { infoUser } = props;
-const location = useLocation();
+  const location = useLocation();
 
   const logout = () => {
     Cookies.remove("token-user");
@@ -69,6 +70,18 @@ const location = useLocation();
           <FontAwesomeIcon icon={faGears} />
           <span>Cài đặt gợi ý việc làm</span>
         </Link>
+      ),
+    },
+    {
+      key: "/profile/:slug",
+      label: (
+        <>
+          <Link className="info-drop__button" to={`/profile/${infoUser.id}`}>
+            <FontAwesomeIcon icon={faFile} />
+            <span style={{marginLeft: 8}}>Hồ sơ của tôi</span>
+          </Link>
+         
+        </>
       ),
     },
     // {

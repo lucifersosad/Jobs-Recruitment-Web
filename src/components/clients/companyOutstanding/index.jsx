@@ -36,7 +36,7 @@ function CompanyOutstanding() {
                   </div>
                   <div className="text-box">
                     <a title={item?.companyName} className="title" href={"/cong-ty/"+item?.slug}>
-                      Công ty {item?.companyName}
+                      {item?.companyName}
                     </a>
                     <p className="des">Đang có {item?.countJobs} việc làm</p>
                   </div>

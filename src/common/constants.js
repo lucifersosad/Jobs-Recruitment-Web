@@ -45,3 +45,34 @@ export const JOB_EDUCATION_LEVEL = {
   POSTGRADUATE: "postgraduate",
 }
 
+export const USER_LEVEL = {
+  STUDENT_INTERN: "student-intern",
+  JUST_HAVE_GRADUATED: "just-have-graduated",
+  STAFF: "staff",
+  TEAMLEADER_SUPERVISOR: "teamleader-supervisor",
+  MANAGER: "manager",
+  VICE_DIRECTOR: "vice-director",
+  GENERAL_DIRECTOR: "general-director",
+  OTHER: "other"
+}
+
+export const USER_EDUCATION_LEVEL = {
+  HIGH_SCHOOL: "high-school",
+  INTERMEDIATE: "intermediate-level",
+  COLLEGE: "college",
+  UNIVERSITY: "university",
+  POSTGRADUATE: "postgraduate",
+  OTHER: "other",
+}
+
+export const USER_EXPERIENCE = {
+  NONE: "0_nam",
+  UNDER_ONE_YEAR: "duoi_1_nam",
+  ONE_YEAR: "1_nam",
+  TWO_YEAR: "2_nam",
+  THREE_YEAR: "3_nam",
+  FOUR_YEAR: "4_nam",
+  FIVE_YEAR: "5_nam",
+  OVER_FIVE_YEAR: "tren_5_nam",
+}
+

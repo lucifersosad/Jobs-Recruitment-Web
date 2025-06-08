@@ -70,11 +70,10 @@ function MayBeInterested() {
                   <div className="title">
                     <a 
                       target="_blank" rel="noreferrer" 
-                      title={"Công ty " + recordItem?.companyName}
                       className="title-text title-span-webkit"
                       href={`/tim-viec-lam/${recordItem?.slug}`}
                     >
-                      Công ty {recordItem?.companyName}
+                      {recordItem?.companyName}
                     </a>
                   </div>
                 </div>

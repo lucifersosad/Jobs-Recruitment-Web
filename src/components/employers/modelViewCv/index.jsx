@@ -151,15 +151,6 @@ function ModelViewCv({ record, dataFull, fetchApi }) {
             style={{ width: "100%", height: loadingCv ? "680px" : "100%" }}
           >
             <Spin
-              indicator={
-                <img
-                  style={{
-                    width: "300px",
-                    height: "300px",
-                  }}
-                  src={catLoading}
-                />
-              }
               spinning={loadingCv}
               style={{
                 display: "flex",

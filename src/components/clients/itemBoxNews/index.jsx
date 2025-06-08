@@ -106,7 +106,7 @@ function ItemBoxNews({
                 </label>
               </div>
               <div className="company">
-                <a target="_blank" rel="noreferrer" href={`/cong-ty/${item?.slugCompany}`}>Công ty {item?.companyName}</a>
+                <a target="_blank" rel="noreferrer" href={`/cong-ty/${item?.slugCompany}`}>{item?.companyName}</a>
               </div>
               <div className="updateAt">
                 Cập nhật {formatTimeDifferenceMongoDb(item.updatedAt)} trước

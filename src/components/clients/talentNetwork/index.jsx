@@ -7,7 +7,7 @@ function TalentNetwork() {
   const [listCompany, setListCompany] = useState([]);
   useEffect(() => {
     const fetchApi = async () => {
-      const recordEmployers = await getListEmployers("1", "10");
+      const recordEmployers = await getListEmployers("1", "8");
 
       if (recordEmployers.code === 200) {
         setListCompany(recordEmployers.data);
