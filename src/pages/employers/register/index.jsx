@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./register.scss";
 
-import banner from "./images/banner.png";
+import banner from "/images/banner-auth-employer.png";
 import { Link } from "react-router-dom";
 import {
   getCityApi,
