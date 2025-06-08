@@ -197,7 +197,7 @@ function ChangeInfoCompany() {
               <Form.Item className="col-12 text-center ">
                 <div className="upload-image-form">
                   <div className="upload-image-form__preview">
-                    <img src={imageLogo} alt="logo" />
+                    <img src={imageLogo} alt="logo" style={{objectFit: "contain"}} />
 
                     <div className="upload-image-form__button">
                       <a href="#!" onClick={onButtonClick}>

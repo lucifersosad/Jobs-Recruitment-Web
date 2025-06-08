@@ -1,10 +1,11 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { getPdfToDriver } from "../../../services/employers/jobsApi";
 import { convertFileCvDriverToUrl } from "../../../helpers/convertFileCvDriverToUrl";
-import { Spin } from "antd";
+import { Flex, Spin } from "antd";
 import catLoading from "./images/cat.gif";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { getMyCvFile } from "../../../services/employers/myCvsApi";
+import { LoadingOutlined } from '@ant-design/icons';
 
 function CvProfileUser({ record }) {
   const [linkCv, setLinkCv] = useState("");
@@ -57,16 +58,13 @@ function CvProfileUser({ record }) {
         style={{ width: "100%", height: loadingCv ? "474px" : "100%" }}
       >
         <Spin
-          indicator={
-            <img
-              style={{
-                width: "300px",
-                height: "300px",
-              }}
-              src={catLoading}
-            />
-          }
           spinning={loadingCv}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
         >
           {!loadingCv && (record?.cv?.length === 0 || linkCv === "") && <div>Người dùng chưa có CV</div>}
           {linkCv && (

@@ -26,7 +26,7 @@ const SelectSkillDebounce = ({...rest}) => {
     const result = await getListSkill(searchText)
     
     const valueUniversity = result.data.map((item) => ({ key: item._id, value: item.title }));
-    const options = valueUniversity.length === 0 ? [] : valueUniversity;
+    const options = valueUniversity.length === 0 ? [{value: searchText}] : valueUniversity;
 
     setOptionsSkill(options);
     setLoading(false)
@@ -46,12 +46,12 @@ const SelectSkillDebounce = ({...rest}) => {
     <Select 
       mode="multiple"
       placeholder="Tìm kiếm kĩ năng"
-      notFoundContent={loading ? <Spin tip="Đang tải" size="large"><div style={contentStyle} /></Spin> : 'Không Tìm Thấy Kĩ Năng!'}
+      notFoundContent={loading ? <Spin tip="Đang tải" size="large"><div style={contentStyle} /></Spin> : null }
       filterOption={false}
       onSearch={handleSearchDebounce}
       options={optionsSkill}
       allowClear={true}
-      autoClearSearchValue={false}
+      // autoClearSearchValue={false}
       onBlur={() => setOptionsSkill([])}
       onChange={(value) => console.log(value)}
       {...rest}

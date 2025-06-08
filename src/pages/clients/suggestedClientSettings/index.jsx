@@ -1,4 +1,4 @@
-import { DatePicker, Form, Radio, Select, Spin } from "antd";
+import { Col, DatePicker, Form, Radio, Row, Select, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useDebounce } from "use-debounce";
 import { useCallback, useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import { faBriefcase, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useDispatch, useSelector } from "react-redux";
-import { optionsSalary, optionsYearsOfExperience } from "./js/options";
+import { dataDegree, dataExperience, dataLevel, optionsSalary, optionsYearsOfExperience } from "./js/options";
 
 import { fetchApi, loadApi } from "./js/fetchApi";
 import { removeAccents } from "../../../helpers/removeAccents";
@@ -16,6 +16,7 @@ import { changeJobSuggestions } from "../../../services/clients/user-userApi";
 
 import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updateDataClient";
 import moment from "moment";
+import SelectSkillDebounce from "../../../components/alls/SelectSkillDebounce";
 function SuggestedClientSettings() {
   const [message, setMessage] = useState("");
   const [noti, setNoti] = useState(false);
@@ -53,6 +54,12 @@ function SuggestedClientSettings() {
     if(infoUser?.dateOfBirth){
       objectVlue.dateOfBirth = moment(infoUser?.dateOfBirth);
     }
+    if (infoUser?.skills?.length > 0 ) {
+      const newSkills = objectVlue.skills.map(item => item?.title)
+      objectVlue.skills = newSkills;
+    } else {
+      objectVlue.skills = []
+    }
     form.setFieldsValue(objectVlue);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,7 +73,11 @@ function SuggestedClientSettings() {
    
      //Chuyển đổi thành dạng date của moment
       //Chuyển đổi thành dạng iso
-      valueForm.dateOfBirth= valueForm.dateOfBirth.toISOString();
+      valueForm.dateOfBirth = valueForm.dateOfBirth.toISOString();
+      const newSkills = valueForm.skills?.map(item => ({title: item}))
+      valueForm.skills = newSkills
+      console.log("🚀 ~ handleForm ~ valueForm:", valueForm)
+      // return;
     
       setLoading(true);
 
@@ -150,7 +161,7 @@ function SuggestedClientSettings() {
               <hr />
               <div className="box-settings-info__h2">
                 <FontAwesomeIcon icon={faUser} />
-                <h2 className="col-6">Thông tin cá nhân</h2>
+                <h2 className="col-6">Thông tin cơ bản</h2>
               </div>
 
               <Form.Item
@@ -166,7 +177,7 @@ function SuggestedClientSettings() {
                 <Radio.Group>
                   <Radio value={1}>Nữ</Radio>
                   <Radio value={2}>Nam</Radio>
-                  <Radio value={3}>Không xác định</Radio>
+                  <Radio value={3}>Khác</Radio>
                 </Radio.Group>
               </Form.Item>
               <Form.Item
@@ -186,7 +197,95 @@ function SuggestedClientSettings() {
                   }}
                 />
               </Form.Item>
-
+              <Row>
+                <Col span={24}>
+                  <Form.Item
+                    label="Bằng cấp cao nhất"
+                    name="educationalLevel"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Bằng cấp bắt buộc",
+                      },
+                    ]}
+                  >
+                    <Select 
+                      filterOption={(input, option) =>
+                        removeAccents(option.label)
+                          .toLowerCase()
+                          .includes(removeAccents(input).toLowerCase()) ||
+                        removeAccents(option.value)
+                          .toLowerCase()
+                          .includes(removeAccents(input).toLowerCase())
+                      }
+                      showSearch
+                      placeholder="-- Chọn bằng cấp cao nhất --"
+                      size="large"
+                      options={dataDegree}
+                    />
+                  </Form.Item>
+                </Col>
+                
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <Form.Item
+                    label="Cấp bậc hiện tại"
+                    name="level"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Cấp bậc bắt buộc",
+                      },
+                    ]}
+                  >
+                    <Select 
+                      filterOption={(input, option) =>
+                        removeAccents(option.label)
+                          .toLowerCase()
+                          .includes(removeAccents(input).toLowerCase()) ||
+                        removeAccents(option.value)
+                          .toLowerCase()
+                          .includes(removeAccents(input).toLowerCase())
+                      }
+                      showSearch
+                      placeholder="-- Chọn cấp bậc hiện tại --"
+                      size="large"
+                      options={dataLevel}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <Form.Item
+                    label="Kinh nghiệm"
+                    name="yearsOfExperience"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng chọn kinh nghiệm",
+                      },
+                    ]}
+                  >
+                    <Select
+                      filterOption={(input, option) =>
+                        removeAccents(option.label)
+                          .toLowerCase()
+                          .includes(removeAccents(input).toLowerCase()) ||
+                        removeAccents(option.value)
+                          .toLowerCase()
+                          .includes(removeAccents(input).toLowerCase())
+                      }
+                      showSearch
+                      placeholder="-- Chọn kinh nghiệm làm việc mong muốn --"
+                      size="large"
+                      options={dataExperience}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              
               <hr />
 
               <div className="box-settings-info__h2">
@@ -194,7 +293,7 @@ function SuggestedClientSettings() {
                 <h2>Nhu cầu công việc</h2>
               </div>
               <Form.Item
-                label="Vị trí chuyên môn"
+                label="Ngành nghề"
                 name="job_categorie_id"
                 rules={[
                   {
@@ -221,36 +320,7 @@ function SuggestedClientSettings() {
                   // maxCount={5}
                 />
               </Form.Item>
-              <Form.Item
-                label="Kỹ năng"
-                name="skill_id"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng chọn kỹ năng",
-                  },
-                ]}
-              >
-                <Select
-                  filterOption={(input, option) =>
-                    removeAccents(option.label)
-                      .toLowerCase()
-                      .includes(removeAccents(input).toLowerCase()) ||
-                    removeAccents(option.value)
-                      .toLowerCase()
-                      .includes(removeAccents(input).toLowerCase())
-                  }
-                  mode="multiple"
-                  maxTagCount={3}
-                  // maxTagTextLength={10}
-                  maxCount={MAX_COUNT}
-                  showSearch
-                  placeholder="-- Chọn kỹ năng của bạn --"
-                  size="large"
-                  options={skill}
-                />
-              </Form.Item>
-              <Form.Item
+              {/* <Form.Item
                 label="Kinh nghiệm"
                 name="yearsOfExperience"
                 rules={[
@@ -274,7 +344,7 @@ function SuggestedClientSettings() {
                   size="large"
                   options={optionsYearsOfExperience}
                 />
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item
                 label="Mức lương"
                 name="desiredSalary"

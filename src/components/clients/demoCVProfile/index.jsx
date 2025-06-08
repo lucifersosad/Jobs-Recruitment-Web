@@ -1,4 +1,4 @@
-import { Button, Modal, Spin, Tooltip } from "antd";
+import { Button, Flex, Modal, Spin, Tooltip } from "antd";
 import { useState } from "react";
 
 import { convertFileCvDriverToUrl } from "../../../helpers/convertFileCvDriverToUrl";
@@ -11,7 +11,7 @@ import { getPdfToDriverClient } from "../../../services/clients/jobsApi";
 import { getMyCvFile } from "../../../services/clients/myCvsApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { DeleteOutlined, EditOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EyeOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons';
 
 function DemoCvProfile({ record }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,15 +77,6 @@ function DemoCvProfile({ record }) {
             style={{ width: "100%", height: loadingCv ? "680px" : "100%" }}
           >
             <Spin
-              indicator={
-                <img
-                  style={{
-                    width: "300px",
-                    height: "300px",
-                  }}
-                  src={catLoading}
-                />
-              }
               spinning={loadingCv}
               style={{
                 display: "flex",

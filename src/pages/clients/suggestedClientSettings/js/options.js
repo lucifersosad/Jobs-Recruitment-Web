@@ -1,3 +1,5 @@
+import { USER_EDUCATION_LEVEL, USER_EXPERIENCE, USER_LEVEL } from "../../../../common/constants"
+
 export const optionsSalary = [
     {
         label: "Dưới 10 triệu",
@@ -67,4 +69,98 @@ export const optionsYearsOfExperience =  [
         label: "Trên 5 năm",
         value: "tren_5_nam",
     }
+]
+
+export const dataExperience  = [
+    {
+        value: USER_EXPERIENCE.NONE,
+        label:"Chưa có kinh nghiệm"
+    },
+    {
+        value: USER_EXPERIENCE.UNDER_ONE_YEAR,
+        label:"Dưới 1 Năm"
+    },
+    {
+        value: USER_EXPERIENCE.ONE_YEAR,
+        label:"1 Năm"
+    },
+    {
+        value: USER_EXPERIENCE.TWO_YEAR,
+        label:"2 Năm"
+    },
+    {
+        value: USER_EXPERIENCE.THREE_YEAR,
+        label:"3 Năm"
+    },
+    {
+        value: USER_EXPERIENCE.FOUR_YEAR,
+        label:"4 Năm"
+    },
+    {
+        value: USER_EXPERIENCE.FIVE_YEAR,
+        label:"5 Năm"
+    },
+ 
+    {
+        value: USER_EXPERIENCE.OVER_FIVE_YEAR,
+        label:"Trên 5 Năm"
+    },
+]
+
+export const dataLevel = [
+    {
+        value: USER_LEVEL.STUDENT_INTERN,
+        label:"Sinh Viên/Thực Tập Sinh"
+    },
+    {
+        value: USER_LEVEL.JUST_HAVE_GRADUATED,
+        label:"Mới Tốt Nghiệp"
+    },
+    {
+        value: USER_LEVEL.STAFF,
+        label:"Nhân Viên"
+    },
+    {
+        value: USER_LEVEL.TEAMLEADER_SUPERVISOR,
+        label:"Trường Nhóm/Giám Sát"
+    },
+    {
+        value: USER_LEVEL.MANAGER,
+        label:"Quản Lý"
+    },
+    {
+        value: USER_LEVEL.VICE_DIRECTOR,
+        label:"Phó Giám Đốc"
+    },
+    {
+        value: USER_LEVEL.GENERAL_DIRECTOR,
+        label:"Tổng Giám Đốc"
+    },
+]
+
+export const dataDegree  = [
+    {
+        value: USER_EDUCATION_LEVEL.HIGH_SCHOOL,
+        label:"Trung Học"
+    },
+    {
+        value: USER_EDUCATION_LEVEL.INTERMEDIATE,
+        label:"Trung Cấp"
+    },
+    {
+        value: USER_EDUCATION_LEVEL.COLLEGE,
+        label:"Cao Đẳng"
+    },
+    {
+        value: USER_EDUCATION_LEVEL.UNIVERSITY,
+        label:"Đại Học"
+    },
+    {
+        value: USER_EDUCATION_LEVEL.POSTGRADUATE,
+        label:"Thạc Sĩ/Tiến Sĩ"
+    },
+    {
+        value: USER_EDUCATION_LEVEL.OTHER,
+        label: "Khác"
+    },
 ]
