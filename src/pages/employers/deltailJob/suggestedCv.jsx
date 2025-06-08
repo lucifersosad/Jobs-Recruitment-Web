@@ -4,6 +4,7 @@ import {
   buyUserPreviewJob,
   followUserProfile,
   userPreviewJob,
+  userSuggestedJob,
 } from "../../../services/employers/jobsApi";
 import MemoizedFilterDropdownCustom from "../../../components/employers/filterDropdownCustom";
 import { removeAccents } from "../../../helpers/removeAccents";
@@ -34,7 +35,7 @@ function SuggestedCv({ record }) {
     const objectNew = {
       idJob: record._id,
     };
-    const result = await userPreviewJob(objectNew);
+    const result = await userSuggestedJob(objectNew);
     if (result.code === 200) {
       setData(result?.data);
       //   setData(result.data);

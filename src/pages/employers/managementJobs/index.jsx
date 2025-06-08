@@ -20,9 +20,14 @@ function ManagementJobsEmployer() {
   const [statuss, setStatus] = useState("");
   const [keywords, setKeywords] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
+  const [initLoading, setInitLoading] = useState(true)
 
   useEffect(() => {
-    fetchApi(setData, statuss, keywords);
+    const fetchDataLoading = async () => {
+      await fetchApi(setData, statuss, keywords);
+      setInitLoading(false)
+    }
+    fetchDataLoading()
   }, []);
 
   const onChangeSwitch = async (checked, id) => {
@@ -252,6 +257,7 @@ function ManagementJobsEmployer() {
         </div>
         <div className="table-form">
           <Table
+            loading={initLoading}
             showSorterTooltip={false}
             columns={columns}
             dataSource={dataFull}

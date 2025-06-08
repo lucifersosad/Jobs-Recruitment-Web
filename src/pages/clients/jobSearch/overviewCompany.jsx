@@ -79,13 +79,13 @@ function OverviewCompany({ record }) {
           <h3 className="mb-3 title-all">GIỚI THIỆU VỀ CÔNG TY</h3>
           <hr />
           <div className="content">
-            {/* <div
+            <div
               dangerouslySetInnerHTML={{
                 __html: infoCompany?.descriptionCompany,
               }}
-            /> */}
+            />
 
-            {infoCompany?.descriptionCompany ? (
+            {/* {infoCompany?.descriptionCompany ? (
               <>
                 <div
                   className={"dest " + (isExpanded ? "expanded " : "")}
@@ -111,7 +111,7 @@ function OverviewCompany({ record }) {
               </>) : (
                 <div>Chưa cập nhật</div>
               )
-            }
+            } */}
           </div>
         </div>
         <div className="job-company">
