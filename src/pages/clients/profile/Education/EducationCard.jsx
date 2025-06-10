@@ -32,12 +32,19 @@ const EducationCard = ({canAddOrEdit, profile, loading, getData}) => {
         >
           {profile?.educations && profile?.educations?.length === 0 ? (
             <Flex align="center">
-              <Space size={"large"} direction="vertical" style={{width: "50%"}}>
+              {canAddOrEdit ? (
+                <Space size={"large"} direction="vertical" style={{width: "50%"}}>
                 <Typography.Text style={{fontSize: "20px"}}>
                   Cập nhật thông tin học vấn của bạn 
                 </Typography.Text>
-                <Button type="primary" ghost size="large" onClick={handleAdd}>Thêm mục</Button>
               </Space>
+              ): (
+                <Space size={"large"} direction="vertical" style={{width: "50%"}}>
+                  <Typography.Text style={{fontSize: "20px"}}>
+                    Không có thông tin học vấn
+                  </Typography.Text>
+                </Space>
+              )}
               <Avatar size={150} src={"https://www.topcv.vn/v3/profile/profile-png/profile-education.png"} shape="square" style={{marginLeft: "auto"}} className="ml-5"/>
             </Flex>
           ) : (
