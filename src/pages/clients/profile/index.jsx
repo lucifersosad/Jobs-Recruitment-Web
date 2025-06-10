@@ -10,7 +10,7 @@ import {
 import "./profile.scss";
 import { getProfile } from "../../../services/clients/user-userApi";
 import ExperienceCard from "./Experience/ExperienceCard";
-import { Avatar, Card, Flex, Space, Typography } from "antd";
+import { Avatar, Card, Flex, Space, Spin, Typography } from "antd";
 import EducationCard from "./Education/EducationCard";
 import SkillCard from "./Skill/SkillCard";
 import MemoizedNewsJobHeader from "../../../components/clients/newsJobHeader";
@@ -19,12 +19,18 @@ import CertificationCard from "./Certification/CertificationCard";
 import ProjectCard from "./Project/ProjectCard";
 import { useParams } from "react-router-dom";
 import InfoModal from "./Info/InfoModal";
+import { useSelector } from "react-redux";
+import defaultAvatar from "/images/default-cv-pdf-avatar.jpg"
 
 const Profile = () => {
   const { id } = useParams();
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [open, setOpen] = useState(false)
   const [profile, setProfile] = useState();
+
+  const authenMainClient = useSelector(
+    (status) => status.authenticationReducerClient
+  );
 
   const getData = async () => {
     const result = await getProfile(id);
@@ -41,12 +47,12 @@ const Profile = () => {
 
   return (
     <>
-      <div className="col-8">
+      <div className={authenMainClient?.infoUser?.id === id ? "col-8" : "col-6 offset-3"}>
         <Space direction="vertical" size="large" style={{ width: "100%" }}>
           <Card
             bordered={false}
             cover={<MemoizedNewsJobHeader />}
-            actions={[
+            actions={authenMainClient?.infoUser?.id === id && [
               <Space key="edit" align="center" onClick={() => setOpen(true)}>
                 <EditOutlined />
                 <Typography.Text strong>Chỉnh sửa</Typography.Text> 
@@ -76,7 +82,7 @@ const Profile = () => {
                         boxShadow: "0 3px 12px -8px rgba(0,0,0,.75)",
                         borderRadius: "50%",
                       }}
-                      src={profile?.avatar || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"}
+                      src={profile?.avatar || defaultAvatar}
                       alt="avatar"
                     />
                   }
@@ -88,21 +94,24 @@ const Profile = () => {
             <Typography.Paragraph style={{marginTop: "20px"}}>{profile?.jobObjective}</Typography.Paragraph>
           </Card>
           <EducationCard
+            canAddOrEdit={authenMainClient?.infoUser?.id === id}
             getData={getData}
             loading={loadingProfile}
             profile={profile}
           />
           <ExperienceCard
+            canAddOrEdit={authenMainClient?.infoUser?.id === id}
             getData={getData}
             loading={loadingProfile}
             profile={profile}
           />
           <SkillCard
+            canAddOrEdit={authenMainClient?.infoUser?.id === id}
             getData={getData}
             loading={loadingProfile}
             profile={profile}
           />
-          <CertificationCard 
+          {/* <CertificationCard 
             loading={loadingProfile}
             profile={profile}
           />
@@ -113,7 +122,7 @@ const Profile = () => {
           <ProjectCard
             loading={loadingProfile}
             profile={profile}
-          />
+          /> */}
         </Space>
       </div>
       <InfoModal open={open} setOpen={setOpen} getData={getData} profile={profile}/>

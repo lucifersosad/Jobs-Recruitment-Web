@@ -3,7 +3,7 @@ import { PlusSquareOutlined, EditOutlined } from "@ant-design/icons";
 import ExperienceModal from "./ExperienceModal";
 import { useState } from "react";
 
-const ExperienceCard = ({profile, loading, getData}) => {
+const ExperienceCard = ({canAddOrEdit, profile, loading, getData}) => {
   const [open, setOpen] = useState(false);
   const [experience, setExperience] = useState();
 
@@ -18,7 +18,7 @@ const ExperienceCard = ({profile, loading, getData}) => {
         <Card
           loading={loading}
           className="box-profile"
-          extra={
+          extra={canAddOrEdit &&
             profile?.experiences?.length > 0 && (
               <Flex>
                 <PlusSquareOutlined
@@ -46,7 +46,7 @@ const ExperienceCard = ({profile, loading, getData}) => {
                 <List.Item
                   key={index}
                   className="box-profile__item"
-                  extra={
+                  extra={canAddOrEdit && 
                     <EditOutlined
                       className="icon-edit"
                       onClick={() => {

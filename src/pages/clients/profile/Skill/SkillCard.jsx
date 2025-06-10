@@ -3,7 +3,7 @@ import { PlusSquareOutlined, EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import SkillModal from "./SkillModal";
 
-const SkillCard = ({profile, loading, getData}) => {
+const SkillCard = ({canAddOrEdit, profile, loading, getData}) => {
   const [open, setOpen] = useState(false);
   const [skill, setSkill] = useState();
 
@@ -18,7 +18,7 @@ const SkillCard = ({profile, loading, getData}) => {
         <Card
           loading={loading}
           className="box-profile"
-          extra={
+          extra={canAddOrEdit && 
             profile?.skills?.length > 0 && (
               <Flex>
                 <PlusSquareOutlined
@@ -46,7 +46,7 @@ const SkillCard = ({profile, loading, getData}) => {
                 <List.Item
                   key={index}
                   className="box-profile__item"
-                  extra={
+                  extra={canAddOrEdit && 
                     <EditOutlined
                       className="icon-edit"
                       onClick={() => {
