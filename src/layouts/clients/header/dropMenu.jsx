@@ -76,7 +76,7 @@ function DropMenu(props) {
       key: "/profile/:slug",
       label: (
         <>
-          <Link className="info-drop__button" to={`/profile/${infoUser.id}`}>
+          <Link className="info-drop__button" to={`/my-profile/${infoUser.id}`}>
             <FontAwesomeIcon icon={faFile} />
             <span style={{marginLeft: 8}}>Hồ sơ của tôi</span>
           </Link>

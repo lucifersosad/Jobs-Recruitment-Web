@@ -95,8 +95,8 @@ function ManagementCategories() {
             dataIndex: 'thumbnail',
             key: 'thumbnail',
 
-            render: (_, { thumbnail }) => (
-                <img src={thumbnail} alt={`${thumbnail}.jpg`}></img>
+            render: (_, { thumbnail, title }) => (
+                <img src={thumbnail} alt={`${title}`}></img>
             )
         },
         {
@@ -185,6 +185,7 @@ function ManagementCategories() {
 
         const result = await changeMultipleCategories(newRecord);
         if (result.code === 200) {
+            setDeleteId([])
             api.success({
                 message: `Success`,
                 description: (
