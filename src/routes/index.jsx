@@ -101,7 +101,7 @@ export const routes = [
             element: <PostProfile />,
           },
           {
-            path: "profile/:id",
+            path: "my-profile/:id",
             element: <SettingsAccount />,
             children: [
               {
@@ -217,6 +217,16 @@ export const routes = [
     children: [
       {
         element: <PreviewCv />,
+        index: true,
+      },
+    ],
+  },
+  {
+    path: "/profile/:id",
+    element: <LayoutClient />,
+    children: [
+      {
+        element: <Profile />,
         index: true,
       },
     ],

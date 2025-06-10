@@ -7,7 +7,7 @@ function LayoutClient() {
     return (
     <>
       <Layout>
-        <Content>
+        <Content style={{background: "#EDF1F5", paddingTop: "20px"}}>
           <Outlet />
         </Content>
       </Layout>
