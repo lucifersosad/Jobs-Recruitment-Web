@@ -1,4 +1,4 @@
-import { Carousel, Slider } from "antd";
+import { Card, Carousel, Flex, Slider } from "antd";
 
 import "./dashboard.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +17,21 @@ import {
   faFileLines,
   faStar,
 } from "@fortawesome/free-regular-svg-icons";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts';
 
 import { PhoneOutlined } from "@ant-design/icons";
 import MEMBER from "./images/MEMBER.gif";
@@ -32,6 +47,9 @@ import APlayer from "aplayer";
 import { useSelector } from "react-redux";
 import { statisticCompany } from "../../../services/employers/employer-userApi";
 // import { onMessageListener, requestForToken } from "../../../helpers/firebase";
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
 function DashboardEmployer() {
   const [imageRole, setImageRole] = React.useState(MEMBER);
   const [data, setData] = useState([]);
@@ -47,25 +65,29 @@ function DashboardEmployer() {
   );
   const [infoUserEmployer, setInfoUserEmployer] = useState({});
 
-  const config = {
+const config = {
     data,
     xField: "type",
     yField: "value",
     height: 313,
-    autoFit: true,
-    shapeField: "column25D",
+    // autoFit: true,
+    // shapeField: "column25D",
     style: {
-      maxWidth: 20,
-      fill: "rgb(241 150 187 / 90%)",
+      maxWidth: 55,
+      // fill: "rgb(241 150 187 / 90%)",
     },
     axis: {
       y: {
         labelFormatter: ".0%",
       },
     },
-
-    colorField: "rgb(233 107 158)", // or seriesField in some cases
+    label: {
+      text: (d) => `${(d.value * 100).toFixed(0)}%`,
+      textBaseline: 'bottom',
+    },
+    colorField: "rgb(233 107 158)",
   };
+
   const handleChangeSlider = (value) => {
     const roles = [
       { limit: 300, role: MEMBER },
@@ -78,21 +100,43 @@ function DashboardEmployer() {
     const { role } = roles.find(({ limit }) => value < limit);
     setImageRole(role);
   };
+
+  const viewsData = [
+    { date: 'T1', views: 150, applications: 30 },
+    { date: 'T2', views: 220, applications: 45 },
+    { date: 'T3', views: 180, applications: 35 },
+    { date: 'T4', views: 320, applications: 60 },
+    { date: 'T5', views: 250, applications: 50 },
+    { date: 'T6', views: 280, applications: 55 },
+  ];
+
+  const jobStatusData = [
+    { name: 'Đang hiển thị', value: 12 },
+    { name: 'Chờ duyệt', value: 5 },
+    { name: 'Hết hạn', value: 3 },
+  ];
+
+  const applicationStatusData = [
+    { status: 'Chờ duyệt', count: 25 },
+    { status: 'Đã duyệt', count: 32 },
+    { status: 'Từ chối', count: 15 },
+  ];
+
   useEffect(() => {
-    if (authenMainEmployer?.status === true) {
-      new APlayer({
-        container: document.getElementById("aplayer"),
-        audio: [
-          {
-            name: "Closure",
-            artist: "Hayd",
-            url: "https://res.cloudinary.com/dmmz10szo/video/upload/v1709551928/music_ik8qur.mp3",
-            cover:
-              "https://media.istockphoto.com/id/917367814/photo/pink-abstract-background-bright-colorful-textured-sparkling-backdrop.webp?b=1&s=170667a&w=0&k=20&c=E5TRBRXj9Ldm8gR09gYaK8JB8mu5Stbq4FLWuOg5BXE=",
-          },
-        ],
-      });
-    }
+    // if (authenMainEmployer?.status === true) {
+    //   new APlayer({
+    //     container: document.getElementById("aplayer"),
+    //     audio: [
+    //       {
+    //         name: "Closure",
+    //         artist: "Hayd",
+    //         url: "https://res.cloudinary.com/dmmz10szo/video/upload/v1709551928/music_ik8qur.mp3",
+    //         cover:
+    //           "https://media.istockphoto.com/id/917367814/photo/pink-abstract-background-bright-colorful-textured-sparkling-backdrop.webp?b=1&s=170667a&w=0&k=20&c=E5TRBRXj9Ldm8gR09gYaK8JB8mu5Stbq4FLWuOg5BXE=",
+    //       },
+    //     ],
+    //   });
+    // }
 
     const { infoUserEmployer } = authenMainEmployer;
 
@@ -114,7 +158,7 @@ function DashboardEmployer() {
       }
     };
     fetchApi();
-  }, [infoUserEmployer]);
+  }, []);
 
   return (
     <>
@@ -123,7 +167,7 @@ function DashboardEmployer() {
           <div className=" title-employer-setting  ml-10 mb-4">
             <h3>Bảng tin</h3>
           </div>
-          <div className="banner-slick ">
+          {/* <div className="banner-slick ">
             <Carousel
               autoplay
               ref={carouselRef}
@@ -173,10 +217,10 @@ function DashboardEmployer() {
             >
               <FontAwesomeIcon icon={faArrowRight} />
             </div>
-          </div>
+          </div> */}
           <div className="box-content ml-10 mt-3">
             <div className="row gx-3 gy-3">
-              <div className="col-6">
+              <div className="col-12">
                 <div className="item-box">
                   <div className="box-1 pd-item-d">
                     <div className="box-head">
@@ -185,7 +229,7 @@ function DashboardEmployer() {
                         <FontAwesomeIcon icon={faInfo} />
                       </span>
                     </div>
-                    <div className="box-body ">
+                    <div className="box-body pb-3">
                       <div className="row gx-3 gy-3">
                         <div className="col-6">
                           <BoxInfoColor
@@ -231,9 +275,88 @@ function DashboardEmployer() {
                   </div>
                 </div>
               </div>
+              <div className="col-6">
+                <Card title="Thống kê lượt xem và ứng tuyển" hoverable>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={viewsData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis yAxisId="left" />
+                      <YAxis yAxisId="right" orientation="right" />
+                      <Tooltip />
+                      <Legend />
+                      <Line
+                        yAxisId="left"
+                        type="monotone"
+                        dataKey="views"
+                        name="Lượt xem"
+                        stroke="#1890ff"
+                        strokeWidth={2}
+                        dot={{ stroke: '#1890ff', strokeWidth: 2, r: 4 }}
+                        activeDot={{ r: 8 }}
+                      />
+                      <Line
+                        yAxisId="right"
+                        type="monotone"
+                        dataKey="applications"
+                        name="Lượt ứng tuyển"
+                        stroke="#52c41a"
+                        strokeWidth={2}
+                        dot={{ stroke: '#52c41a', strokeWidth: 2, r: 4 }}
+                        activeDot={{ r: 8 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </Card>
+              </div>
 
               <div className="col-6">
-                <div className="item-box">
+                <Card title="Trạng thái tin tuyển dụng" hoverable>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={jobStatusData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {jobStatusData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </Card>
+              </div>
+
+              <div className="col-6">
+                <Card title="Trạng thái ứng tuyển" hoverable>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={applicationStatusData} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis type="number" />
+                      <YAxis dataKey="status" type="category" width={100} />
+                      <Tooltip />
+                      <Legend />
+                      <Bar 
+                        dataKey="count" 
+                        name="Số lượng" 
+                        fill="#722ed1"
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </Card>
+              </div>
+
+              <div className="col-6">
+                <Flex vertical style={{height: "100%"}}>
+                  <div className="item-box" >
                   <div className="box-2 pd-item-d">
                     <div className="box-head-v">
                       <div className="user">
@@ -272,7 +395,7 @@ function DashboardEmployer() {
                     </div>
                   </div>
                 </div>
-                <div className="item-box mt-2  w-d-100">
+                <div className="item-box mt-2  w-d-100 pb-2" style={{flex: 1}}>
                   <div className="box-2 pd-item-d">
                     <div className="box-body-v">
                       <div className="box-slider" style={{ padding: "0 10px" }}>
@@ -308,65 +431,12 @@ function DashboardEmployer() {
                             </a>
                           </div>
                         </div>
-
-                        <div className="content__flex">
-                          <div className="content col-8">
-                            <p className="desc">
-                              Bạn cần đạt tối thiểu cấp độ xác thực 3 để thực
-                              hiện xét hạng khách hàng và sử dụng các quyền lợi
-                              tương ứng.
-                            </p>
-                            <p className="prew">
-                              <a href="#!">
-                                <span>Xác thực ngay</span>
-                              </a>
-                            </p>
-                          </div>
-                          <div className="button-content col-4">
-                            <a href="#!" className="button-employer-normal">
-                              <span>Xác thực ngay</span>
-                            </a>
-                          </div>
-                        </div>
                       </div>
                     </div>
-                    <div className="box-info-footer mt-2">
-                      <div className="title text-center">
-                        <div className="dest">Số Lượng GP</div>
-                        <div className="set-role">
-                          <div className="point-item">
-                            <span>Xét hạng:</span>
-                            <span>
-                              <strong>{infoUserEmployer?.cointsGP} GP</strong>
-                            </span>
-                          </div>
-                          <div className="point-item">
-                            <span>Tổng Point:</span>
-                            <span>
-                              <strong>{infoUserEmployer?.cointsGP} GP</strong>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="box-info-music pb-2">
-                      <div id="aplayer"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <div className="col-12">
-                <div className="item-box pd-item-d">
-                  <div className="box-3 ">
-                    <h5>Các vị trí đã được tối ưu tìm kiếm</h5>
-                    <div className="text-color">
-                      Chúng tôi sẽ liên tục cập nhật các vị trí mới và gia tăng
-                      nguồn ứng viên phù hợp theo nhu cầu của bạn.
-                    </div>
-                    <hr />
                   </div>
                 </div>
+                </Flex>
               </div>
             </div>
           </div>

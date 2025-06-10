@@ -99,7 +99,7 @@ function SliderHome() {
               </span>
             }
           >
-            <Link to={LINK_URL + "dashboard"}>Bảng tin</Link>
+            <Link to={LINK_URL + "dashboard"}>Tổng quan</Link>
           </Menu.Item>
           <Menu.Item
             key={LINK_URL + "management-jobs"}

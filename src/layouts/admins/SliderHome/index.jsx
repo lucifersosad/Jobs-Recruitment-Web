@@ -64,7 +64,7 @@ function SliderHome(props) {
   const items = [
     getItem(
       "/admin",
-      <Link to="/admin">Trang chủ</Link>,
+      <Link to="/admin">Tổng quan</Link>,
       <span className="layout__slider-item">
         <HomeOutlined />
       </span>

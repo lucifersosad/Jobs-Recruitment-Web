@@ -124,7 +124,7 @@ function ManagementJobsEmployer() {
                       />
                     </a>
                     <Link to={`../detail-jobs/${data._id}/?active_tab=job`}>
-                      Xem báo cáo
+                      Xem chi tiết
                     </Link>
                   </div>
                   <Link
