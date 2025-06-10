@@ -68,6 +68,7 @@ function InfoCompany() {
 
   const [expandedComments, setExpandedComments] = useState({});
   const [commentDisplayMode, setCommentDisplayMode] = useState({});
+  const [commentRefreshCount, setCommentRefreshCount] = useState(0);
 
   useEffect(() => {
     const fetchCompanyData = async () => {
@@ -513,8 +514,19 @@ function InfoCompany() {
           }));
         }
       }
+      
+      // Tự động tải lại bình luận sau 3 giây, bất kể thành công hay không
+      setTimeout(() => {
+        reloadComments(postId);
+      }, 2000);
+      
     } catch (err) {
       console.error("Error commenting:", err);
+      
+      // Vẫn tải lại bình luận ngay cả khi có lỗi
+      setTimeout(() => {
+        reloadComments(postId);
+      }, 3000);
     }
   };
 
@@ -523,6 +535,149 @@ function InfoCompany() {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleComment(postId);
+    }
+  };
+
+  const reloadComments = async (postId) => {
+    try {
+      // Hiển thị thông báo đang tải
+      showNotification('Đang tải lại bình luận...', 'info');
+      
+      // Đặt trạng thái loading
+      setPosts(prevPosts => 
+        prevPosts.map(post => 
+          post.id === postId
+            ? { ...post, commentsLoading: true }
+            : post
+        )
+      );
+      
+      console.log("1. Bắt đầu tải lại bình luận cho bài viết:", postId);
+      
+      // Gọi API lấy bình luận
+      const token = getCookie("token-user") || "";
+      console.log("2. Token:", token ? "Có token" : "Không có token");
+      
+      try {
+        console.log("3. Thử phương pháp 1: Gọi API trực tiếp");
+        const response = await fetch(`/api/v1/posts/${postId}/comments`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        console.log("4. Kết quả API:", response.status, response.ok);
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log("5. Dữ liệu API:", data);
+          
+          let commentsData = [];
+          
+          if (Array.isArray(data)) {
+            commentsData = data;
+            console.log("6a. Dữ liệu là mảng, có", commentsData.length, "bình luận");
+          } else if (data?.data && Array.isArray(data.data)) {
+            commentsData = data.data;
+            console.log("6b. Dữ liệu trong data.data, có", commentsData.length, "bình luận");
+          } else if (data?.comments && Array.isArray(data.comments)) {
+            commentsData = data.comments;
+            console.log("6c. Dữ liệu trong data.comments, có", commentsData.length, "bình luận");
+          } else {
+            console.log("6d. Không tìm thấy mảng bình luận trong dữ liệu:", data);
+            commentsData = [];
+          }
+          
+          // Cập nhật state với dữ liệu mới và buộc re-render
+          const newPosts = [...posts];
+          const postIndex = newPosts.findIndex(p => p.id === postId);
+          
+          if (postIndex >= 0) {
+            console.log("7. Tìm thấy bài viết cần cập nhật ở vị trí:", postIndex);
+            newPosts[postIndex] = { 
+              ...newPosts[postIndex], 
+              comments: commentsData,
+              commentsLoading: false,
+              commentsLoaded: true,
+              _forceUpdate: Date.now() // Thêm trường này để đảm bảo React nhận ra sự thay đổi
+            };
+            
+            console.log("8. Đã cập nhật bài viết với", commentsData.length, "bình luận");
+            setPosts(newPosts);
+          } else {
+            console.log("7. Không tìm thấy bài viết với ID:", postId);
+          }
+          
+          // Tăng biến đếm để buộc component re-render
+          setCommentRefreshCount(prev => prev + 1);
+          
+          showNotification('Đã tải lại bình luận', 'success');
+          return;
+        } else {
+          console.log("4. API lỗi, thử phương pháp khác");
+          throw new Error("API trả về lỗi");
+        }
+      } catch (error) {
+        console.log("9. Lỗi phương pháp 1:", error.message);
+        
+        // Thử cách 2: Dùng getPostComments
+        try {
+          console.log("10. Thử phương pháp 2: Sử dụng getPostComments");
+          const commentsResult = await getPostComments(postId);
+          console.log("11. Kết quả getPostComments:", commentsResult);
+          
+          if (commentsResult?.code === 200 && commentsResult.data) {
+            console.log("12. getPostComments thành công, có dữ liệu");
+            
+            // Cập nhật state với cách khác để đảm bảo React render lại
+            const newPosts = JSON.parse(JSON.stringify(posts)); // Deep clone
+            const postIndex = newPosts.findIndex(p => p.id === postId);
+            
+            if (postIndex >= 0) {
+              newPosts[postIndex] = { 
+                ...newPosts[postIndex], 
+                comments: commentsResult.data,
+                commentsLoading: false,
+                commentsLoaded: true,
+                _forceUpdate: Date.now()
+              };
+              
+              console.log("13. Cập nhật state với", commentsResult.data.length, "bình luận");
+              setPosts(newPosts);
+              
+              // Tăng biến đếm để buộc component re-render
+              setCommentRefreshCount(prev => prev + 1);
+              
+              showNotification('Đã tải lại bình luận', 'success');
+              return;
+            }
+          } else {
+            console.log("12. getPostComments không thành công:", commentsResult);
+            throw new Error("getPostComments không trả về dữ liệu");
+          }
+        } catch (error2) {
+          console.log("14. Lỗi phương pháp 2:", error2.message);
+          
+          // Thử phương pháp 3: Tải lại toàn bộ trang
+          console.log("15. Thử phương pháp 3: Tải lại trang");
+          showNotification('Đang tải lại trang...', 'info');
+          
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error("Lỗi chung khi tải lại bình luận:", error);
+      showNotification('Không thể tải lại bình luận, đang tải lại trang...', 'error');
+      
+      // Tải lại trang là cách cuối cùng
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     }
   };
 
