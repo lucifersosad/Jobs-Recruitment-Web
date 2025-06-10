@@ -3,7 +3,7 @@ import { PlusSquareOutlined, EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import EducationModal from "./EducationModal";
 
-const EducationCard = ({profile, loading, getData}) => {
+const EducationCard = ({canAddOrEdit, profile, loading, getData}) => {
   const [open, setOpen] = useState(false);
   const [education, setEducation] = useState();
 
@@ -18,7 +18,7 @@ const EducationCard = ({profile, loading, getData}) => {
         <Card
           loading={loading}
           className="box-profile"
-          extra={
+          extra={canAddOrEdit && 
             profile?.educations?.length > 0 && (
               <Flex>
                 <PlusSquareOutlined
@@ -46,7 +46,7 @@ const EducationCard = ({profile, loading, getData}) => {
                 <List.Item
                   key={index}
                   className="box-profile__item"
-                  extra={
+                  extra={canAddOrEdit && 
                     <EditOutlined
                       className="icon-edit"
                       onClick={() => {
