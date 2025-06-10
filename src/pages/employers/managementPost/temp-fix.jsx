@@ -22,7 +22,7 @@ const renderAvatar = () => {
         />
       ) : (
         <a 
-          href={`http://localhost:3000/profile/${replyUserId}`}
+          href={`/profile/${replyUserId}`}
           target="_blank"
           rel="noopener noreferrer"
           className="cursor-pointer"
@@ -78,7 +78,7 @@ const renderName = () => {
         </>
       ) : (
         <a 
-          href={`http://localhost:3000/profile/${replyUserId}`}
+          href={`/profile/${replyUserId}`}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-blue-500 cursor-pointer"
