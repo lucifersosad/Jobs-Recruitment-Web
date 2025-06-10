@@ -1552,7 +1552,7 @@ function ManagementPost() {
                   ) : (
                     <>
                       <a 
-                        href={`http://localhost:3000/profile/${userId_id}`}
+                        href={`/profile/${userId_id}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="cursor-pointer"
@@ -1573,7 +1573,7 @@ function ManagementPost() {
                         <div className="bg-gray-100 rounded-lg p-2">
                           <div className="font-semibold text-sm text-gray-800">
                             <a 
-                              href={`http://localhost:3000/profile/${userId_id}`}
+                              href={`/profile/${userId_id}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="hover:text-blue-500 cursor-pointer"
@@ -1751,7 +1751,7 @@ function ManagementPost() {
                                   />
                                 ) : (
                                   <a 
-                                    href={`http://localhost:3000/profile/${replyUserId}`}
+                                    href={`/profile/${replyUserId}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="cursor-pointer"
@@ -2182,7 +2182,7 @@ function ManagementPost() {
             {currentLikeList.map((user, index) => (
               <div key={`like-${index}`} className="flex items-center py-2 border-b">
                 <a 
-                  href={`http://localhost:3000/profile/${user._id || user.id}`} 
+                  href={`/profile/${user._id || user.id}`} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center cursor-pointer"
