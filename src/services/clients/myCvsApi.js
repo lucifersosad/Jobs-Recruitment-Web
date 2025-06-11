@@ -63,12 +63,7 @@ export const downloadMyCv = async (idCv) => {
   return result;
 };
 
-export const extractMyCv = async (formData) => {
-  const response = await fetch(`${API_DOMAIN}/my-cvs/extract`, {
-    method: "POST",
-    body: formData
-  });
-
-  const result = await response.json();
+export const extractMyCv = async (valueForm) => {
+  const result = await AuthPostForm(`/my-cvs/extract`,valueForm,checkToken);
   return result;
 };
