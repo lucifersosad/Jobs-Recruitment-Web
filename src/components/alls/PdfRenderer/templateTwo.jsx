@@ -1,4 +1,6 @@
 import { Document, Page, Text, View, Font } from '@react-pdf/renderer';
+import { decode } from 'html-entities';
+import DOMPurify from 'dompurify';
 import { createTw } from 'react-pdf-tailwind';
 import BeVietnam from '/fonts/BeVietnamPro-Regular.ttf';
 
@@ -23,9 +25,9 @@ const tw = createTw({
 const BulletedList = ({ items }) => (
   <View>
     {items.map((item, index) => (
-      <View style={tw('flex flex-row flex-wrap items-center gap-1')} key={index}>
+      <View style={tw('flex flex-row flex-wrap items-center gap-1 flex-nowrap')} key={index}>
         <Text style={tw('text-accent')}>•</Text>
-        <Text style={tw('text-sm')}>{item.name}</Text>
+        <Text style={[tw('text-sm'), { flex: 1 }]}>{item.name}</Text>
       </View>
     ))}
   </View>
@@ -35,6 +37,15 @@ const HeaderSection = () => <View fixed style={tw('h-4 w-full bg-primary')} />;
 
 export default function ResumeTemplateTwo({ formData }) {
   console.log('Template Two Rendering with data:', formData);
+  
+  const parseHTMLToList = (html) => {
+  const clean = DOMPurify.sanitize(html);
+  const container = document.createElement('div');
+  container.innerHTML = clean;
+
+  const listItems = [...container.querySelectorAll('li')];
+  return listItems.map((li) => li.textContent.trim());
+};
 
   return (
     <Document>
@@ -44,19 +55,17 @@ export default function ResumeTemplateTwo({ formData }) {
         {/* Header Section */}
         <View style={tw('mt-6 text-center mb-6')}>
           <Text style={tw('text-3xl font-bold text-primary')}>
-            {formData.personal_details?.fname ?? 'First Name'}{' '}
-            {formData.personal_details?.lname ?? 'Last Name'}
+            {formData.fullName ?? 'Họ và tên'}
           </Text>
-          <View style={tw('flex flex-row justify-center gap-4 mt-2')}>
+          <View style={tw('flex flex-row justify-center gap-4 mt-[-10px]')}>
             <Text style={tw('text-sm text-muted')}>
-              {formData.personal_details?.email ?? 'Email'}
+              {formData?.email ?? 'Email'}
             </Text>
             <Text style={tw('text-sm text-muted')}>
-              {formData.personal_details?.phone ?? 'Phone'}
+              {formData?.phone}
             </Text>
             <Text style={tw('text-sm text-muted')}>
-              {formData.personal_details?.city ?? 'City'},{' '}
-              {formData.personal_details?.country ?? 'Country'}
+              {formData?.address}
             </Text>
           </View>
         </View>
@@ -64,10 +73,10 @@ export default function ResumeTemplateTwo({ formData }) {
         {/* Summary Section */}
         <View style={tw('mb-6')}>
           <Text style={tw('text-lg font-bold text-primary mb-2')}>
-            Professional Summary
+            Mục tiêu nghề nghiệp
           </Text>
           <Text style={tw('text-sm')}>
-            {formData.personal_details?.summary ?? 'Summary'}
+            {formData?.objective}
           </Text>
         </View>
 
@@ -78,22 +87,20 @@ export default function ResumeTemplateTwo({ formData }) {
             {/* Work Experience */}
             <View style={tw('mb-6')}>
               <Text style={tw('text-lg font-bold text-primary mb-2')}>
-                Work Experience
+                Kinh nghiệm làm việc
               </Text>
               <View style={tw('flex flex-col gap-4')}>
-                {formData?.jobs?.length &&
-                  formData.jobs.map((job, index) => (
-                    <View wrap={false} key={index}>
-                      <Text style={tw('font-bold')}>
-                        {job?.jobTitle ?? 'Job Title'}
+                {formData?.experiences?.length &&
+                  formData.experiences.map((experience, index) => (
+                    <View wrap={false} key={index} style={tw('flex flex-col gap-2')}>
+                      <Text style={tw('font-bold text-base')}>
+                        {experience?.position_name ?? 'Vị trí'}
                       </Text>
                       <Text style={tw('text-sm text-muted')}>
-                        {job?.employer ?? 'Employer'} | {job?.startDate ?? 'Start'} -{' '}
-                        {job?.endDate ?? 'End'}
+                        {experience?.company_name ?? 'Công ty'} | {experience?.start_date ?? 'Bắt đầu'} -{' '}
+                        {experience?.end_date ?? 'Kết thúc'}
                       </Text>
-                      <Text style={tw('text-sm mt-1')}>
-                        {job?.description ?? ''}
-                      </Text>
+                      <BulletedList items={parseHTMLToList(experience?.description ?? '').map(item => ({ name: item }))} />
                     </View>
                   ))}
               </View>
@@ -102,22 +109,20 @@ export default function ResumeTemplateTwo({ formData }) {
             {/* Education */}
             <View style={tw('mb-6')}>
               <Text style={tw('text-lg font-bold text-primary mb-2')}>
-                Education
+                Học vấn
               </Text>
               <View style={tw('flex flex-col gap-4')}>
                 {formData?.educations?.length &&
                   formData.educations.map((edu, index) => (
-                    <View key={index}>
-                      <Text style={tw('font-bold')}>
-                        {edu?.degree ?? 'Degree'} in {edu?.field ?? 'Field'}
+                    <View key={index} style={tw('flex flex-col gap-2')}>
+                      <Text style={tw('font-bold text-base')}>
+                        {edu?.title ?? 'Chuyên ngành'}
                       </Text>
                       <Text style={tw('text-sm text-muted')}>
-                        {edu?.school ?? 'School'} | {edu?.startDate ?? 'Start'} -{' '}
-                        {edu?.endDate ?? 'End'}
+                        {edu?.school_name ?? 'School'} | {edu?.start_date ?? 'Bắt đầu'} -{' '}
+                        {edu?.end_date ?? 'Kết thúc'}
                       </Text>
-                      <Text style={tw('text-sm mt-1')}>
-                        {edu?.description ?? ''}
-                      </Text>
+                      <BulletedList items={parseHTMLToList(edu?.description ?? '').map(item => ({ name: item }))} />
                     </View>
                   ))}
               </View>
@@ -129,7 +134,7 @@ export default function ResumeTemplateTwo({ formData }) {
             {/* Skills Section */}
             <View style={tw('mb-6')}>
               <Text style={tw('text-lg font-bold text-primary mb-2')}>
-                Skills
+                Kỹ năng
               </Text>
               <BulletedList
                 items={
@@ -138,22 +143,10 @@ export default function ResumeTemplateTwo({ formData }) {
               />
             </View>
 
-            {/* Tools Section */}
-            <View style={tw('mb-6')}>
-              <Text style={tw('text-lg font-bold text-primary mb-2')}>
-                Tools
-              </Text>
-              <BulletedList
-                items={
-                  formData?.tools?.map(tool => ({ name: tool.tool_name })) ?? []
-                }
-              />
-            </View>
-
             {/* Languages Section */}
             <View style={tw('mb-6')}>
               <Text style={tw('text-lg font-bold text-primary mb-2')}>
-                Languages
+                Ngôn ngữ
               </Text>
               <BulletedList
                 items={

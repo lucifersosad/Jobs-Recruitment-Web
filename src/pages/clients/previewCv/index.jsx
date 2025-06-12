@@ -17,6 +17,7 @@ const PreviewCv = () => {
   const [loading, setLoading] = useState(true)
   const [loadingDownload, setLoadingDownload] = useState(false)
   const [cv, setCv] = useState();
+  console.log("🚀 ~ PreviewCv ~ cv:", cv)
   const { Title } = Typography
 
   const sampleFormData = {
@@ -116,17 +117,18 @@ const PreviewCv = () => {
           >Tải CV</a>
         </Button> */}
         {!loading && <Title level={5} style={{margin: 0, color: "#ddd"}}>Xem CV online trên UTEM của {cv.fullName}</Title>}
-        <Button style={{color: "#ddd", marginLeft: "auto", fontWeight: "bold"}} size="middle" type="text" onClick={handleDownloadCV} loading={loadingDownload} icon={<DownloadOutlined />}>
+        {/* <Button style={{color: "#ddd", marginLeft: "auto", fontWeight: "bold"}} size="middle" type="text" onClick={handleDownloadCV} loading={loadingDownload} icon={<DownloadOutlined />}>
           <spa>Tải CV</spa>
-        </Button>
+        </Button> */}
       </div>
       <div className="preview-cv__layout">
         <div className="preview-cv__container">
           <div className="preview-cv__content">
             {/* {!loading && <UserCv data={cv}/>} */}
-            <PDFViewer style={{ width: '100%', height: '100%' }}>
-              <ResumeTemplateTwo formData={sampleFormData} />
-            </PDFViewer>
+            {!loading && 
+              <PDFViewer style={{ width: '100%', height: '100%' }}>
+              <ResumeTemplateTwo formData={cv} />
+            </PDFViewer>}
           </div>
         </div>
       </div>
