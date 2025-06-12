@@ -9,6 +9,8 @@ import { downloadMyCv, getMyCv } from "../../../services/clients/myCvsApi";
 import NotFound from "../notFound";
 import { Button, Typography } from "antd";
 import { convertFileCvDriverToUrl } from "../../../helpers/convertFileCvDriverToUrl";
+import ResumeTemplateOne from "../../../components/alls/PdfRenderer/templateOne";
+import ResumeTemplateTwo from "../../../components/alls/PdfRenderer/templateTwo";
 
 const PreviewCv = () => {
   const { idCv } = useParams();
@@ -16,6 +18,40 @@ const PreviewCv = () => {
   const [loadingDownload, setLoadingDownload] = useState(false)
   const [cv, setCv] = useState();
   const { Title } = Typography
+
+  const sampleFormData = {
+  personal_details: {
+    fname: 'Trần',
+    lname: 'Duy Anh',
+    email: 'example@gmail.com',
+    phone: '0123456789',
+    city: 'TP.HCM',
+    country: 'Việt Nam',
+    summary: 'Một sinh viên đam mê công nghệ và sáng tạo.'
+  },
+  skills: [{ skill_name: 'JavaScript' }, { skill_name: 'React' }],
+  tools: [{ tool_name: 'VS Code' }, { tool_name: 'Git' }],
+  languages: [{ lang_name: 'Vietnamese' }, { lang_name: 'English' }],
+  educations: [
+    {
+      degree: 'Cử nhân',
+      field: 'Công nghệ thông tin',
+      school: 'Đại học A',
+      startDate: '2019',
+      endDate: '2023',
+      description: 'Tốt nghiệp loại giỏi, GPA 3.5/4.0'
+    }
+  ],
+  jobs: [
+    {
+      jobTitle: 'Frontend Developer',
+      employer: 'Công ty ABC',
+      startDate: '2022',
+      endDate: '2024',
+      description: 'Phát triển ứng dụng web sử dụng ReactJS.'
+    }
+  ]
+};
 
   useEffect(() => {
     const getData = async () => {
@@ -87,7 +123,10 @@ const PreviewCv = () => {
       <div className="preview-cv__layout">
         <div className="preview-cv__container">
           <div className="preview-cv__content">
-            {!loading && <UserCv data={cv}/>}
+            {/* {!loading && <UserCv data={cv}/>} */}
+            <PDFViewer style={{ width: '100%', height: '100%' }}>
+              <ResumeTemplateTwo formData={sampleFormData} />
+            </PDFViewer>
           </div>
         </div>
       </div>
