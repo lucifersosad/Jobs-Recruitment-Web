@@ -67,3 +67,8 @@ export const extractMyCv = async (valueForm) => {
   const result = await AuthPostForm(`/my-cvs/extract`,valueForm,checkToken);
   return result;
 };
+
+export const suggestBuildMyCv = async (value) => {
+  const result = await AuthPost(`/my-cvs/suggest-builder`,value,checkToken);
+  return result;
+};
