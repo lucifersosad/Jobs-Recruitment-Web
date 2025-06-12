@@ -24,6 +24,9 @@ import MemoizedTinyMce from "../../../components/clients/tinyEditor";
 import { createMyCv } from "../../../services/clients/myCvsApi";
 import banner from "/images/banner-cv.png";
 import DropCvModal from "./DropCvModal";
+import { Spark, Spark2 } from "../../../components/clients/customIcon";
+import SuggestBuildCvModal from "./SuggestBuildCvModal";
+import "./CreateCv.scss"
 
 const CreateCv = () => {
   const [api, contextHolder] = notification.useNotification();
@@ -33,13 +36,14 @@ const CreateCv = () => {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
+  const [openSuggest, setOpenSuggest] = useState(false);
 
   const defaultValue = {
     fullName: "",
     email: "",
     phone: "",
     address: "",
-    position: "",
+    jobTitle: "",
     objective: "",
     skills: [],
     experiences: [],
@@ -99,9 +103,47 @@ const handleImportCv = (values) => {
     newValues[key] = newValues[key]?.map?.(item => {
       if (item?.description) {
         const descriptions = item.description
-          .split(".")
+          .split("-")
           .map(desc => desc.trim())
           .filter(desc => desc);
+
+        const htmlList = `<ul>${descriptions.map(d => `<li>${d}</li>`).join("")}</ul>`;
+
+        return {
+          ...item,
+          description: htmlList
+        };
+      }
+      return item;
+    }) || newValues[key];
+  }
+
+  console.log("🚀 ~ handleImportCv ~ newValues:", newValues)
+
+  form.setFieldsValue(newValues);
+};
+
+const handleSuggestBuildCv = (values) => {
+  if (!values) return;
+
+  // Format skills
+  const skills = values.skills?.map(skill => ({
+    skill_name: skill
+  })) || [];
+
+  const educations = Array.isArray(values.educations) ? values.educations : []
+  const experiences = Array.isArray(values.experiences) ? values.experiences : []
+
+  const newValues = { ...values, skills, educations, experiences };
+
+  // Duyệt qua từng phần tử trong newValues
+  for (const key in newValues) {
+    newValues[key] = newValues[key]?.map?.(item => {
+      if (item?.description) {
+        const descriptions = item.description
+          .map(desc => desc.trim())
+          .filter(desc => desc)
+          .map(desc => desc.charAt(0).toUpperCase() + desc.slice(1));
 
         const htmlList = `<ul>${descriptions.map(d => `<li>${d}</li>`).join("")}</ul>`;
 
@@ -123,7 +165,7 @@ const handleImportCv = (values) => {
   return (
     <>
       {contextHolder}
-      <div className="cb-section cb-section-padding-bottom bg-grey2">
+      <div className="cb-section cb-section-padding-bottom bg-grey2 section-create-cv">
         <div className="container">
           <div className="box-settings-info__banner" style={{ zIndex: 1 }}>
             <div className="left">
@@ -154,7 +196,7 @@ const handleImportCv = (values) => {
                   setOpen(true);
                 }}
               >
-                Import ngay
+                Import
               </Link>
             </Flex>
             <Form
@@ -187,10 +229,10 @@ const handleImportCv = (values) => {
                       <Input placeholder="Nhập họ và tên" />
                     </Form.Item>
                   </Col>
-                  <Col xs={12}>
+                  {/* <Col xs={12}>
                     <Form.Item
                       label="Vị trí ứng tuyển"
-                      name="position"
+                      name="jobTitle"
                       rules={[
                         {
                           required: true,
@@ -200,7 +242,7 @@ const handleImportCv = (values) => {
                     >
                       <Input placeholder="Nhập vị trí ứng tuyển" />
                     </Form.Item>
-                  </Col>
+                  </Col> */}
                   <Col xs={12}>
                     <Form.Item
                       label="Email"
@@ -246,6 +288,36 @@ const handleImportCv = (values) => {
                 </Row>
                 <Row>
                   <Col xs={24}>
+                    <Flex gap={4}>
+                      <Spark size={20} color={"#FF7D55"} />
+                      <Text>Tạo CV chuyên nghiệp và thu hút với AI.</Text>
+                      <Text
+                        style={{cursor: "pointer"}}
+                        type="danger"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setOpenSuggest(true);
+                        }}
+                      >
+                        Thử ngay
+                      </Text>
+                    </Flex>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={24}>
+                    <Title level={4}>Vị trí ứng tuyển</Title>
+                  </Col>
+                  <Col xs={24}>
+                    <Form.Item
+                      name="jobTitle"
+                    >
+                      <Input placeholder="Nhập vị trí ứng tuyển" />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={24}>
                     <Title level={4}>Mục tiêu nghề nghiệp</Title>
                   </Col>
                   <Col xs={24}>
@@ -283,6 +355,7 @@ const handleImportCv = (values) => {
                               ({ key, name, ...restField }, index) => (
                                 <Card
                                   key={key}
+                                  title={`Học vấn ${index + 1}`}
                                   type="inner"
                                   extra={
                                     <DeleteOutlined
@@ -401,6 +474,7 @@ const handleImportCv = (values) => {
                               ({ key, name, ...restField }, index) => (
                                 <Card
                                   key={key}
+                                  title={`Kinh nghiệm ${index + 1}`}
                                   type="inner"
                                   extra={
                                     <DeleteOutlined
@@ -519,6 +593,7 @@ const handleImportCv = (values) => {
                               ({ key, name, ...restField }, index) => (
                                 <Card
                                   key={key}
+                                  title={`Kỹ năng ${index + 1}`}
                                   type="inner"
                                   extra={
                                     <DeleteOutlined
@@ -532,7 +607,7 @@ const handleImportCv = (values) => {
                                       <Form.Item
                                         {...restField}
                                         name={[name, "skill_name"]}
-                                        label="Kỹ năng"
+                                        label="Tên kỹ năng"
                                       >
                                         <Input placeholder="Nhập tên kỹ năng" />
                                       </Form.Item>
@@ -879,6 +954,7 @@ const handleImportCv = (values) => {
         </div>
       </div>
       <DropCvModal open={open} setOpen={setOpen} handleImportCv={handleImportCv}/>
+      <SuggestBuildCvModal open={openSuggest} setOpen={setOpenSuggest} handleSuggestBuildCv={handleSuggestBuildCv}/>
     </>
   );
 };
