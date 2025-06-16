@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { deviceSession } from "../services/employers/employer-userApi";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -18,26 +19,26 @@ const analytics = getAnalytics(app);
 
 const messaging = getMessaging();
 
-export const requestForToken = () => {
-  return getToken(messaging, {
-    vapidKey:
-      "BJh2TVr-bdRO4lv9Tc8iYKXfbcE-SmZZPPR3-BMKO8g_UTgyS_R_xFpzG9WV9yBWWQVvpKes30030KQnafuaKO4",
-  })
-    .then((currentToken) => {
-      if (currentToken) {
-        console.log("current token for client: ", currentToken);
-        // Perform any other neccessary action with the token
-      } else {
-        // Show permission request UI
-        console.log(
-          "No registration token available. Request permission to generate one."
-        );
-      }
-    })
-    .catch((err) => {
-      console.log("An error occurred while retrieving token. ", err);
+export const requestForToken = async () => {
+  try {
+    const currentToken = await getToken(messaging, {
+      vapidKey:
+        "BJh2TVr-bdRO4lv9Tc8iYKXfbcE-SmZZPPR3-BMKO8g_UTgyS_R_xFpzG9WV9yBWWQVvpKes30030KQnafuaKO4",
     });
+
+    if (currentToken) {
+      console.log("✅ current token for client: ", currentToken);
+
+      // Gửi token lên server
+      await deviceSession({ notification_token: currentToken });
+    } else {
+      console.log("⚠️ No registration token available. Request permission to generate one.");
+    }
+  } catch (err) {
+    console.error("❌ An error occurred while retrieving token or sending to server:", err);
+  }
 };
+
 
 export const onMessageListener = (callback) => {
   try {
