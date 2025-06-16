@@ -68,3 +68,8 @@ export const statisticCompany = async ()=>{
     const result = await AuthGet(`/users/statistic-company`,checkToken);
     return result;
 }
+
+export const deviceSession = async (valueForm) => {
+    const result = await AuthPost(`/users/device-session`, valueForm, checkToken);
+    return result;
+}
