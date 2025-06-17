@@ -284,6 +284,12 @@ function SuggestedCv({ record }) {
       },
     },
     {
+      title: "Mức độ phù hợp",
+      dataIndex: "score",
+      key: "score",
+      render: (_, dataRecord) => (<>{`${Number(dataRecord.score.toFixed(2)) * 100}%`}</>),
+    },
+    {
       title: "Thời gian xem",
       key: "dataTime",
       dataIndex: "dataTime",
@@ -329,12 +335,12 @@ function SuggestedCv({ record }) {
       <div className="title-head">
         <div className="head">
         </div>
-        <div className="body-d">
+        {/* <div className="body-d">
           <button onClick={() => setOpen(true)}>
             <SettingOutlined />
             <span>Cài đặt</span>
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="table-view">
         <Table

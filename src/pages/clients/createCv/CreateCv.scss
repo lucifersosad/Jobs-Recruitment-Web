@@ -1,0 +1,24 @@
+.section-create-cv {
+  ul {
+    list-style-type: disc;
+  }
+}
+.ant-tag.suggest-prompt-tag {
+    background-color: #F3F9FC;
+    border-color: #F3F9FC;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    white-space: wrap;
+    padding: 20px;
+    border-radius: 9999px;
+    font-size: 15px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #3dbff7;
+      color: #fff;
+    }
+    &.ant-tag-checkable-checked {
+      background-color: #3dbff7;
+    }
+  }

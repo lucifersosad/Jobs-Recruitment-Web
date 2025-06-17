@@ -266,7 +266,7 @@ function ModalReviewCV({ record, infoUser, showModel }) {
         <div className="box-title mb-3">
           <FontAwesomeIcon icon={faFolder} />
           <p>
-            Chọn CV để ứng tuyển: <span>{record?.title}</span>{" "}
+            Chọn CV để đánh giá cho công việc: <span>{record?.title}</span>{" "}
           </p>
         </div>
         <Spin spinning={loading}>
