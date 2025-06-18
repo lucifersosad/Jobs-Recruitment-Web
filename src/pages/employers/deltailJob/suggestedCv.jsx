@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Table, message } from "antd";
+import { Button, Flex, Popconfirm, Table, message } from "antd";
 import { memo, useEffect, useState } from "react";
 import {
   buyUserPreviewJob,
@@ -26,12 +26,26 @@ import { UpdateDataAuthEmployer } from "../../../update-data-reducer/employers/u
 import UserProfile from "../../../components/employers/userProfile";
 import SuggestSettingModal from "./suggestSettingModal";
 
+const remark = (score) => {
+  if (score > 0.8) {
+    return "Rất phù hợp"
+  } else if (score > 0.6) {
+    return "Khá phù hợp"
+  } else if (score > 0.4) {
+    return "Có thể phù hợp"
+  }
+
+  return "";
+}
+
 function SuggestedCv({ record }) {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
   const fetchApi = async () => {
+    setLoading(true)
     const objectNew = {
       idJob: record._id,
     };
@@ -39,6 +53,7 @@ function SuggestedCv({ record }) {
     if (result.code === 200) {
       setData(result?.data);
       //   setData(result.data);
+      setLoading(false)
     }
   };
   const handleConfirm = async (idUser) => {
@@ -287,7 +302,11 @@ function SuggestedCv({ record }) {
       title: "Mức độ phù hợp",
       dataIndex: "score",
       key: "score",
-      render: (_, dataRecord) => (<>{`${Number(dataRecord.score.toFixed(2)) * 100}%`}</>),
+      align: "center",
+      render: (_, dataRecord) => (<>
+        {`${Math.round((dataRecord?.similarity || 0) * 100)}%`} 
+        <div style={{fontWeight: "bold"}}>{remark(dataRecord?.similarity)}</div>
+      </>),
     },
     {
       title: "Thời gian xem",
@@ -344,6 +363,7 @@ function SuggestedCv({ record }) {
       </div>
       <div className="table-view">
         <Table
+          loading={loading}
           rowKey={"_id"}
           columns={columns}
           dataSource={data}
