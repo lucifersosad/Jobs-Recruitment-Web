@@ -70,6 +70,7 @@ function LoginEmployers() {
                   <Form.Item
                     label="Email"
                     name="email"
+                    initialValue={"company1@gmail.com"}
                     rules={[
                       {
                         required: true,
@@ -91,7 +92,7 @@ function LoginEmployers() {
                   <Form.Item
                     label="Mật khẩu"
                     name="password"
-                    
+                    initialValue={"123456"}
                     rules={[
                       {
                         required: true,

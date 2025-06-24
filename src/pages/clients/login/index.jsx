@@ -80,6 +80,7 @@ function Login() {
                     <Form.Item
                       label="Email"
                       name="email"
+                      initialValue={"luciferxhnh@gmail.com"}
                       rules={[
                         {
                           required: true,
@@ -100,6 +101,7 @@ function Login() {
                     <Form.Item
                       label="Mật khẩu"
                       name="password"
+                      initialValue={"123456"}
                       rules={[
                         {
                           required: true,
