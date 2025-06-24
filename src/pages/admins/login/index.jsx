@@ -60,6 +60,7 @@ function LoginAdmin() {
           <Form.Item
             label="Email"
             name="email"
+            initialValue={"admin@gmail.com"}
             rules={[
               {
                 required: true,
@@ -73,6 +74,7 @@ function LoginAdmin() {
           <Form.Item
             label="Password"
             name="password"
+            initialValue={"123456"}
             rules={[
               {
                 required: true,
