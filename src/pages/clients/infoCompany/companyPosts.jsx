@@ -41,8 +41,6 @@ const CompanyPosts = ({ recordItem }) => {
     refetch,
   } = useGetPostsInfinite(recordItem?._id);
 
-  console.log("🚀 ~ CompanyPosts ~ data:", data);
-
   const posts = useMemo(() => {
     if (!data?.pages) return [];
     return data.pages.flatMap((page) => page.data);
