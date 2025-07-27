@@ -13,11 +13,17 @@ export const getEmployerPosts = async (employerId = "", token = "", page = 1) =>
     console.log("Calling getEmployerPosts with employerId:", employerId);
     try {
         const result = await AuthGet(`/post/get-all/${employerId}?page=${page}`, token || checkToken); // Sử dụng token từ parameter hoặc từ cookie
-        console.log("getEmployerPosts response status:", result?.code);
-        return result;
+        if (result?.code === 200) {
+          console.log("getEmployerPosts response status:", result?.code);
+          return result;
+        } else {
+          console.log("getEmployerPosts response status:", result);
+          throw result?.error
+        }
     } catch (err) {
         console.error("getEmployerPosts error:", err);
-        return { code: 500, error: err.message || "Failed to fetch posts" };
+        throw err
+        // return { code: 500, error: err.message || "Failed to fetch posts" };
     }
 };
 

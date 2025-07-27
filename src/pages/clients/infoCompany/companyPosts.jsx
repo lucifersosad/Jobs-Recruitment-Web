@@ -19,8 +19,10 @@ import { useInView } from 'react-intersection-observer'
 // Thêm hằng số cho avatar mặc định
 const DEFAULT_AVATAR = "https://via.placeholder.com/32";
 
-const CompanyPosts = ({ recordItem }) => {
+const CompanyPosts = ({ recordItem,  }) => {
   const { ref, inView } = useInView()
+  const [postsError, setPostsError] = useState(null)
+
   const authUser = useSelector(
     (state) => state.authenticationReducerClient?.infoUser
   );
@@ -33,8 +35,8 @@ const CompanyPosts = ({ recordItem }) => {
     data,
     status,
     isLoading: postsLoading,
+    isError,
     isFetching,
-    postsError,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -709,8 +711,8 @@ const CompanyPosts = ({ recordItem }) => {
             <div className="text-center text-gray-600 p-4">
               Đang tải bài viết...
             </div>
-          ) : postsError ? (
-            <div className="text-center text-red-500 p-4">{postsError}</div>
+          ) : isError ? (
+            <div className="text-center text-red-500 p-4">Vui lòng đăng nhập để tiếp tục</div>
           ) : (
             <div className="posts-container">
               {posts.length > 0 ? (
