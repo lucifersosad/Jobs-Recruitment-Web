@@ -4,7 +4,7 @@ import { getCookie } from "../../helpers/cookie";
 const checkToken = getCookie("token-user") || "";
 
 // Lấy tất cả bài viết của một employer (employerId là tham số lọc, không phải ID từ token)
-export const getEmployerPosts = async (employerId = "", token = "") => {
+export const getEmployerPosts = async (employerId = "", token = "", page = 1) => {
     if (!employerId) {
         console.error("getEmployerPosts: Missing employerId parameter");
         return { code: 400, error: "Missing employerId parameter" };
@@ -12,12 +12,18 @@ export const getEmployerPosts = async (employerId = "", token = "") => {
     
     console.log("Calling getEmployerPosts with employerId:", employerId);
     try {
-        const result = await AuthGet(`/post/get-all/${employerId}`, token || checkToken); // Sử dụng token từ parameter hoặc từ cookie
-        console.log("getEmployerPosts response status:", result?.code);
-        return result;
+        const result = await AuthGet(`/post/get-all/${employerId}?page=${page}`, token || checkToken); // Sử dụng token từ parameter hoặc từ cookie
+        if (result?.code === 200) {
+          console.log("getEmployerPosts response status:", result?.code);
+          return result;
+        } else {
+          console.log("getEmployerPosts response status:", result);
+          throw result?.error
+        }
     } catch (err) {
         console.error("getEmployerPosts error:", err);
-        return { code: 500, error: err.message || "Failed to fetch posts" };
+        throw err
+        // return { code: 500, error: err.message || "Failed to fetch posts" };
     }
 };
 
@@ -185,3 +191,5 @@ export const checkEmployerPostsLikeStatus = async (employerId = "", token = "") 
     return { code: 500, error: error.message || "Failed to check employer posts like status" };
   }
 };
+
+
