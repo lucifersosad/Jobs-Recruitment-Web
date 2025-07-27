@@ -37,6 +37,7 @@ import { getCoordinateAddress } from "../../../services/locations/locationsApi";
 import { useSelector } from "react-redux";
 
 import { dataNumberOfWorkers } from "./js/options";
+import CompanyPosts from "./companyPosts";
 
 // Thêm hằng số cho avatar mặc định
 const DEFAULT_AVATAR = "https://via.placeholder.com/32";
@@ -119,13 +120,13 @@ function InfoCompany() {
     fetchCompanyData();
   }, [slug]);
 
-  useEffect(() => {
-    console.log("Active tab changed to:", activeTab);
+  // useEffect(() => {
+  //   console.log("Active tab changed to:", activeTab);
     
-    if (activeTab === 'posts' && recordItem?.slug) {
-      fetchPosts();
-    }
-  }, [activeTab, recordItem]);
+  //   if (activeTab === 'posts' && recordItem?.slug) {
+  //     fetchPosts();
+  //   }
+  // }, [activeTab, recordItem]);
 
   const fetchPosts = async () => {
     setPostsLoading(true);
@@ -954,10 +955,10 @@ function InfoCompany() {
         return result;
       }
       
-      // Log dữ liệu comment để debug
-      if (process.env.NODE_ENV === 'development') {
-        console.log("Comment data debug:", comment);
-      }
+      // // Log dữ liệu comment để debug
+      // if (process.env.NODE_ENV === 'development') {
+      //   console.log("Comment data debug:", comment);
+      // }
       
       // Kiểm tra userId trong comment - Bước 1 (Ưu tiên cao nhất)
       if (comment.userId) {
@@ -1386,127 +1387,7 @@ function InfoCompany() {
               )}
 
               {activeTab === 'posts' && (
-                <div className="posts-box mb-4">
-                  <div className="title-header1">
-                    <h2>Bài viết của công ty</h2>
-                    {renderRefreshButton()}
-                  </div>
-                  <div className="box-item-content" style={{ maxHeight: '800px', overflowY: 'auto' }}>
-                    {postsLoading ? (
-                      <div className="text-center text-gray-600 p-4">Đang tải bài viết...</div>
-                    ) : postsError ? (
-                      <div className="text-center text-red-500 p-4">{postsError}</div>
-                    ) : (
-                      <div className="posts-container">
-                        {posts.length > 0 ? (
-                          posts.map((post) => (
-                            <div
-                              key={`post-${post.id}`}
-                              className="post-item"
-                            >
-                              <div className="post-header" style={{ marginBottom: '10px' }}>
-                                <div className="avatar" style={{ cursor: 'pointer', marginRight: '12px' }} onClick={() => window.location.reload()}>
-                                  <img
-                                    src={recordItem?.logoCompany || "https://via.placeholder.com/40"}
-                                    alt="Company Logo"
-                                  />
-                                </div>
-                                <div className="info">
-                                  <div className="name" style={{ 
-                                    cursor: 'pointer', 
-                                    fontWeight: 'bold',
-                                    color: '#050505',
-                                    marginTop: '-3px'
-                                  }} onClick={() => window.location.reload()}>
-                                    {post.companyName || recordItem?.companyName || "Công ty ẩn danh"}
-                                  </div>
-                                  <div className="time">
-                                    {post.timeAgo || "Không rõ thời gian"}
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="post-content" style={{ marginBottom: '3px' }}>
-                                {post.caption && (
-                                  <div className="text" style={{ marginBottom: '0px' }}>{post.caption}</div>
-                                )}
-                              </div>
-
-                              {post.images && post.images.length > 0 && renderPostImages(post.id, post.images)}
-
-                              <div className="post-stats" style={{ marginTop: '12px' }}>
-                                <span>{post.likes || 0} lượt thích</span>
-                                <span>{post.comments?.length || 0} bình luận</span>
-                              </div>
-
-                              <div className="post-actions">
-                                <button 
-                                  className={`action-button ${post.isLiked ? 'liked' : ''}`}
-                                  onClick={() => handleLike(post.id)}
-                                  style={{ color: post.isLiked ? '#1877f2' : '' }}
-                                >
-                                  <FontAwesomeIcon 
-                                    icon={faHeart} 
-                                    className={post.isLiked ? 'liked-icon' : ''}
-                                    style={{ color: post.isLiked ? '#1877f2' : '#65676b' }}
-                                  />
-                                  <span>{post.isLiked ? 'Đã thích' : 'Thích'}</span>
-                                </button>
-                                <button className="action-button">
-                                  <FontAwesomeIcon icon={faComment} />
-                                  <span>Bình luận</span>
-                                </button>
-                              </div>
-                              
-                              <div className="post-comments">
-                                {post.comments?.length > 0 ? (
-                                  <div className="comments-wrapper">
-                                    {renderComments(post.comments, post.id)}
-                                  </div>
-                                ) : (
-                                  <div className="no-comments">Chưa có bình luận nào</div>
-                                )}
-                                
-                                <div className="comment-form">
-                                  <div className="avatar" style={{ marginRight: '12px' }}>
-                                    <img
-                                      src={authUser?.avatar || "https://via.placeholder.com/32"}
-                                      alt="Current User Avatar"
-                                    />
-                                  </div>
-                                  <Input
-                                    value={commentContent[post.id] || ""}
-                                    onChange={(e) =>
-                                      setCommentContent((prev) => ({
-                                        ...prev,
-                                        [post.id]: e.target.value,
-                                      }))
-                                    }
-                                    onKeyPress={(e) => handleCommentKeyPress(e, post.id)}
-                                    placeholder="Viết bình luận..."
-                                    autoComplete="off"
-                                    autoCorrect="off"
-                                    autoCapitalize="off"
-                                    spellCheck="false"
-                                    suffix={
-                                      <FontAwesomeIcon
-                                        icon={faPaperPlane}
-                                        onClick={() => handleComment(post.id)}
-                                        className="send-button"
-                                      />
-                                    }
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="text-center text-gray-600 p-4">Chưa có bài viết nào.</div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <CompanyPosts recordItem={recordItem} showNotification={showNotification}/>
               )}
 
               {employersWithJobCounts.length > 0 && (
