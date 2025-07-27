@@ -7,8 +7,8 @@ export function useCommentOnPost() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ postId, content }) => commentOnPost(postId, content),
-    onMutate: async ({ postId, content }) => {
+    mutationFn: ({ postId, content, currentUser }) => commentOnPost(postId, content),
+    onMutate: async ({ postId, content, currentUser }) => {
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: ['posts-infinite'] });
       
@@ -22,7 +22,11 @@ export function useCommentOnPost() {
         const newComment = {
           id: `temp-${Date.now()}`,
           content,
-          userId: null, // Will be filled from user data
+          userId: currentUser ? {
+            _id: currentUser._id || currentUser.id,
+            avatar: currentUser.avatar,
+            fullName: currentUser.fullName || currentUser.name
+          } : null,
           timeAgo: "Vừa xong",
           parentCommentId: null,
           isOptimistic: true

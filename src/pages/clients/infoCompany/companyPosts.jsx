@@ -195,7 +195,11 @@ const CompanyPosts = ({ recordItem }) => {
     setCommentContent(prev => ({ ...prev, [postId]: "" }));
 
     try {
-      await commentMutation.mutateAsync({ postId, content });
+      await commentMutation.mutateAsync({ 
+        postId, 
+        content, 
+        currentUser: authUser 
+      });
     } catch (error) {
       console.error("Failed to comment:", error);
       // Restore content if there's an error
