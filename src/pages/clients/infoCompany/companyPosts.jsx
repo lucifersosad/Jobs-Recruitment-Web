@@ -191,12 +191,15 @@ const CompanyPosts = ({ recordItem }) => {
       return;
     }
 
+    // Clear comment input immediately for better UX
+    setCommentContent(prev => ({ ...prev, [postId]: "" }));
+
     try {
       await commentMutation.mutateAsync({ postId, content });
-      // Clear comment input after successful submission
-      setCommentContent(prev => ({ ...prev, [postId]: "" }));
     } catch (error) {
       console.error("Failed to comment:", error);
+      // Restore content if there's an error
+      setCommentContent(prev => ({ ...prev, [postId]: content }));
     }
   };
 
