@@ -28,7 +28,7 @@ export function useCommentOnPost() {
                 avatar: currentUser.avatar,
               }
             : null,
-          timeAgo: "1 phút",
+          timeAgo: "Đang viết....",
           parentCommentId: null,
           isOptimistic: true,
         };
@@ -80,6 +80,7 @@ export function useCommentOnPost() {
                               ...comment,
                               isOptimistic: false,
                               id: data.comment._id,
+                              timeAgo: data.comment.timeAgo
                             }
                           : comment
                       ),
