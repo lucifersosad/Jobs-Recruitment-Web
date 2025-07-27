@@ -185,3 +185,5 @@ export const checkEmployerPostsLikeStatus = async (employerId = "", token = "") 
     return { code: 500, error: error.message || "Failed to check employer posts like status" };
   }
 };
+
+
