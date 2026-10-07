@@ -598,3 +598,15 @@ input[type="button"] {
     }
   }
 }
+
+.chat-box-layout {
+  height: 100dvh;
+  overflow: hidden;
+  > .row {
+    height: 100%;
+    > [class*="col-"] {
+      height: 100%;
+      overflow-y: auto;
+    }
+  }
+}

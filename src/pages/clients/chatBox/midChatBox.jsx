@@ -183,7 +183,7 @@ function MidChatBox({
           </div>
         </Spin>
       </div>
-      <div className="mid-chat-client__footer p-3">
+      <div className="mid-chat-client__footer p-3 pt-0">
         <TypingIndicator
           fullName={userData?.fullName}
           isTyping={typing}
