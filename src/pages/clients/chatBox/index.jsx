@@ -47,7 +47,7 @@ function ChatBoxClient() {
   }, [idUser]);
 
   return (
-    <div className="chat-box-client">
+    <div className="chat-box-client chat-box-layout">
       <div className="row gx-0">
         <div className="col-3">
           <LeftChatBox  idUser={idUser}  historyChat = {historyChat}/>

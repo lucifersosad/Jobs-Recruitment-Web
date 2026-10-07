@@ -1,6 +1,9 @@
 .mid-chat {
   border-right: 1px solid #ddd;
-  height: 965px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   &__slogan {
     border-bottom: 1px solid #ddd;
     .content {
@@ -43,22 +46,30 @@
     }
   }
   &__body {
+    flex: 1;
+    min-height: 0;
+    .ant-spin-nested-loading,
+    .ant-spin-container {
+      height: 100%;
+    }
     .box-chat-all {
-      height: 730px;
-      overflow-y: scroll;
+      height: 100%;
+      overflow-y: auto;
 
       &::-webkit-scrollbar {
-        width: 1px;
+        width: 4px;
       }
 
       /* Track */
       &::-webkit-scrollbar-track {
-        background: transparent;
+        background: #24bafa26;
+        border-radius: 9999px;
       }
 
       /* Handle */
       &::-webkit-scrollbar-thumb {
         background: #5a5a5a3d;
+        border-radius: 9999px;
       }
 
       /* Handle on hover */

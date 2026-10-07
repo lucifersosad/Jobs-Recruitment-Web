@@ -173,7 +173,7 @@ function MidChatBox({ socket, userData, contentChat, loadMore }) {
           </div>
         </Spin>
       </div>
-      <div className="mid-chat__footer p-3">
+      <div className="mid-chat__footer p-3 pt-0">
         <TypingIndicator fullName={userData?.fullName} isTyping={typing} />
         <div className="input-chat row align-items-center">
           <div className="col-1">

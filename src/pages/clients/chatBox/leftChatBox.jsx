@@ -50,11 +50,11 @@ function LeftChatBox({ historyChat, idUser }) {
         </div>
       </div>
       <div className="left-chat-client__sending">
-        <div className="p-1 mx-1">
-          <div className="memu-sending mb-3">
+        <div className="-mx-1">
+          <div className="memu-sending">
             <Menu mode="horizontal" items={items} />
           </div>
-          <div className="menu-chat">
+          <div className="menu-chat px-1">
             {historyChat.map((item, index) => (
               <div key={index}>
                 {(item?.lastMessage || item?.typeRoom === "group") && (
@@ -62,7 +62,7 @@ function LeftChatBox({ historyChat, idUser }) {
                     <Link
                       to={`/chat-box/t/${item?.user_id}`}
                       key={index}
-                      className={`chat-box mb-2 ${
+                      className={`chat-box mb-2 mt-2 ${
                         item?.user_id === idUser && "active"
                       }`}
                     >

@@ -49,7 +49,7 @@ function ChatBox() {
   }, [idUser]);
 
   return (
-    <div className="chat-box ">
+    <div className="chat-box chat-box-layout">
       <div className="row gx-0">
         <div className="col-3">
           <LeftChatBox  idUser={idUser}  historyChat = {historyChat}/>

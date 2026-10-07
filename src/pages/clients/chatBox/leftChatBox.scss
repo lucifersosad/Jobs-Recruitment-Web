@@ -1,4 +1,7 @@
 .left-chat-client {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   .ant-menu-light.ant-menu-horizontal > .ant-menu-item-selected::after {
     border-bottom-color: #94c8f5 !important;
   }
@@ -85,7 +88,16 @@
     }
   }
   &__sending {
-    height: 674px;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    > div {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
 
     .memu-sending {
       ul {
@@ -95,22 +107,25 @@
       }
     }
     .menu-chat {
-      max-height: 600px;
+      flex: 1;
+      min-height: 0;
       overflow-x: hidden;
-      overflow-y: scroll;
+      overflow-y: auto;
 
       &::-webkit-scrollbar {
-        width: 1px;
+        width: 4px;
       }
 
       /* Track */
       &::-webkit-scrollbar-track {
         background: transparent;
+        border-radius: 9999px;
       }
 
       /* Handle */
       &::-webkit-scrollbar-thumb {
         background: #5dcaf975;
+        border-radius: 9999px;
       }
 
       /* Handle on hover */
