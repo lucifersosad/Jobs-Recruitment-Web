@@ -77,15 +77,13 @@
   &__logo {
     padding: 13px;
     a {
-      font-size: 30px;
-      font-weight: 600;
+      display: inline-block;
       text-decoration: none;
-      color: #fda4c8;
-      margin-bottom: 0;
-      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-      border-radius: 10px;
-      background-color: #f6f6f6;
-      transform: rotate(-6deg);
+      .logo-img {
+        height: 32px;
+        width: auto;
+        object-fit: contain;
+      }
     }
   }
 

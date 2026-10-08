@@ -35,7 +35,7 @@ function Header({ setIsCollapsed, isCollapsed }) {
               <MenuOutlined />
             </button>
             <a href="#!">
-              <span className=" headerEmployer__logo">UTEM</span>
+              <span className=" headerEmployer__logo"><img className="logo-img" src="/images/UTEM_LOGO.svg" alt="UTEM" /></span>
             </a>
           </div>
 

@@ -22,6 +22,14 @@
     color: #ffffff;
     font-size: 28px;
     font-weight: 600;
+    .logo-img {
+      height: 28px;
+      width: auto;
+      background: #fff;
+      border-radius: 6px;
+      padding: 4px 8px;
+      vertical-align: middle;
+    }
   }
   &__button {
     background: transparent;
