@@ -11,8 +11,13 @@ import logo from "./images/logo.png";
 import { Input, Menu } from "antd";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function LeftChatBox({ historyChat, idUser }) {
+  //Id của employer đang đăng nhập, dùng để biết tin nhắn cuối có phải do mình gửi không
+  const idEmployer = useSelector(
+    (state) => state.authenticationReducerEmployer?.infoUserEmployer?.id
+  );
 
   const items = [
     {
@@ -83,7 +88,7 @@ function LeftChatBox({ historyChat, idUser }) {
                           <span>{item?.fullName}</span>
                         </div>
                         <div className="demo">
-                          {item?.user_id !== item?.idUserChat && "Bạn: "}
+                          {item?.idUserChat && item?.idUserChat === idEmployer && "Bạn: "}
                           <span
                             className={`${item?.unreadCount > 0 && "noo-seen"}`}
                           >
