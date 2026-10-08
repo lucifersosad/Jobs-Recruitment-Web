@@ -56,40 +56,47 @@ function MidChatBox({
     if (!socket) return;
 
     //Hàm này check xem user có online hay không
-    socket.on("SERVER_RETURN_REQUEST_ONLINE", (data) => {
+    const handleOnline = (data) => {
       if (idUser === data?.user_id) {
         setStatus("Hoạt động");
       }
-    });
+    };
 
     //Hàm này check xem user có offline hay không
-    socket.on("SERVER_RETURN_REQUEST_OFFLINE", (data) => {
+    const handleOffline = (data) => {
       if (idUser === data?.user_id) {
         setStatus("Dừng hoạt động");
       }
-    });
+    };
     //Hàm này nhận tin nhắn từ server
-    socket.on("SERVER_RETURN_MESSAGE", (data) => {
-      console.log("🚀 ~ socket.on ~ data:", data)
+    const handleMessage = (data) => {
       setArrayChat((prev) => [...prev, data]);
-    });
+    };
     //Hàm này load thêm tin nhắn khi có tin nhắn mới tin nhắn mới nhất
-    socket.on("SERVER_RETURN_REQUEST_LOADMORE", (data) => {
+    const handleLoadMore = (data) => {
       const idCheck = data?.id_check;
+      //Chưa mở khung chat nào thì server không xử lý seen, load lại luôn
+      if (!idUser) {
+        loadMore();
+        return;
+      }
       //Nếu mà hiện tại đang ở khung chat của đối phương thì sẽ đổi read = true luôn vì đang ở khung chat đối phương mà
-
-      socket.emit("CLIENT_SEND_REQUEST_SEEN_CHAT", {
-        idUser: idUser,
-        idCheck: idCheck,
-      });
+      //Đợi server cập nhật read xong (ack) mới load lại lịch sử, timeout để không bị treo nếu server không phản hồi
+      socket.timeout(5000).emit(
+        "CLIENT_SEND_REQUEST_SEEN_CHAT",
+        {
+          idUser: idUser,
+          idCheck: idCheck,
+        },
+        () => loadMore()
+      );
       // if (idClient !== idCheck &&  arrayChat.length > 0) {
       //   const audio = new Audio(audioMp3);
       //   audio.play();
       // }
-      loadMore();
-    });
+    };
     //Chức năng typing
-    socket.on("SERVER_RETURN_TYPING", () => {
+    const handleTypingServer = () => {
       setTyping(true);
       if (typingTimer.current) {
         clearTimeout(typingTimer.current);
@@ -97,10 +104,22 @@ function MidChatBox({
       typingTimer.current = setTimeout(() => {
         setTyping(false);
       }, 3000);
-    });
+    };
+
+    socket.on("SERVER_RETURN_REQUEST_ONLINE", handleOnline);
+    socket.on("SERVER_RETURN_REQUEST_OFFLINE", handleOffline);
+    socket.on("SERVER_RETURN_MESSAGE", handleMessage);
+    socket.on("SERVER_RETURN_REQUEST_LOADMORE", handleLoadMore);
+    socket.on("SERVER_RETURN_TYPING", handleTypingServer);
+
     setLoading(false);
     //Nếu mà component bị unmount thì sẽ xóa hết listener
     return () => {
+      socket.off("SERVER_RETURN_REQUEST_ONLINE", handleOnline);
+      socket.off("SERVER_RETURN_REQUEST_OFFLINE", handleOffline);
+      socket.off("SERVER_RETURN_MESSAGE", handleMessage);
+      socket.off("SERVER_RETURN_REQUEST_LOADMORE", handleLoadMore);
+      socket.off("SERVER_RETURN_TYPING", handleTypingServer);
       setTyping(false);
       if (typingTimer.current) {
         clearTimeout(typingTimer.current);
