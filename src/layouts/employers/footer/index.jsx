@@ -12,7 +12,7 @@ function FooterMain() {
             <Footer className='footer'>
                 <div className='container footer__main'>
                     <div className="footer__logo col-2">
-                        <NavLink className="mr-1 emplo" to={"/"}>UTEM</NavLink>
+                        <NavLink className="mr-1 emplo" to={"/"}><img className="logo-img" src="/images/UTEM_LOGO.svg" alt="UTEM" /></NavLink>
                     </div>
                     <div className='row footer__main-body'>
                         <div className='col-2'>

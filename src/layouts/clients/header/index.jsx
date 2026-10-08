@@ -99,7 +99,7 @@ function Header() {
           <div className="row justify-content-center align-items-center">
             <div className="header__logo col-2">
               <NavLink className="mr-1" to="/">
-                UTEM
+                <img className="logo-img" src="/images/UTEM_LOGO.svg" alt="UTEM" />
               </NavLink>
             </div>
             <div className="header__search col-5 text-center">
