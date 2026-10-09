@@ -40,11 +40,11 @@ function LeftChatBox({ historyChat, idUser }) {
         <div className="settings">
           <Link to={"../dashboard"}>Về trang chủ</Link>
         </div>
-        <div className="logo">
+        {/* <div className="logo">
           <FontAwesomeIcon icon={faGear} />
-        </div>
+        </div> */}
       </div>
-      <div className="left-chat__search mb-3">
+      {/* <div className="left-chat__search mb-3">
         <div className="search p-1 mx-1">
           <Input
             style={{ width: "100%" }}
@@ -52,8 +52,8 @@ function LeftChatBox({ historyChat, idUser }) {
             prefix={<FontAwesomeIcon icon={faMagnifyingGlass} />}
           ></Input>
         </div>
-      </div>
-      <div className="left-chat__feedback mb-3">
+      </div> */}
+      {/* <div className="left-chat__feedback mb-3">
         <div className="send-feedback p-3 mx-1 mt-2">
           <span className="content-feed">
             <strong>Bạn đánh giá trải nghiệp của mình với UTEM thế nào</strong>{" "}
@@ -62,12 +62,12 @@ function LeftChatBox({ historyChat, idUser }) {
           </span>
           <button className="button-feed btn mt-3 w-100">Gửi phàn hồi</button>
         </div>
-      </div>
+      </div> */}
       <div className="left-chat__sending">
         <div className="-mx-1">
-          <div className="memu-sending">
+          {/* <div className="memu-sending">
             <Menu mode="horizontal" items={items} />
-          </div>
+          </div> */}
           <div className="menu-chat px-2">
             {historyChat.map((item, index) => (
               <div key={index}>

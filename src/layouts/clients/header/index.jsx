@@ -79,16 +79,16 @@ function Header() {
       key: "cv",
       icon: null,
     },
-    {
-      label: "Cẩm Nang Tuyển Dụng",
-      key: "3",
-      icon: null,
-    },
-    {
-      label: "Tiện Ích",
-      key: "4",
-      icon: null,
-    },
+    // {
+    //   label: "Cẩm Nang Tuyển Dụng",
+    //   key: "3",
+    //   icon: null,
+    // },
+    // {
+    //   label: "Tiện Ích",
+    //   key: "4",
+    //   icon: null,
+    // },
     
   ];
 
