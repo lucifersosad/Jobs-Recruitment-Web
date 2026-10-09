@@ -9,6 +9,7 @@ import { getCity } from "../../../services/admins/headerApi";
 import { messageHelp } from "./js/options";
 import { phoneCheck } from "../../../pages/admins/addJobs/js/validate";
 function ContactUsers() {
+    const [form] = Form.useForm();
     const [city, setCity] = useState([]);
     const fetchApi = async () => {
       const dataCity = await getCity();
@@ -25,8 +26,8 @@ function ContactUsers() {
     useEffect(() => {
       fetchApi();
     },[])
-    const handleFormSubmit = (values) => {
-    
+    const handleFormSubmit = () => {
+      form.resetFields();
     }
   return (
     <div className="contact-users row gx-0">
@@ -36,7 +37,7 @@ function ContactUsers() {
       <div className="box-content col-6">
         <div className="form-contact">
           <div className="text-heading">Đăng ký nhận tư vấn</div>
-          <Form  onFinish={handleFormSubmit} layout="vertical" name="contact-users">
+          <Form form={form} onFinish={handleFormSubmit} layout="vertical" name="contact-users">
             <Form.Item
 
               label="Họ và tên"

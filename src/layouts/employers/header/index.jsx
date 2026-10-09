@@ -53,7 +53,7 @@ function Header() {
               </NavLink>
             </div>
             <div className="header-employers__search col-5 text-center">
-              <Menu mode="horizontal" items={itemsMenuNav} />
+              <Menu mode="horizontal" items={itemsMenuNav} selectedKeys={['1']} onClick={undefined}/>
             </div>
 
             <div className="header-employers__boxUsers col-3 text-center">
