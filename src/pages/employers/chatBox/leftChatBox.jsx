@@ -68,7 +68,7 @@ function LeftChatBox({ historyChat, idUser }) {
           <div className="memu-sending">
             <Menu mode="horizontal" items={items} />
           </div>
-          <div className="menu-chat px-1">
+          <div className="menu-chat px-2">
             {historyChat.map((item, index) => (
               <div key={index}>
                 {(item?.lastMessage || item?.typeRoom === "group") && (

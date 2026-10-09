@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import LeftChatBox from "./leftChatBox";
 import MidChatBox from "./midChatBox";
 import RightChatBox from "./rightChatBox";
+import EmptyChatBox from "../../../components/alls/EmptyChatBox";
 import "./chatBox.scss";
 
 import { getCookie } from "../../../helpers/cookie";
@@ -46,6 +47,16 @@ function ChatBoxClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idUser]);
 
+  //Chưa mở khung chat nào thì MidChatBox không render, tự load lại lịch sử khi có tin nhắn mới
+  useEffect(() => {
+    if (!socketClient || idUser) return;
+    const handleLoadMore = () => loadMore(setHistoryChat);
+    socketClient.on("SERVER_RETURN_REQUEST_LOADMORE", handleLoadMore);
+    return () => {
+      socketClient.off("SERVER_RETURN_REQUEST_LOADMORE", handleLoadMore);
+    };
+  }, [socketClient, idUser]);
+
   return (
     <div className="chat-box-client chat-box-layout">
       <div className="row gx-0">
@@ -53,15 +64,19 @@ function ChatBoxClient() {
           <LeftChatBox  idUser={idUser}  historyChat = {historyChat}/>
         </div>
         <div className="col-6 reset-button-employer">
-          <MidChatBox
-            loadMore={() => {
-              loadMore(setHistoryChat);
-            }}
-            typeRoom={typeRoom}
-            contentChat={contentChat}
-            userData={userData}
-            socket={socketClient}
-          />
+          {idUser ? (
+            <MidChatBox
+              loadMore={() => {
+                loadMore(setHistoryChat);
+              }}
+              typeRoom={typeRoom}
+              contentChat={contentChat}
+              userData={userData}
+              socket={socketClient}
+            />
+          ) : (
+            <EmptyChatBox role="client" />
+          )}
         </div>
         <div className="col-3 reset-button-employer">
           <RightChatBox />
