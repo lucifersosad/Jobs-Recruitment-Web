@@ -149,11 +149,11 @@ function DropMenu(props) {
     <>
       {" "}
       <ul className="header__user col-5">
-        <li className="header__user-noti">
+        {/* <li className="header__user-noti">
           <a href="#!">
             <FontAwesomeIcon icon={faBell} />
           </a>
-        </li>
+        </li> */}
         <li className="header__user-chat">
           <Link to="/chat-box">
             <FontAwesomeIcon icon={faMessage} />

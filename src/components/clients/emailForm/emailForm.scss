@@ -56,6 +56,12 @@
             .ant-input-outlined {
                 border: 0 !important;
             }
+            .ant-input-prefix {
+                margin-inline-end: 0;
+            }
+            .ant-input-affix-wrapper {
+                padding: 0;
+            }
             .ant-input-group-addon{
                 background: #bd9579;
                 overflow:hidden ;

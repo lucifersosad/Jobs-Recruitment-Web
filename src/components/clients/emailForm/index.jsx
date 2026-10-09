@@ -1,10 +1,13 @@
 import { Input } from "antd";
 import "./emailForm.scss";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { MailOutlined } from "@ant-design/icons";
 function EmailForm(props) {
   const { Search } = Input;
-  const handleFormSearch = (value) => {};
+  const [email, setEmail] = useState("");
+  const handleFormSearch = () => {
+    setEmail("");
+  };
   return (
     <div className="cb-section" style={{paddingBottom: 60}}>
       <div className="email ">
@@ -24,6 +27,8 @@ function EmailForm(props) {
                 prefix={<MailOutlined size={20} style={{padding: "0 10px", fontSize: 18, opacity: "0.5"}}/>}
                 className="search__form "
                 placeholder="Nhập địa chỉ email của bạn"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 onSearch={handleFormSearch}
                 enterButton="Đăng Ký Ngay"
               />

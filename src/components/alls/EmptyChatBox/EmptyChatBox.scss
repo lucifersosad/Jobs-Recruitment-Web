@@ -1,0 +1,484 @@
+$blue: #47a5f8;
+$blue-soft: #94c8f5;
+$navy: #0b356e;
+
+.empty-chat {
+  --accent: #fda4c8;
+  --accent-strong: #fc7fb1;
+  --accent-rgb: 253, 164, 200;
+  --accent-strong-rgb: 252, 127, 177;
+  --mx: 0;
+  --my: 0;
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #ddd;
+  background: #fbfcff;
+  isolation: isolate;
+
+  &--employer {
+    --accent: #24bafa;
+    --accent-strong: #00b1fd;
+    --accent-rgb: 36, 186, 250;
+    --accent-strong-rgb: 0, 177, 253;
+  }
+
+  /* ---------- Nền động ---------- */
+  &__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.55;
+      animation: emptyChatFloat 16s ease-in-out infinite alternate;
+    }
+    .blob--accent {
+      width: 340px;
+      height: 340px;
+      background: var(--accent);
+      top: -80px;
+      right: -60px;
+    }
+    .blob--blue {
+      width: 380px;
+      height: 380px;
+      background: $blue-soft;
+      bottom: -120px;
+      left: -100px;
+      animation-delay: -5s;
+      animation-duration: 19s;
+    }
+    .blob--navy {
+      width: 220px;
+      height: 220px;
+      background: rgba($navy, 0.35);
+      top: 40%;
+      left: 55%;
+      animation-delay: -9s;
+      animation-duration: 22s;
+    }
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba($navy, 0.13) 1px, transparent 1px);
+      background-size: 22px 22px;
+      mask-image: radial-gradient(ellipse at center, #000 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 70%);
+    }
+  }
+
+  &__inner {
+    width: 100%;
+    max-width: 520px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* ---------- Khung cảnh minh hoạ ---------- */
+  &__scene {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin-bottom: 20px;
+    transform: perspective(900px) rotateX(calc(var(--my) * -10deg))
+      rotateY(calc(var(--mx) * 12deg));
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: emptyChatRise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      translate: -50% -50%;
+    }
+    .ring--outer {
+      width: 290px;
+      height: 290px;
+      border: 1.5px dashed rgba($blue, 0.35);
+      animation: emptyChatSpin 40s linear infinite;
+    }
+    .ring--inner {
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(#fff, 0.9) 40%, rgba(#fff, 0) 70%);
+      border: 1px solid rgba(var(--accent-rgb), 0.4);
+      box-shadow: 0 0 60px rgba(var(--accent-rgb), 0.35), inset 0 0 40px rgba($blue-soft, 0.25);
+    }
+
+    .ring__item {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 40px;
+      height: 40px;
+      margin: -20px 0 0 -20px;
+      transform: rotate(calc(360deg / var(--n) * var(--i))) translateY(-145px)
+        rotate(calc(-360deg / var(--n) * var(--i)));
+
+      .orbit-icon {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        border: 2px solid #fff;
+        box-shadow: 0 6px 16px rgba($navy, 0.2);
+        animation: emptyChatSpin 40s linear infinite reverse;
+      }
+      &:nth-child(even) .orbit-icon {
+        background: linear-gradient(135deg, $blue, $navy);
+      }
+    }
+
+    .phone {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 210px;
+      translate: -50% -50%;
+      padding: 12px;
+      border-radius: 22px;
+      background: rgba(#fff, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(#fff, 0.9);
+      box-shadow: 0 24px 50px -12px rgba($navy, 0.28),
+        0 0 0 1px rgba($navy, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+
+      &__head {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba($navy, 0.06);
+        font-size: 11px;
+        font-weight: 600;
+        color: $navy;
+      }
+      &__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #3ad29f;
+        box-shadow: 0 0 0 0 rgba(#3ad29f, 0.6);
+        animation: emptyChatPulse 2s ease-out infinite;
+      }
+    }
+
+    .bubble {
+      max-width: 85%;
+      font-size: 11.5px;
+      line-height: 1.35;
+      padding: 7px 10px;
+      border-radius: 14px;
+      opacity: 0;
+      animation: emptyChatBubble 7s ease-in-out infinite;
+
+      &--friend {
+        align-self: flex-start;
+        background: #eef3fb;
+        color: $navy;
+        border-bottom-left-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        svg {
+          color: $blue;
+        }
+      }
+      &--me {
+        align-self: flex-end;
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        border-bottom-right-radius: 4px;
+        animation-delay: 0.9s;
+      }
+      &--typing {
+        animation-delay: 1.8s;
+        gap: 4px;
+        padding: 9px 12px;
+        span {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: $blue;
+          animation: emptyChatDot 1.2s ease-in-out infinite;
+          &:nth-child(2) {
+            animation-delay: 0.15s;
+          }
+          &:nth-child(3) {
+            animation-delay: 0.3s;
+          }
+        }
+      }
+    }
+
+    .spark {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      rotate: 45deg;
+      animation: emptyChatTwinkle 3s ease-in-out infinite;
+    }
+    .spark--1 {
+      top: 18px;
+      left: 40px;
+      background: var(--accent);
+    }
+    .spark--2 {
+      bottom: 30px;
+      right: 26px;
+      background: $blue;
+      animation-delay: 1s;
+    }
+    .spark--3 {
+      top: 60px;
+      right: 10px;
+      width: 6px;
+      height: 6px;
+      background: $navy;
+      animation-delay: 2s;
+    }
+  }
+
+  /* ---------- Chữ ---------- */
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: $navy;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+    animation: emptyChatRise 0.8s 0.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    span {
+      background: linear-gradient(90deg, $blue, var(--accent-strong), $blue);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: emptyChatShine 4s linear infinite;
+    }
+    .wave {
+      display: inline-block;
+      font-style: normal;
+      transform-origin: 70% 70%;
+      animation: emptyChatWave 2.4s ease-in-out infinite;
+    }
+  }
+  &__desc {
+    max-width: 400px;
+    color: #5b6b82;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 22px;
+    animation: emptyChatRise 0.8s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    strong {
+      color: var(--accent-strong);
+    }
+  }
+
+  /* ---------- CTA ---------- */
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    margin-bottom: 22px;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    background: linear-gradient(135deg, $blue, $navy);
+    box-shadow: 0 12px 24px -8px rgba($navy, 0.5);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: emptyChatRise 0.8s 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    &:hover {
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px -8px rgba($navy, 0.6);
+    }
+  }
+
+  /* ---------- Tính năng ---------- */
+  &__features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    animation: emptyChatRise 0.8s 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: $navy;
+      background: rgba(#fff, 0.7);
+      border: 1px solid rgba($navy, 0.07);
+      svg {
+        color: $blue;
+      }
+    }
+  }
+
+  &__hint {
+    margin-top: 18px;
+    font-size: 12px;
+    color: #9aa5b5;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    svg {
+      animation: emptyChatNudge 1.6s ease-in-out infinite;
+    }
+  }
+
+  @media (max-height: 720px) {
+    &__scene {
+      transform: scale(0.8);
+      margin: -30px 0 -10px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    &__scene {
+      animation: none !important;
+      transition: none !important;
+    }
+    .bubble {
+      opacity: 1;
+    }
+  }
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes emptyChatFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -20px) scale(1.08);
+  }
+  100% {
+    transform: translate(-20px, 25px) scale(0.95);
+  }
+}
+@keyframes emptyChatSpin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes emptyChatRise {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes emptyChatBubble {
+  0%,
+  4% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.92);
+  }
+  10%,
+  82% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  92%,
+  100% {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+@keyframes emptyChatDot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+@keyframes emptyChatPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(58, 210, 159, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba(58, 210, 159, 0);
+  }
+}
+@keyframes emptyChatTwinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+    scale: 0.6;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.1;
+  }
+}
+@keyframes emptyChatShine {
+  to {
+    background-position: 200% center;
+  }
+}
+@keyframes emptyChatWave {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10%,
+  30% {
+    transform: rotate(16deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+}
+@keyframes emptyChatNudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+}

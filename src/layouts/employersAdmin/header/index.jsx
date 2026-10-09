@@ -63,12 +63,12 @@ function Header({ setIsCollapsed, isCollapsed }) {
                   <span to={"./chat-box"}>Kết nối</span>
                 </Link>
               </li>
-              <li className="navbar__item check">
+              {/* <li className="navbar__item check">
                 <Link>
                   <FontAwesomeIcon icon={faQuestion} />
                   <span>Trợ giúp</span>
                 </Link>
-              </li>
+              </li> */}
               <li className="navbar__item no-check">
                 <NotificationEmployer />
               </li>
