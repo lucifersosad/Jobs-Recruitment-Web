@@ -20,6 +20,7 @@ function MidChatBox({ socket, userData, contentChat, loadMore }) {
   );
   const [form] = Form.useForm();
   const typingTimer = useRef(null);
+  const inputRef = useRef(null);
   const [typing, setTyping] = useState(false);
   const { idUser } = useParams();
 
@@ -134,7 +135,9 @@ function MidChatBox({ socket, userData, contentChat, loadMore }) {
     if (!socket) return;
     if (content) {
       socket.emit("CLIENT_SEND_MESSAGE", content);
-      form.resetFields();
+      //Không dùng resetFields vì nó remount Input làm mất focus, chỉ xoá nội dung ô nhập
+      form.setFieldsValue({ content: "" });
+      inputRef.current?.focus();
     }
   };
   const handleTyping = () => {
@@ -204,12 +207,12 @@ function MidChatBox({ socket, userData, contentChat, loadMore }) {
 
           <div className="col-11">
             <div className="box-input">
-              <Form form={form} onFinish={handleSendChat} layout="inline">
+              <Form form={form} onFinish={handleSendChat} layout="inline" autoComplete="off">
                 <Form.Item name="content" style={{ flex: "1" }}>
-                  <Input onChange={handleTyping} placeholder="Aa" />
+                  <Input ref={inputRef} autoComplete="off" onChange={handleTyping} placeholder="Aa" />
                 </Form.Item>
                 <Form.Item>
-                  <button type="submit">Gửi</button>
+                  <button type="submit" onMouseDown={(e) => e.preventDefault()}>Gửi</button>
                 </Form.Item>
               </Form>
             </div>
