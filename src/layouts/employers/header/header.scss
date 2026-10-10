@@ -205,3 +205,40 @@
     border-bottom-color: #fda4c8 !important;
   }
 }
+
+.header-employers--mobile {
+  height: 56px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+
+  &__logo img {
+    height: 28px;
+    width: auto;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
+    a {
+      height: 36px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .btn-outline {
+      border: 1px solid #fda4c8;
+      color: #f7619d;
+    }
+    .btn-solid {
+      background: #f7619d;
+      color: #fff;
+    }
+  }
+}

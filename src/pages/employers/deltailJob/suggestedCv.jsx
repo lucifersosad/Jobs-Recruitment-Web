@@ -25,6 +25,7 @@ import { useDispatch } from "react-redux";
 import { UpdateDataAuthEmployer } from "../../../update-data-reducer/employers/updateDataEmployers";
 import UserProfile from "../../../components/employers/userProfile";
 import SuggestSettingModal from "./suggestSettingModal";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const remark = (score) => {
   if (score > 0.8) {
@@ -39,6 +40,7 @@ const remark = (score) => {
 }
 
 function SuggestedCv({ record }) {
+  const isMobile = useIsMobile();
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -363,6 +365,7 @@ function SuggestedCv({ record }) {
       </div>
       <div className="table-view">
         <Table
+          scroll={isMobile ? { x: "max-content" } : undefined}
           loading={loading}
           rowKey={"_id"}
           columns={columns}

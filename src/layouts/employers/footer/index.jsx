@@ -3,13 +3,16 @@ import "./footer.scss"
 
 import { NavLink } from 'react-router-dom';
 import dk from "./images/dk.webp"
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const { Footer } = Layout;
 
 function FooterMain() {
+    const isMobile = useIsMobile();
+
     return (
         <>
-            <Footer className='footer'>
+            <Footer className={`footer${isMobile ? " footer--mobile" : ""}`}>
                 <div className='container footer__main'>
                     <div className="footer__logo col-2">
                         <NavLink className="mr-1 emplo" to={"/"}><img className="logo-img" src="/images/UTEM_LOGO.svg" alt="UTEM" /></NavLink>

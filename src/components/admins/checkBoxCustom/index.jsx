@@ -1,8 +1,10 @@
 import { Checkbox, Col, Row } from "antd";
 import { memo } from "react";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function CheckBoxCustom(props) {
   const { data, gutter, col, value } = props;
+  const isMobile = useIsMobile();
 
   const onChange = (checkedValues) => {
     // Notify the form that the value has changed
@@ -21,7 +23,7 @@ function CheckBoxCustom(props) {
           data.length > 0 &&
           data.map((item, index) => {
             return (
-              <Col key={index} span={col}>
+              <Col key={index} span={isMobile ? 12 : col}>
                 <Checkbox value={item.value}>{item.label}</Checkbox>
               </Col>
             );

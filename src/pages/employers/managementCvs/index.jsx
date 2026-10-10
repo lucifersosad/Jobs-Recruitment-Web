@@ -15,7 +15,9 @@ import moment from "moment";
 import "./managementCvs.scss";
 import MemoizedModelViewCv from "../../../components/employers/modelViewCv";
 import { actionCv } from "../../../services/employers/jobsApi";
+import useIsMobile from "../../../hooks/useIsMobile";
 function ManagementCvs() {
+  const isMobile = useIsMobile();
   const [data, setdata] = useState([]);
  
   const [statusApi, setStatusApi] = useState("");
@@ -256,8 +258,8 @@ const [keywordApi,setKeywordApi] = useState("")
             }}
           >
             <Segmented
-         
-                size="large"
+                block={isMobile}
+                size={isMobile ? "middle" : "large"}
               value={statusApi}
               onChange={(value) => setStatusApi(value)}
               options={[
@@ -298,7 +300,7 @@ const [keywordApi,setKeywordApi] = useState("")
           </ConfigProvider>
         </div>
         <div className="table-cvs">
-          <Table columns={columns} dataSource={data} />
+          <Table columns={columns} dataSource={data} scroll={isMobile ? { x: "max-content" } : undefined} />
         </div>
       </div>
     </div>

@@ -12,6 +12,7 @@ import { io } from "socket.io-client";
 
 import { fetchApi, loadMore } from "./js";
 import { DOMAIN } from "../../../utils/api-domain";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const checkTokenEmployer = getCookie("token-employer") || "";
 
@@ -21,6 +22,7 @@ function ChatBox() {
   const [contentChat, setContentChat] = useState([]);
   const [historyChat, setHistoryChat] = useState([]);
   const { idUser } = useParams();
+  const isMobile = useIsMobile();
 
 
   useEffect(() => {
@@ -60,26 +62,33 @@ function ChatBox() {
   }, [socketEmployer, idUser]);
 
   return (
-    <div className="chat-box chat-box-layout">
+    <div className={`chat-box chat-box-layout${isMobile ? " chat-box-layout--mobile" : ""}`}>
       <div className="row gx-0">
-        <div className="col-3">
-          <LeftChatBox  idUser={idUser}  historyChat = {historyChat}/>
-        </div>
-        <div className="col-6 reset-button-employer">
-          {idUser ? (
-            <MidChatBox
-              loadMore= {()=>{loadMore(setHistoryChat)}}
-              contentChat={contentChat}
-              userData={userData}
-              socket={socketEmployer}
-            />
-          ) : (
-            <EmptyChatBox role="employer" />
-          )}
-        </div>
-        <div className="col-3 reset-button-employer">
-          <RightChatBox />
-        </div>
+        {/* Mobile: chưa chọn hội thoại thì hiện danh sách, đã chọn thì hiện khung chat */}
+        {(!isMobile || !idUser) && (
+          <div className={isMobile ? "col-12" : "col-3"}>
+            <LeftChatBox  idUser={idUser}  historyChat = {historyChat}/>
+          </div>
+        )}
+        {(!isMobile || idUser) && (
+          <div className={`${isMobile ? "col-12" : "col-6"} reset-button-employer`}>
+            {idUser ? (
+              <MidChatBox
+                loadMore= {()=>{loadMore(setHistoryChat)}}
+                contentChat={contentChat}
+                userData={userData}
+                socket={socketEmployer}
+              />
+            ) : (
+              <EmptyChatBox role="employer" />
+            )}
+          </div>
+        )}
+        {!isMobile && (
+          <div className="col-3 reset-button-employer">
+            <RightChatBox />
+          </div>
+        )}
       </div>
     </div>
   );

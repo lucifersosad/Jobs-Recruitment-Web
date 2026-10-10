@@ -13,7 +13,10 @@ import { useState } from "react";
 
 import NotifyClient from "../../../components/clients/notify";
 import { forgotPasswordUserEmployer } from "../../../services/employers/employer-userApi";
+import useIsMobile from "../../../hooks/useIsMobile";
+import "../login/authMobile.scss";
 function ForgotPasswordEmployer() {
+  const isMobile = useIsMobile();
   const [api, contextHolder] = notification.useNotification();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -44,9 +47,9 @@ function ForgotPasswordEmployer() {
   return (
     <>
       {contextHolder}
-      <div className="employers-login">
+      <div className={`employers-login${isMobile ? " employer-auth--mobile" : ""}`}>
         <div className="row align-items-center ">
-          <div className="col-7">
+          <div className={isMobile ? "col-12" : "col-7"}>
             <div className="employer-login__form content-container">
               <h2 className="title">Quên mật khẩu</h2>
               {message !== "" ? (
@@ -155,13 +158,15 @@ function ForgotPasswordEmployer() {
               </div>
             </div>
           </div>
-          <div className="col-5">
-            <div className="sticky-item-ok">
-              <div className="employer-login__image sitcky-item">
-                <img src={banner} alt="" />
+          {!isMobile && (
+            <div className="col-5">
+              <div className="sticky-item-ok">
+                <div className="employer-login__image sitcky-item">
+                  <img src={banner} alt="" />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

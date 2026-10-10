@@ -4,13 +4,16 @@ import { faFaceSmile, faImage } from "@fortawesome/free-regular-svg-icons";
 import { Form, Input, Spin } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import useIsMobile from "../../../hooks/useIsMobile";
 import audioMp3 from "./mp3/tb.mp3";
 import TypingIndicator from "../../../components/alls/Typing";
 function MidChatBox({ socket, userData, contentChat, loadMore }) {
   
   const [idEmployer, setIdEmployer] = useState("");
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
   const boxChatAllRef = useRef(null);
   const [status, setStatus] = useState(
     userData?.statusOnline ? "Hoạt động" : "Dừng hoạt động"
@@ -145,13 +148,20 @@ function MidChatBox({ socket, userData, contentChat, loadMore }) {
   };
   return (
     <div className="mid-chat  ">
-      <div className="mid-chat__slogan p-3 mb-1">
-        <div className="content">
-          Embrace a fresh approach to <span>pursue your opportunities</span>.
+      {!isMobile && (
+        <div className="mid-chat__slogan p-3 mb-1">
+          <div className="content">
+            Embrace a fresh approach to <span>pursue your opportunities</span>.
+          </div>
         </div>
-      </div>
-      <div className="mid-chat__header p-3">
+      )}
+      <div className={`mid-chat__header ${isMobile ? "p-2" : "p-3"}`}>
         <div className="box-info">
+          {isMobile && (
+            <Link to="/nha-tuyen-dung/app/chat-box" className="back-button" aria-label="Quay lại">
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </Link>
+          )}
           <div className="image">
             <img src={userData?.avatar} alt="avatar" />
           </div>
@@ -198,14 +208,16 @@ function MidChatBox({ socket, userData, contentChat, loadMore }) {
       <div className="mid-chat__footer p-3 pt-0">
         <TypingIndicator fullName={userData?.fullName} isTyping={typing} />
         <div className="input-chat row align-items-center">
-          <div className="col-1">
-            <div className="box-icon">
-              <FontAwesomeIcon icon={faImage} />
-              <FontAwesomeIcon icon={faFaceSmile} />
+          {!isMobile && (
+            <div className="col-1">
+              <div className="box-icon">
+                <FontAwesomeIcon icon={faImage} />
+                <FontAwesomeIcon icon={faFaceSmile} />
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-11">
+          <div className={isMobile ? "col-12" : "col-11"}>
             <div className="box-input">
               <Form form={form} onFinish={handleSendChat} layout="inline" autoComplete="off">
                 <Form.Item name="content" style={{ flex: "1" }}>

@@ -161,3 +161,31 @@
     }
   }
 }
+
+.chat-box-layout--mobile {
+  .mid-chat {
+    border-right: none;
+    &__header .box-info {
+      gap: 12px;
+      .back-button {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #212f3f;
+        font-size: 18px;
+      }
+      .image {
+        width: 40px;
+        height: 40px;
+      }
+    }
+    &__footer {
+      padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+      input {
+        font-size: 16px;
+      }
+    }
+  }
+}

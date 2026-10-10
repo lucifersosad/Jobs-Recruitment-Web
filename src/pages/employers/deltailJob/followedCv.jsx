@@ -22,8 +22,10 @@ import { removeAccents } from "../../../helpers/removeAccents";
 import moment from "moment";
 import UserProfile from "../../../components/employers/userProfile";
 import { faAddressBook } from "@fortawesome/free-regular-svg-icons";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function FollowedCv({ record }) {
+  const isMobile = useIsMobile();
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
@@ -339,6 +341,7 @@ function FollowedCv({ record }) {
       </div>
       <div className="table-view">
         <Table
+          scroll={isMobile ? { x: "max-content" } : undefined}
           rowKey={"_id"}
           columns={columns}
           dataSource={data}

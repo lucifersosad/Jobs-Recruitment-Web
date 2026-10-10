@@ -1,0 +1,47 @@
+// Giao diện mobile dùng chung cho Đăng nhập / Đăng ký / Quên mật khẩu / Tạo lại mật khẩu (nhà tuyển dụng)
+.employer-auth--mobile {
+  > .row {
+    margin: 0;
+    > .col-12 {
+      padding: 0;
+    }
+  }
+
+  .content-container {
+    padding: 24px 16px 32px;
+  }
+
+  // Đăng ký: các cặp ô nhập (col-5) xếp dọc
+  form .row > .col-5,
+  form .row > .col-6 {
+    width: 100%;
+  }
+
+  input {
+    font-size: 16px !important;
+  }
+
+  button[type="submit"] {
+    min-height: 44px;
+  }
+}
+
+.employer-reset--mobile {
+  position: static;
+  min-height: 100vh;
+  padding: 24px 0;
+
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .employers-reset__form {
+    width: 100%;
+    padding: 20px 16px;
+  }
+
+  input {
+    font-size: 16px !important;
+  }
+}

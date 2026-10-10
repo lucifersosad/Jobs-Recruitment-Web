@@ -24,8 +24,11 @@ import { dataLevel } from "./js/options";
 import { removeAccents } from "../../../helpers/removeAccents";
 import { phoneCheck } from "../../admins/addJobs/js/validate";
 import { registerUserEmployer } from "../../../services/employers/employer-userApi";
+import useIsMobile from "../../../hooks/useIsMobile";
+import "../login/authMobile.scss";
 
 function RegisterEmployers() {
+  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [noti, setNoti] = useState(false);
@@ -103,9 +106,9 @@ function RegisterEmployers() {
   };
   return (
     <>
-      <div className="employer-login  ">
+      <div className={`employer-login${isMobile ? " employer-auth--mobile" : ""}`}>
         <div className="row ">
-          <div className="col-7 ">
+          <div className={isMobile ? "col-12" : "col-7"}>
             <div className="employer-login__form content-container">
               <h2 className="title">Đăng ký tài khoản cho Nhà tuyển dụng</h2>
               <p className="description">
@@ -406,13 +409,15 @@ function RegisterEmployers() {
               <hr />
             </div>
           </div>
-          <div className="col-5">
-            <div className="sticky-item-ok">
-              <div className="employer-login__image sitcky-item">
-                <img src={banner} alt="" />
+          {!isMobile && (
+            <div className="col-5">
+              <div className="sticky-item-ok">
+                <div className="employer-login__image sitcky-item">
+                  <img src={banner} alt="" />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

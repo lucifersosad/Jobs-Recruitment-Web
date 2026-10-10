@@ -15,8 +15,10 @@ import AOS from "aos";
 import "aos/dist/aos.css"; // You can also use <link> for styles
 import { useEffect } from "react";
 import MemoizedCherryBlossom from "../../../components/employers/cherryBlossom";
+import useIsMobile, { MOBILE_BREAKPOINT } from "../../../hooks/useIsMobile";
 
 function HomeEmployers() {
+  const isMobile = useIsMobile();
   // Defining WOW
 
   const blossoms = Array(Math.floor(Math.random() * 9) + 2).fill(null);
@@ -24,12 +26,14 @@ function HomeEmployers() {
   useEffect(() => {
     AOS.init({
       duration: 2500,
+      //Mobile: tắt hiệu ứng trượt ngang, hình hiện luôn
+      disable: () => window.innerWidth < MOBILE_BREAKPOINT,
     });
   }, []);
   return (
     <div className="cb-section">
       <div className="">
-        <div className="home-employer">
+        <div className={`home-employer${isMobile ? " home-employer--mobile" : ""}`}>
           {/* section1 */}
           <section className="section-1 bg-main " style={{position:"relative"}}>
             {blossoms.map((_, index) => (

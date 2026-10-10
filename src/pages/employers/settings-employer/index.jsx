@@ -5,9 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faUser, faBuilding } from "@fortawesome/free-solid-svg-icons";
 import ChangePassword from "./changePassword";
 import InfoCompany from "./infoCompany";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 
 function SettingEmployer() {
+  const isMobile = useIsMobile();
 
   const itemsTab = [
     {
@@ -47,7 +49,7 @@ function SettingEmployer() {
         <h3>Cài đặt tài khoản</h3>
       </div>
       <div className="box-tab">
-        <Tabs tabPosition={"left"} type="card" items={itemsTab}  style={{width: "100%"}}/>
+        <Tabs tabPosition={isMobile ? "top" : "left"} type="card" items={itemsTab}  style={{width: "100%"}}/>
       </div>
     </div>
   );

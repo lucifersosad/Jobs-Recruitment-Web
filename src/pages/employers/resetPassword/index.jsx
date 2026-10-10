@@ -11,8 +11,11 @@ import NotifyClient from "../../../components/clients/notify";
 
 import { checkTokenResetEmployer, resetPasswordEmployer } from "../../../services/employers/employer-userApi";
 import NotFound from "../notFound";
+import useIsMobile from "../../../hooks/useIsMobile";
+import "../login/authMobile.scss";
 
 function ResetPasswordEmployer() {
+  const isMobile = useIsMobile();
   const { token } = useParams();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -68,7 +71,7 @@ function ResetPasswordEmployer() {
         <NotFound />
       ) : (
         <>
-          <div className="cb-section employers-reset">
+          <div className={`cb-section employers-reset${isMobile ? " employer-reset--mobile" : ""}`}>
             <div className="container">
               <div className="row">
                 <div className="col-12">

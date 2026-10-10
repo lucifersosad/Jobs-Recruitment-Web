@@ -17,8 +17,10 @@ import MemoizedFilterDropdownCustom from "../../../components/employers/filterDr
 import { removeAccents } from "../../../helpers/removeAccents";
 
 import { options } from "./js/options";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function ApplyCv({ record, fetchApi, loading, messageHandlers }) {
+  const isMobile = useIsMobile();
   const [statusCheck, setStatus] = useState("");
   const [data, setData] = useState([]);
   const [dataFull, setDataFull] = useState([]);
@@ -256,6 +258,7 @@ function ApplyCv({ record, fetchApi, loading, messageHandlers }) {
         />
       </div>
       <Table
+        scroll={isMobile ? { x: "max-content" } : undefined}
         loading={loading}
         showSorterTooltip={false}
         rowKey={"email"}

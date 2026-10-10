@@ -22,8 +22,10 @@ import { faAddressBook } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch } from "react-redux";
 import { UpdateDataAuthEmployer } from "../../../update-data-reducer/employers/updateDataEmployers";
 import UserProfile from "../../../components/employers/userProfile";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function ViewedJob({ record }) {
+  const isMobile = useIsMobile();
   const [data, setData] = useState([]);
   console.log("🚀 ~ ViewedJob ~ data:", data)
   const dispatch = useDispatch();
@@ -342,6 +344,7 @@ function ViewedJob({ record }) {
       </div>
       <div className="table-view">
         <Table
+          scroll={isMobile ? { x: "max-content" } : undefined}
           rowKey={"_id"}
           columns={columns}
           dataSource={data}

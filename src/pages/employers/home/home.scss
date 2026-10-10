@@ -447,3 +447,141 @@
     }
   }
 }
+
+// ===== Mobile =====
+.home-employer--mobile {
+  // AOS (fade-left/right) và hoa anh đào dịch phần tử sang ngang, chặn tràn màn hình
+  overflow-x: hidden;
+
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  // các cột xếp dọc
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+    row-gap: 16px;
+    > [class*="col-"] {
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .padding-convert {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .section-1 {
+    height: 360px;
+    padding: 0 16px;
+    .heading {
+      font-size: 26px;
+      line-height: 1.3;
+    }
+  }
+
+  .button-link-link {
+    line-height: 1.4;
+    font-size: 15px;
+  }
+
+  .box-content .hedings {
+    font-size: 20px;
+    line-height: 1.35;
+  }
+
+  .content-check {
+    padding: 16px 0;
+    .items {
+      .heading {
+        font-size: 20px;
+      }
+      .heading-2 {
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+      .description {
+        font-size: 14px;
+      }
+    }
+    .box-item {
+      padding: 0;
+    }
+  }
+
+  // Tính năng mới: thẻ không cần cao cố định
+  .section-4 .bodys .items {
+    padding: 0;
+    .item-box {
+      min-height: 0;
+      padding: 16px;
+      .title {
+        font-size: 18px;
+      }
+      .images img {
+        max-height: 110px;
+        width: auto;
+      }
+    }
+  }
+
+  // Số liệu: 2 cột, các ô cao bằng nhau
+  .section-7 .row {
+    align-items: stretch !important;
+    row-gap: 8px;
+    padding: 0;
+    > [class*="col-"] {
+      width: 50%;
+      margin-top: 0;
+      padding: 0 4px;
+    }
+  }
+  .section-7 .item-box {
+    height: 100%;
+    min-height: 0;
+    padding: 16px 8px;
+    .title {
+      font-size: 28px;
+    }
+  }
+
+  .section-8 {
+    padding: 20px 16px;
+    .box-header .text-1,
+    .box-header h2 {
+      font-size: 20px;
+    }
+    .contact-users .box-image {
+      display: none;
+    }
+    .contact-users .form-contact {
+      padding: 16px !important;
+    }
+    .contact-users .box-content {
+      padding: 0 !important;
+    }
+    input {
+      font-size: 16px;
+    }
+  }
+
+  .section-9 .bodys .items-box {
+    padding: 16px;
+  }
+
+  .section-10 .bodys {
+    padding: 16px;
+    .convert-col {
+      width: 100%;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}

@@ -12,7 +12,10 @@ import { useState } from "react";
 import NotifyClient from "../../../components/clients/notify";
 import Cookies from "js-cookie";
 import { loginUserEmployer } from "../../../services/employers/employer-userApi";
+import useIsMobile from "../../../hooks/useIsMobile";
+import "../login/authMobile.scss";
 function LoginEmployers() {
+  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [noti, setNoti] = useState(false);
@@ -36,9 +39,9 @@ function LoginEmployers() {
   };
   return (
     <>
-      <div className="employers-login">
+      <div className={`employers-login${isMobile ? " employer-auth--mobile" : ""}`}>
         <div className="row  align-items-center">
-          <div className="col-7">
+          <div className={isMobile ? "col-12" : "col-7"}>
             <div className="employers-login__form content-container">
               <h2 className="title">Chào mừng bạn quay trở lại</h2>
               <p className="description">
@@ -138,13 +141,15 @@ function LoginEmployers() {
               <hr />
             </div>
           </div>
-          <div className="col-5">
-            <div className="sticky-item-ok">
-              <div className="employer-login__image sitcky-item">
-                <img src={banner} alt="" />
+          {!isMobile && (
+            <div className="col-5">
+              <div className="sticky-item-ok">
+                <div className="employer-login__image sitcky-item">
+                  <img src={banner} alt="" />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

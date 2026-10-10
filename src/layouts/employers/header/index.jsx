@@ -6,11 +6,14 @@ import { Menu } from "antd";
 import { useEffect } from "react";
 
 import { useSelector } from "react-redux";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function Header() {
   const authenMainEmployer = useSelector(
     (status) => status.authenticationReducerEmployer
   );
+
+  const isMobile = useIsMobile();
 
   useEffect(() => {}, []);
 
@@ -41,6 +44,26 @@ function Header() {
       icon: null,
     },
   ];
+
+  if (isMobile) {
+    return (
+      <header className="header-employers header-employers--mobile">
+        <NavLink className="header-employers--mobile__logo" to="/">
+          <img src="/images/UTEM_LOGO.svg" alt="UTEM" />
+        </NavLink>
+        <div className="header-employers--mobile__actions">
+          {!authenMainEmployer.status ? (
+            <>
+              <NavLink className="btn-outline" to={"/nha-tuyen-dung/login"}>Đăng nhập</NavLink>
+              <NavLink className="btn-solid" to={"/nha-tuyen-dung/register"}>Đăng ký</NavLink>
+            </>
+          ) : (
+            <NavLink className="btn-solid" to={"/nha-tuyen-dung/app/dashboard"}>Đăng tin</NavLink>
+          )}
+        </div>
+      </header>
+    );
+  }
 
   return (
     <>

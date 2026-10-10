@@ -51,6 +51,7 @@ import { getTreeCategories } from "../../../services/admins/jobsCategoriesApi";
 import { FormatTree } from "../../../helpers/selectTree";
 import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
 import SelectSkillDebounce from "../../../components/alls/SelectSkillDebounce";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function FormEdit(props) {
   const { record, fetchApiLoad, messageApi, dataStatus } = props;
@@ -64,6 +65,7 @@ function FormEdit(props) {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState(record.address.linkMap);
   const [isModal, setIsModalOpen] = useState(false);
+  const isMobile = useIsMobile();
   const [optionsSelectTreeJobCategories, setOptionsSelectTree] = useState([]);
 
   const [city, setCity] = useState([]);
@@ -240,9 +242,10 @@ function FormEdit(props) {
 
       <Modal
         style={{
-          top: 65,
+          top: isMobile ? 8 : 65,
         }}
-        width={"80%"}
+        width={isMobile ? "100%" : "80%"}
+        rootClassName={isMobile ? "edit-job-modal--mobile" : undefined}
         title="Chỉnh Công Việc"
         open={isModal}
         onCancel={() => handleCancel(form, setIsModalOpen)}

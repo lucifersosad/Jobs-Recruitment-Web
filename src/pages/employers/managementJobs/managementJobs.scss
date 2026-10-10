@@ -145,3 +145,55 @@
 .ant-table-row:hover .box-recruitment-campaign .box-recruitment-campaign__detail{
   visibility: visible !important;
 }
+// Modal sửa tin tuyển dụng trên mobile (modal render ngoài layout nên style riêng ở đây)
+.edit-job-modal--mobile {
+  .ant-modal {
+    max-width: calc(100vw - 16px);
+    margin: 0 auto;
+    padding-bottom: 8px;
+  }
+  .ant-modal-content {
+    padding: 16px 12px;
+  }
+  // bỏ bớt padding của các Card lồng nhau
+  .ant-card .ant-card-body {
+    padding: 0;
+  }
+  .ant-card {
+    border: none;
+    box-shadow: none;
+  }
+  .card-form-admin {
+    margin-bottom: 16px;
+    > .ant-card-body {
+      padding: 12px;
+    }
+    border: 1px solid #f0f0f0;
+  }
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+    > .col-3,
+    > .col-4,
+    > .col-5,
+    > .col-6 {
+      width: 100%;
+      padding: 0;
+    }
+  }
+  .title-header {
+    font-size: 16px;
+  }
+  // lương, tuổi: 2 ô chia đôi một hàng
+  .ant-form-item[style*="inline-block"] {
+    width: calc(50% - 5px);
+    .ant-input-number {
+      width: 100%;
+    }
+  }
+  input,
+  textarea,
+  .ant-select-selection-search-input {
+    font-size: 16px !important;
+  }
+}

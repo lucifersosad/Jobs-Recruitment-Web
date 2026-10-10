@@ -1,0 +1,135 @@
+// Giao diện mobile dùng chung cho các trang trong app nhà tuyển dụng (/nha-tuyen-dung/app/*)
+.layout__employer-admin--mobile .layout__main {
+  .page-content {
+    margin-top: 12px !important;
+    padding: 0 12px 80px;
+  }
+
+  .ml-10 {
+    margin-left: 0;
+  }
+
+  // Tiêu đề trang: chữ nhỏ lại, nút hành động tự xuống dòng
+  .title-employer-setting {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px !important;
+    h3 {
+      font-size: 17px;
+      margin: 0;
+    }
+  }
+
+  // Lưới Bootstrap: các cột xếp thành 1 cột (trừ một số khối số liệu ở dưới)
+  .col-3,
+  .col-4,
+  .col-5,
+  .col-6,
+  .col-7,
+  .col-8,
+  .col-9 {
+    width: 100%;
+  }
+
+  // Bảng: cuộn ngang trong khung thay vì tràn trang
+  .ant-table-wrapper {
+    max-width: 100%;
+  }
+
+  // Form
+  input,
+  textarea,
+  .ant-select-selection-search-input {
+    font-size: 16px !important; // tránh iOS tự zoom khi focus
+  }
+  .ant-picker,
+  .ant-input-number {
+    width: 100% !important;
+  }
+
+  // ===== Tổng quan (dashboard): 4 ô số liệu giữ 2 cột =====
+  .dashboar-employer .box-body .row > .col-6 {
+    width: 50%;
+  }
+
+  // ===== Quản lý tin tuyển dụng =====
+  .management-jobs {
+    .search-form .ant-select-selector {
+      width: 120px !important;
+    }
+  }
+
+  // ===== Chi tiết tin: 4 ô số liệu thành 2 cột, ẩn banner trang trí =====
+  .detail-job {
+    &__card .row > .col-3 {
+      width: 50%;
+      margin-bottom: 8px;
+    }
+    &__banner .images {
+      display: none;
+    }
+  }
+
+  // ===== Đăng tin: các bước gọn lại =====
+  .add-jobs-employer {
+    .card-step .ant-card-body {
+      padding: 12px 8px;
+    }
+    .ant-steps-item-title {
+      font-size: 12px;
+      line-height: 1.3;
+    }
+  }
+
+  // ===== Cài đặt tài khoản: tab nằm trên, cuộn ngang =====
+  .setting-employer {
+    .ant-tabs-nav {
+      width: 100% !important;
+      background: transparent !important;
+    }
+    .box-text-ok {
+      font-size: 14px;
+      gap: 8px;
+    }
+  }
+
+  // ===== Quản lý bài viết =====
+  .management-post-page {
+    padding: 12px 12px 80px !important;
+    h2 {
+      font-size: 18px !important;
+    }
+    .post-item {
+      padding: 12px !important;
+    }
+  }
+
+  // ===== Đăng tin: 4 bước nằm vừa 1 hàng =====
+  .add-jobs-employer .ant-steps-label-vertical {
+    .ant-steps-item {
+      flex: 1;
+      overflow: visible;
+      padding-inline-start: 0;
+    }
+    .ant-steps-item-icon {
+      margin-inline-start: calc(50% - 12px);
+    }
+    .ant-steps-item-tail {
+      margin-inline-start: 50%;
+      padding: 0 16px;
+    }
+    .ant-steps-item-content {
+      width: 100%;
+      margin-top: 6px;
+    }
+  }
+
+  // ===== Quản lý CV: bộ lọc và ô tìm kiếm xếp 2 hàng =====
+  .management-cvs .segemment {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}

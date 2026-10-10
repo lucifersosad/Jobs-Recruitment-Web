@@ -117,3 +117,61 @@
     }
   }
 }
+
+.headerEmployer--mobile {
+  // thấp hơn modal/drawer của antd (1000) để không che popup
+  z-index: 999;
+  min-width: 0;
+  height: 56px;
+  padding: 0 8px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .headerEmployer__button {
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+  }
+  .headerEmployer__logo .logo-img {
+    height: 26px;
+  }
+
+  .headerEmployer__icons {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    li > a {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 18px;
+      &:active {
+        background: #3b546f;
+      }
+    }
+    .no-check {
+      width: 40px;
+      display: flex;
+      justify-content: center;
+      .ant-avatar {
+        background-color: #3b546f;
+      }
+      .ant-badge .ant-scroll-number {
+        min-width: 15px;
+        height: 15px;
+        font-size: 11px;
+        line-height: 15px;
+      }
+    }
+  }
+}

@@ -11,7 +11,9 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { LoadingOutlined } from "@ant-design/icons";
 
 import { useNavigate } from "react-router-dom";
+import useIsMobile from "../../../hooks/useIsMobile";
 function AddJobsEmployer() {
+  const isMobile = useIsMobile();
   const [messageApi, contextHolder] = message.useMessage();
   const { token } = theme.useToken();
   const navigate = useNavigate();
@@ -168,7 +170,11 @@ function AddJobsEmployer() {
               />
             }
           >
-            <Steps current={current} items={items} />
+            <Steps
+              current={current}
+              items={items}
+              {...(isMobile && { size: "small", responsive: false, labelPlacement: "vertical" })}
+            />
           </Spin>
         </Card>
 

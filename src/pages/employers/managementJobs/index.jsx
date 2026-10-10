@@ -13,7 +13,9 @@ import FilterDropdownCustom from "../../../components/employers/filterDropdownCu
 import { removeAccents } from "../../../helpers/removeAccents";
 import { fetchApi } from "./js/fetchApi";
 import MemoizedFormEdit from "./formEdit";
+import useIsMobile from "../../../hooks/useIsMobile";
 function ManagementJobsEmployer() {
+  const isMobile = useIsMobile();
   const [dataFull, setData] = useState([]);
   const { Search } = Input;
   const [loading, setLoading] = useState(false);
@@ -257,6 +259,7 @@ function ManagementJobsEmployer() {
         </div>
         <div className="table-form">
           <Table
+            scroll={isMobile ? { x: "max-content" } : undefined}
             loading={initLoading}
             showSorterTooltip={false}
             columns={columns}

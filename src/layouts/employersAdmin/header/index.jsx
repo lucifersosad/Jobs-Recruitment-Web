@@ -13,8 +13,10 @@ import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
 import NotificationEmployer from "../../../components/employers/notification";
+import useIsMobile from "../../../hooks/useIsMobile";
 
-function Header({ setIsCollapsed, isCollapsed }) {
+function Header({ setIsCollapsed, isCollapsed, onOpenMenu }) {
+  const isMobile = useIsMobile();
   const handleCollapsed = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -23,6 +25,36 @@ function Header({ setIsCollapsed, isCollapsed }) {
     window.location.href = "/nha-tuyen-dung/login";
   };
   
+  if (isMobile) {
+    return (
+      <nav className="headerEmployer headerEmployer--mobile">
+        <div className="headerEmployer__header">
+          <button onClick={onOpenMenu} className="headerEmployer__button" aria-label="Mở menu">
+            <MenuOutlined />
+          </button>
+          <Link to="/nha-tuyen-dung/app/dashboard">
+            <span className="headerEmployer__logo"><img className="logo-img" src="/images/UTEM_LOGO.svg" alt="UTEM" /></span>
+          </Link>
+        </div>
+        <ul className="headerEmployer__icons">
+          <li>
+            <Link to={"./add-jobs-employer"} aria-label="Đăng tin">
+              <FontAwesomeIcon icon={faPen} />
+            </Link>
+          </li>
+          <li>
+            <Link to={"./chat-box"} aria-label="Kết nối">
+              <FontAwesomeIcon icon={faFacebookMessenger} />
+            </Link>
+          </li>
+          <li className="no-check">
+            <NotificationEmployer />
+          </li>
+        </ul>
+      </nav>
+    );
+  }
+
   return (
     <>
       <nav className="headerEmployer text-left">

@@ -7,6 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { formatDateTime, formatNotificationTime } from "../../../helpers/formartDate";
 import { CheckCircleFilled, LoadingOutlined, UserOutlined } from "@ant-design/icons";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const ListNotification = ({
   isRemaining,
@@ -18,6 +19,7 @@ const ListNotification = ({
   handleRead,
 }) => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const { Text, Link } = Typography;
 
   const [initLoading, setInitLoading] = useState(true);
@@ -70,7 +72,7 @@ const ListNotification = ({
     <>
       <List
         className="list-notification"
-        style={{ width: "470px" }}
+        style={{ width: isMobile ? "calc(100vw - 32px)" : "470px", maxHeight: isMobile ? "70vh" : undefined, overflowY: isMobile ? "auto" : undefined }}
         dataSource={notifications}
         loadMore={loadMore}
         loading={{spinning: initLoading}}
