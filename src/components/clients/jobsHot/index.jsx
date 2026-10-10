@@ -15,11 +15,13 @@ import "./jobsHot.scss";
 import { decData } from "../../../helpers/decData";
 import { Link } from "react-router-dom";
 import { formatSalaryNoVND } from "../../../helpers/salaryConvert";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function JobsHot() {
   const [listJobsFeatured, setListJobsFatured] = useState([]);
   const [listJobsSalary, setListJobsSalary] = useState([]);
   const [listJobsLevel, setListJobsLevel] = useState([]);
+  const isMobile = useIsMobile();
 
   //phân trang cho job nổi bật
   // const changePaginationFeture = async (page) => {
@@ -323,7 +325,7 @@ function JobsHot() {
     <div className="jobs cb-section">
       <div className="container">
         <h2 className="text-center title-text">CÔNG VIỆC ĐƯỢC YÊU THÍCH</h2>
-        <Tabs size="large " centered defaultActiveKey="1" items={items} />
+        <Tabs size={isMobile ? "middle" : "large"} centered={!isMobile} defaultActiveKey="1" items={items} />
       </div>
     </div>
   );

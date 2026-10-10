@@ -1,6 +1,6 @@
 import "./jobSearchAdvanced.scss";
 
-import { ConfigProvider, Form, Radio, Select } from "antd";
+import { ConfigProvider, Drawer, Form, Radio, Select } from "antd";
 import {
   dataExperience,
   dataJobType,
@@ -26,6 +26,7 @@ import MemoizedItemBoxNews from "../../../components/clients/itemBoxNews";
 import MemoizedMayBeInterested from "../../../components/clients/mayBeInterested";
 import MemoizedCompanyOutstanding from "../../../components/clients/companyOutstanding";
 import SelectJobCategoryV2 from "../../../components/alls/SelectJobCategoryV2";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const buildQueryString = (params) => {
 
@@ -38,6 +39,7 @@ function JobSearchAdvanced() {
   const [loading, setLoading] = useState(true)
   const [form] = Form.useForm();
   const [hiden, setHiden] = useState(true);
+  const isMobile = useIsMobile();
   const query = useQuery();
   const keyword = query.get("keywords") || "";
   const page = query.get("page") || 1;
@@ -256,8 +258,63 @@ function JobSearchAdvanced() {
     };
     navigate(`?${buildQueryString(params)}`);
   }
+  const advancedFilters = (
+    <ConfigProvider
+      theme={{
+        components: {
+          Select: {
+            optionPadding: "8px 12px",
+            singleItemHeightLG: 50,
+            optionSelectedBg: "#7acff3",
+            optionSelectedColor: "#fff",
+          },
+        },
+        token: {},
+      }}
+    >
+      <div className="row">
+        <div className={isMobile ? "col-12" : "col-md-4"}>
+          <div className="select" style={{height: "100%"}}>
+            <SelectJobCategoryV2
+              placeholder="Tìm kiếm ngành nghề"
+              style={{width: "100%", height: "100%"}}
+              type="multiple"
+              trigger={isMobile ? "click" : "hover"}
+              options={optionCategories}
+              size="large"
+              onChange={handleChangeJobCategories}
+              value={getJobCategories()}
+            />
+          </div>
+        </div>
+        <div className={isMobile ? "col-12" : "col-md-4"}>
+          <div className="select">
+            <MemoizedSearchCustomVip
+              options={dataJobType}
+              prefix={<FontAwesomeIcon icon={faBuilding} />}
+              defaultValueOk={job_type}
+              value={job_type}
+              onChange={handleChangeJobType}
+            />
+          </div>
+        </div>
+        <div className={isMobile ? "col-12" : "col-md-4"}>
+          <div className="select">
+            <MemoizedSearchCustomVip
+              options={dataLevel}
+              prefix={<FontAwesomeIcon icon={faBuilding} />}
+              defaultValueOk={job_level}
+              onChange={handleChangeJobLevel}
+              value={job_level}
+            />
+          </div>
+        </div>
+      </div>
+    </ConfigProvider>
+  );
+
   return (
-    <div className="cb-section">
+    <div className={`cb-section${isMobile ? " search-addvance--mobile" : ""}`}>
       <div className="search-addvance">
         <div className="header-search-addvance ">
           <div className="container">
@@ -281,7 +338,7 @@ function JobSearchAdvanced() {
                   layout="inline row gx-0"
                   onFinish={handleFinish}
                 >
-                  <Form.Item className="col-5" name="groupDataSearch">
+                  <Form.Item className={isMobile ? "col-12" : "col-5"} name="groupDataSearch">
                     <GroupSearch
                       valueCity={city}
                       valueKeyword={keyword}
@@ -291,14 +348,14 @@ function JobSearchAdvanced() {
                     />
                   </Form.Item>
 
-                  <Form.Item className="col-2" name={"workExperience"}>
+                  <Form.Item className={isMobile ? "col-6" : "col-2"} name={"workExperience"}>
                     <Select size="large" options={dataExperience} />
                   </Form.Item>
-                  <Form.Item className="col-2" name={"salary"}>
+                  <Form.Item className={isMobile ? "col-6" : "col-2"} name={"salary"}>
                     <Select size="large" options={optionsSalary} />
                   </Form.Item>
                   <Form.Item
-                    className="col-2"
+                    className={isMobile ? "col-12" : "col-2"}
                     style={{ flex: "1", marginRight: 0 }}
                   >
                     <button
@@ -330,60 +387,22 @@ function JobSearchAdvanced() {
                 )}
               </div>
             </div>
-            <div className={`select-addvance ${hiden ? "hiden-select" : ""}`}>
-              <ConfigProvider
-                theme={{
-                  components: {
-                    Select: {
-                      optionPadding: "8px 12px",
-                      singleItemHeightLG: 50,
-                      optionSelectedBg: "#7acff3",
-                      optionSelectedColor: "#fff",
-                    },
-                  },
-                  token: {},
-                }}
+            {isMobile ? (
+              <Drawer
+                open={!hiden}
+                onClose={() => setHiden(true)}
+                placement="bottom"
+                height="auto"
+                title="Lọc nâng cao"
+                rootClassName="search-addvance__drawer"
               >
-                <div className="row">
-                  <div className="col-md-4">
-                    <div className="select" style={{height: "100%"}}>
-                      <SelectJobCategoryV2
-                        placeholder="Tìm kiếm ngành nghề"
-                        style={{width: "100%", height: "100%"}}
-                        type="multiple"
-                        trigger="hover" 
-                        options={optionCategories}
-                        size="large"
-                        onChange={handleChangeJobCategories}
-                        value={getJobCategories()}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="select">
-                      <MemoizedSearchCustomVip
-                        options={dataJobType}
-                        prefix={<FontAwesomeIcon icon={faBuilding} />}
-                        defaultValueOk={job_type}
-                        value={job_type}
-                        onChange={handleChangeJobType}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="select">
-                      <MemoizedSearchCustomVip
-                        options={dataLevel}
-                        prefix={<FontAwesomeIcon icon={faBuilding} />}
-                        defaultValueOk={job_level}
-                        onChange={handleChangeJobLevel}
-                        value={job_level}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </ConfigProvider>
-            </div>
+                {advancedFilters}
+              </Drawer>
+            ) : (
+              <div className={`select-addvance ${hiden ? "hiden-select" : ""}`}>
+                {advancedFilters}
+              </div>
+            )}
           </div>
         </div>
         <div className="body-searh-advance bg-grey2 pt-3">
@@ -438,11 +457,13 @@ function JobSearchAdvanced() {
                   countPagination={coutJob}
                   loading={loading}
                 />
+                {!isMobile && (
                   <div className="suggested-job col-md-4">
-                <MemoizedMayBeInterested />
-                <hr />
-                <MemoizedCompanyOutstanding />
-              </div>
+                    <MemoizedMayBeInterested />
+                    <hr />
+                    <MemoizedCompanyOutstanding />
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -45,3 +45,15 @@
     border-radius: 50px;
   }
 }
+.cascader-mobile {
+  left: 16px !important;
+  .ant-cascader-dropdown-custom {
+    width: calc(100vw - 32px);
+  }
+  .ant-cascader-menus {
+    height: 50vh;
+  }
+  .ant-cascader-menu-item {
+    white-space: normal;
+  }
+}

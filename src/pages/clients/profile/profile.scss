@@ -14,3 +14,21 @@
     }
   }
 }
+.profile--mobile {
+  padding-left: 16px;
+  padding-right: 16px;
+
+  .ant-card-body {
+    padding: 16px;
+  }
+  .ant-card-actions > li {
+    margin: 8px 0;
+  }
+  .news__job-header {
+    min-height: 120px;
+    padding: 4px 16px 0;
+    img {
+      display: none;
+    }
+  }
+}

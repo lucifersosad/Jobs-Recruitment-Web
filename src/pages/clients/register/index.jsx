@@ -15,7 +15,10 @@ import { registerUser } from "../../../services/clients/user-userApi";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import NotifyClient from "../../../components/clients/notify";
+import useIsMobile from "../../../hooks/useIsMobile";
+import "../login/authMobile.scss";
 function Register() {
+  const isMobile = useIsMobile();
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -49,10 +52,10 @@ function Register() {
   return (
     <>
 
-      <div className="cb-section client-login">
+      <div className={`cb-section client-login${isMobile ? " client-login--mobile" : ""}`}>
         <div className="container">
           <div className="row">
-            <div className="col-7">
+            <div className={isMobile ? "col-12" : "col-7"}>
               <div className="client-login__form">
                 <h2 className="title">
                   Chào mừng bạn đến với thế giới việc làm
@@ -202,11 +205,13 @@ function Register() {
                 </div>
               </div>
             </div>
-            <div className="col-5">
-              <div className="client-login__image">
-                <img src={banner} alt="" />
+            {!isMobile && (
+              <div className="col-5">
+                <div className="client-login__image">
+                  <img src={banner} alt="" />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

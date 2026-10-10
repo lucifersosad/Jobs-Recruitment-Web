@@ -658,3 +658,150 @@
     }
   }
 }
+
+.deltail-job--mobile {
+  padding-top: 24px;
+  // chừa chỗ cho thanh ứng tuyển cố định ở đáy
+  padding-bottom: 88px;
+
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .job-search-one {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+
+    &__banner {
+      height: 110px;
+    }
+    &__content {
+      position: static;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      padding: 12px 16px 16px;
+      background: #fff;
+    }
+    &__desc {
+      h1 {
+        font-size: 1.125rem;
+        line-height: 1.4;
+        margin-bottom: 4px;
+      }
+    }
+    &__apply {
+      > .ant-flex {
+        flex-direction: column;
+      }
+      button {
+        width: 100% !important;
+        height: 44px;
+      }
+    }
+  }
+
+  .ant-tabs-nav {
+    margin-bottom: 12px;
+  }
+  .ant-tabs .ant-tabs-tab + .ant-tabs-tab {
+    margin-left: 20px;
+  }
+
+  .info-job {
+    &__info-bg {
+      border-radius: 12px;
+      .detail-box {
+        padding: 12px 12px 0;
+      }
+    }
+    &__description,
+    &__detailWorkExperience {
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+      table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+      }
+    }
+    &__listTag ul li {
+      margin-bottom: 14px;
+      a {
+        font-size: 13px;
+      }
+    }
+
+    // Thanh "Lưu + Ứng tuyển" cố định ở đáy màn hình
+    &__heart.job-sticky {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 998;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+      box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+    }
+    &__heart-content {
+      border: none;
+      padding: 0;
+      gap: 10px;
+      align-items: center;
+
+      &-desc ul {
+        li {
+          margin: 0;
+          // chỉ giữ nút lưu việc làm
+          &:not(:first-child) {
+            display: none;
+          }
+          .box-heart {
+            width: 44px;
+            height: 44px;
+            margin: 0;
+            justify-content: center;
+            border: 1px solid #5dcaf9;
+            border-radius: 8px;
+            color: #5dcaf9;
+            svg {
+              padding: 0;
+              font-size: 18px;
+            }
+            div {
+              display: none;
+            }
+          }
+        }
+      }
+      .job-search-one__apply {
+        flex: 1;
+        > div > button {
+          width: 100% !important;
+          height: 44px;
+        }
+      }
+    }
+  }
+
+  .info-job__fullBox {
+    display: none;
+  }
+
+  .side-wrapper {
+    margin-top: 24px;
+  }
+}
+
+.model-job-search--mobile {
+  top: 16px;
+  .ant-modal-content {
+    padding: 16px;
+  }
+  .box-title p {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,51 @@
+// Giao diện mobile dùng chung cho Đăng nhập / Đăng ký / Quên mật khẩu / Tạo lại mật khẩu
+.client-login--mobile {
+  padding: 32px 0 40px;
+
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .client-login__form {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 16px;
+
+    input {
+      font-size: 16px;
+    }
+    .button-submit {
+      height: 44px;
+      padding: 0;
+    }
+    .box-flast-login {
+      .row {
+        --bs-gutter-x: 8px;
+      }
+      .box-icon {
+        height: 44px;
+        gap: 6px;
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+.client-reset--mobile {
+  padding: 32px 0 60px;
+
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .client-reset__form {
+    width: 100%;
+    padding: 20px 16px;
+
+    input {
+      font-size: 16px;
+    }
+  }
+}

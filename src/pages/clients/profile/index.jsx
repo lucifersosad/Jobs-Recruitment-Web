@@ -21,9 +21,11 @@ import { useParams } from "react-router-dom";
 import InfoModal from "./Info/InfoModal";
 import { useSelector } from "react-redux";
 import defaultAvatar from "/images/default-cv-pdf-avatar.jpg"
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const Profile = () => {
   const { id } = useParams();
+  const isMobile = useIsMobile();
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [open, setOpen] = useState(false)
   const [profile, setProfile] = useState();
@@ -47,7 +49,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className={authenMainClient?.infoUser?.id === id ? "col-8" : "col-6 offset-3"}>
+      <div className={isMobile ? "col-12 profile--mobile" : authenMainClient?.infoUser?.id === id ? "col-8" : "col-6 offset-3"}>
         <Space direction="vertical" size="large" style={{ width: "100%" }}>
           <Card
             bordered={false}

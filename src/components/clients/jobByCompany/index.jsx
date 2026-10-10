@@ -7,7 +7,10 @@ import { getCityApi } from "../../../services/clients/user-userApi";
 import { jobByCompany } from "../../../services/clients/jobsApi";
 import MemoizedItemBoxNews from "../itemBoxNews";
 import { removeAccents } from "../../../helpers/removeAccents";
+import useIsMobile from "../../../hooks/useIsMobile";
 function JobByCompany({ slug }) {
+  const isMobile = useIsMobile();
+  const fieldSize = isMobile ? "middle" : "large";
   const [city, setCity] = useState([]);
   const [recordItem, setRecordItem] = useState([]);
   const [coutJob, setCoutJob] = useState(0);
@@ -56,7 +59,7 @@ function JobByCompany({ slug }) {
     setCitySelect(city_select_form);
   };
   return (
-    <div className="job-by-company">
+    <div className={`job-by-company${isMobile ? " job-by-company--mobile" : ""}`}>
       <ConfigProvider
         theme={{
           components: {
@@ -81,11 +84,11 @@ function JobByCompany({ slug }) {
               defaultHoverColor: "#fff",
               groupBorderColor: "#5dcaf9",
               colorPrimary: "#5dcaf9",
-              paddingBlockLG: 25,
+              paddingBlockLG: isMobile ? 8 : 25,
             },
           },
           token: {
-            fontSize: 16,
+            fontSize: isMobile ? 14 : 16,
             /* here is your global tokens */
           },
         }}
@@ -99,14 +102,14 @@ function JobByCompany({ slug }) {
           className="row gx-0 align-items-center"
           layout="inline"
         >
-          <Form.Item name="keyword" className="col-4">
+          <Form.Item name="keyword" className={isMobile ? "col-12" : "col-4"}>
             <Input
               placeholder="Tên công việc, vị trí ứng tuyển..."
-              size="large"
+              size={fieldSize}
               addonBefore={<FontAwesomeIcon icon={faMagnifyingGlass} />}
             />
           </Form.Item>
-          <Form.Item name="city_select" className="col-4">
+          <Form.Item name="city_select" className={isMobile ? "col-12" : "col-4"}>
             <Select
               showSearch
               filterOption={(input, option) =>
@@ -117,15 +120,15 @@ function JobByCompany({ slug }) {
                   .toLowerCase()
                   .includes(removeAccents(input).toLowerCase())
               }
-              size="large"
+              size={fieldSize}
               options={city}
             />
           </Form.Item>
-          <Form.Item className="col-3" style={{ flex: "1", marginRight: "0" }}>
+          <Form.Item className={isMobile ? "col-12" : "col-3"} style={{ flex: "1", marginRight: "0" }}>
             <Button
               style={{ width: "100%" }}
               icon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
-              size="large"
+              size={fieldSize}
               type="primary"
               htmlType="submit"
             >

@@ -38,11 +38,13 @@ import { useSelector } from "react-redux";
 
 import { dataNumberOfWorkers } from "./js/options";
 import CompanyPosts from "./companyPosts";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 // Thêm hằng số cho avatar mặc định
 const DEFAULT_AVATAR = "https://via.placeholder.com/32";
 
 function InfoCompany() {
+  const isMobile = useIsMobile();
   const { Search } = Input;
   const [currentPath] = useState(window.location);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -1284,7 +1286,7 @@ function InfoCompany() {
   };
 
   return (
-    <div className="cb-section cb-section-padding-bottom bg-grey2">
+    <div className={`cb-section cb-section-padding-bottom bg-grey2${isMobile ? " info-company--mobile" : ""}`}>
       <div className="container">
         <div className="full-info-company">
           <div className="box-info-company mb-3">

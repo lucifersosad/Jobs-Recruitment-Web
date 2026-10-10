@@ -18,8 +18,10 @@ import MayBeInterested from "../../../components/clients/mayBeInterested";
 import CompanyOutstanding from "../../../components/clients/companyOutstanding";
 import { useQuery } from "../../../helpers/getQuery";
 import { useNavigate } from "react-router-dom";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function NewJob() {
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
   const [jobCategories, setJobCategories] = useState([]);
   const [recordItem, setRecordItem] = useState([]);
@@ -147,7 +149,7 @@ function NewJob() {
   };
 
   return (
-    <div className="cb-section cb-section-padding-bottom bg-grey2">
+    <div className={`cb-section cb-section-padding-bottom bg-grey2${isMobile ? " news-job--mobile" : ""}`}>
       <div className="container">
         <div className="news__job">
           <MemoizedNewsJobHeader
@@ -251,11 +253,13 @@ function NewJob() {
                 defaultValue={page}
                 countPagination={coutJob}
               />
-              <div className="suggested-job col-md-4">
-                <MayBeInterested />
-                <hr />
-                <CompanyOutstanding />
-              </div>
+              {!isMobile && (
+                <div className="suggested-job col-md-4">
+                  <MayBeInterested />
+                  <hr />
+                  <CompanyOutstanding />
+                </div>
+              )}
             </div>
           </div>
         </div>

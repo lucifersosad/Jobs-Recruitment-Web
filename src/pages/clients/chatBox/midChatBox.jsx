@@ -4,7 +4,9 @@ import { faFaceSmile, faImage } from "@fortawesome/free-regular-svg-icons";
 import { Form, Input, Spin } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import useIsMobile from "../../../hooks/useIsMobile";
 import audioMp3 from "./mp3/tb.mp3";
 import TypingIndicator from "../../../components/alls/Typing";
 function MidChatBox({
@@ -16,6 +18,7 @@ function MidChatBox({
 }) {
 
   const [idClient, setIdClient] = useState("");
+  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
   const boxChatAllRef = useRef(null);
   const [status, setStatus] = useState("");
@@ -152,13 +155,20 @@ function MidChatBox({
 
   return (
     <div className="mid-chat-client  ">
-      <div className="mid-chat-client__slogan p-3 mb-1">
-        <div className="content">
-          Embrace a fresh approach to <span>pursue your opportunities</span>.
+      {!isMobile && (
+        <div className="mid-chat-client__slogan p-3 mb-1">
+          <div className="content">
+            Embrace a fresh approach to <span>pursue your opportunities</span>.
+          </div>
         </div>
-      </div>
-      <div className="mid-chat-client__header p-3">
+      )}
+      <div className={`mid-chat-client__header ${isMobile ? "p-2" : "p-3"}`}>
         <div className="box-info">
+          {isMobile && (
+            <Link to="/chat-box" className="back-button" aria-label="Quay lại">
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </Link>
+          )}
           <div className="image">
             <img src={userData?.logoCompany} alt="avatar" style={{objectFit: "contain"}} />
           </div>
@@ -225,13 +235,15 @@ function MidChatBox({
             </>
           ) : (
             <>
-              <div className="col-1">
-                <div className="box-icon">
-                  <FontAwesomeIcon icon={faImage} />
-                  <FontAwesomeIcon icon={faFaceSmile} />
+              {!isMobile && (
+                <div className="col-1">
+                  <div className="box-icon">
+                    <FontAwesomeIcon icon={faImage} />
+                    <FontAwesomeIcon icon={faFaceSmile} />
+                  </div>
                 </div>
-              </div>
-              <div className="col-11">
+              )}
+              <div className={isMobile ? "col-12" : "col-11"}>
                 <div className="box-input">
                   <>
                     <Form form={form} onFinish={handleSendChat} layout="inline">

@@ -1,6 +1,7 @@
 import { Cascader, Divider, Typography } from "antd";
 import "./cascader.scss";
 import { removeAccents } from "../../../helpers/removeAccents";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const DisplayRender = (labels, selectedOptions = []) =>
   labels.map((label, i) => {
@@ -33,6 +34,7 @@ const SelectJobCategoryV2 = ({
 }) => {
   
   const { SHOW_CHILD } = Cascader;
+  const isMobile = useIsMobile();
 
   const onSearch = (value) => {
     // console.log(value)
@@ -65,6 +67,7 @@ const SelectJobCategoryV2 = ({
       dropdownRender={dropdownRender}
       displayRender={type !== "multiple" && displayRender}
       multiple={type === "multiple"}
+      popupClassName={isMobile ? "cascader-mobile" : undefined}
       {...rest}
     />
   );

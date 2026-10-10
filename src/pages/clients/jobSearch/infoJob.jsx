@@ -45,11 +45,13 @@ import { useNavigate } from "react-router-dom";
 import { saveJob } from "../../../services/clients/user-userApi";
 import { message, Skeleton } from "antd";
 import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updateDataClient";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function InfoJob(props) {
   const { record, loading } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [jobType, setJobType] = useState("");
   const [slary, setSalary] = useState("");
   const [workExperience, setWorkExperience] = useState("");
@@ -269,7 +271,7 @@ function InfoJob(props) {
         >
           {listWalare.length > 0 &&
             listWalare.map((item, index) => (
-              <li className="col-4 mb-1" key={index}>
+              <li className={`${isMobile ? "col-6" : "col-4"} mb-1`} key={index}>
                 <span>{item}</span>
               </li>
             ))}

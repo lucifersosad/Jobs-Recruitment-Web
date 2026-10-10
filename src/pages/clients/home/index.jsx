@@ -16,11 +16,13 @@ import EmailForm from '../../../components/clients/emailForm';
 import JobsOccupation from '../../../components/clients/jobsOccupation';
 import CareerKey from '../../../components/clients/careerKey';
 import TalentNetwork from '../../../components/clients/talentNetwork';
+import useIsMobile from "../../../hooks/useIsMobile";
 
 
 
 function Home() {
   const [listEmployers, setListEmployers] = useState([]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -37,7 +39,7 @@ function Home() {
 
   return (
     <>
-      <div className="home">
+      <div className={`home${isMobile ? " home--mobile" : ""}`}>
         <SliderBanner images={[imageSlider2, imageSlider2]} />
         <EmployerTop listEmployers={listEmployers} />
         <hr></hr>

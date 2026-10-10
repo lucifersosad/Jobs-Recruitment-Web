@@ -197,3 +197,39 @@
     }
   }
 }
+
+.upload-cv--mobile {
+  padding-top: 24px;
+
+  > .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .box-settings-info__banner {
+    padding: 16px;
+    .left .title {
+      font-size: 17px;
+      line-height: 24px;
+    }
+    .left .sub-title {
+      font-size: 13px;
+    }
+    .right {
+      display: none;
+    }
+  }
+
+  .box-upload-cv {
+    padding: 16px 12px;
+    .body-upload-cv .form-ok {
+      padding: 12px;
+    }
+  }
+
+  .footer-upload-cv .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+}

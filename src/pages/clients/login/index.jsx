@@ -15,8 +15,11 @@ import { loginUser } from "../../../services/clients/user-userApi";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import NotifyClient from "../../../components/clients/notify";
+import useIsMobile from "../../../hooks/useIsMobile";
+import "../login/authMobile.scss";
 
 function Login() {
+  const isMobile = useIsMobile();
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -45,10 +48,10 @@ function Login() {
   return (
     <>
 
-      <div className="cb-section client-login">
+      <div className={`cb-section client-login${isMobile ? " client-login--mobile" : ""}`}>
         <div className="container">
           <div className="row">
-            <div className="col-7">
+            <div className={isMobile ? "col-12" : "col-7"}>
               <div className="client-login__form">
                 <h2 className="title">Chào mừng bạn quay trở lại</h2>
                 <p className="description">
@@ -166,11 +169,13 @@ function Login() {
                 </div>
               </div>
             </div>
-            <div className="col-5">
-              <div className="client-login__image">
-                <img src={banner} alt="" />
+            {!isMobile && (
+              <div className="col-5">
+                <div className="client-login__image">
+                  <img src={banner} alt="" />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

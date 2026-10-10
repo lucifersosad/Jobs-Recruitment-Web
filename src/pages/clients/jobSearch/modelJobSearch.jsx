@@ -9,9 +9,11 @@ import { convertThumbUrl } from "../../../helpers/convertThumbUrl";
 
 import { useNavigate } from "react-router-dom";
 import { recruitmentJob } from "../../../services/clients/user-userApi";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function ModelJobSearch({ record, infoUser, showModel }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isMobile = useIsMobile();
   const [filePdf, setFilePdf] = useState(null); // [1
   const [warning, setWarning] = useState(false); // [2
   const [messageApi, contextHolder] = message.useMessage();
@@ -140,7 +142,7 @@ function ModelJobSearch({ record, infoUser, showModel }) {
       </button>
       <Modal
         open={isModalOpen}
-        className="model-job-search"
+        className={`model-job-search${isMobile ? " model-job-search--mobile" : ""}`}
         onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
@@ -223,7 +225,7 @@ function ModelJobSearch({ record, infoUser, showModel }) {
                 </Form.Item>
                 <div className="row">
                   <Form.Item
-                    className="col-6"
+                    className={isMobile ? "col-12" : "col-6"}
                     label="Email"
                     name="email"
                     rules={[
@@ -241,7 +243,7 @@ function ModelJobSearch({ record, infoUser, showModel }) {
                     />
                   </Form.Item>
                   <Form.Item
-                    className="col-6"
+                    className={isMobile ? "col-12" : "col-6"}
                     label="Số điện thoại"
                     name="phone"
                     rules={[

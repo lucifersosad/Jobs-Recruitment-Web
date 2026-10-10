@@ -1,12 +1,15 @@
 import { Layout } from "antd";
 import "./footer.scss";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const { Footer } = Layout;
 
 function FooterMain() {
+  const isMobile = useIsMobile();
+
   return (
     <>
-      <Footer className="footer">
+      <Footer className={`footer${isMobile ? " footer--mobile" : ""}`}>
         <div className="container footer__main">
           <div className="row footer__main-body">
             <div className="col-2">

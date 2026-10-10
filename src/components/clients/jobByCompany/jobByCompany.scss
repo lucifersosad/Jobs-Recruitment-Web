@@ -11,3 +11,22 @@
         justify-content: center;
     }
 }
+.job-by-company--mobile {
+  > form.row {
+    margin: 0;
+    row-gap: 8px;
+    .ant-form-item {
+      margin: 0;
+    }
+    .ant-input,
+    .ant-select-selection-search-input {
+      font-size: 16px; // tránh iOS tự zoom khi focus
+    }
+    .ant-input-affix-wrapper,
+    .ant-input,
+    .ant-select-selector,
+    .ant-btn {
+      min-height: 40px;
+    }
+  }
+}

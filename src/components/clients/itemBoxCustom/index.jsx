@@ -22,7 +22,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { saveJob } from "../../../services/clients/user-userApi";
 import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updateDataClient";
 import { message } from "antd";
+import useIsMobile from "../../../hooks/useIsMobile";
 function ItemBoxCustom() {
+  const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [jobByCategories, setJobByCategories] = useState("");
@@ -100,7 +102,7 @@ function ItemBoxCustom() {
   
 
   return (
-    <div className="items-box__newscustom col-md-12">
+    <div className={`items-box__newscustom col-md-12${isMobile ? " items-box__news--mobile" : ""}`}>
       {contextHolder}
       <h3 className="mb-3 title">Việc làm phù hợp với bạn</h3>
       {recordItem.length > 0 &&

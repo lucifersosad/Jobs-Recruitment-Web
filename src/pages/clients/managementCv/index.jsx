@@ -12,8 +12,10 @@ import DemoCvProfile from "../../../components/clients/demoCVProfile";
 import MemoizedItemBoxCustom from "../../../components/clients/itemBoxCustom";
 import { editMyCv, getMyCvs } from "../../../services/clients/myCvsApi";
 import { DeleteOutlined, EditOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons';
+import useIsMobile from "../../../hooks/useIsMobile";
 function ManagementCv() {
   const [data, setData] = useState([]);
+  const isMobile = useIsMobile();
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false)
@@ -178,7 +180,7 @@ function ManagementCv() {
           <div className="content">
             <div className="title">Quản lý CV</div>
             <div className="table">
-              <Table rowKey={"_id"} columns={columns} dataSource={data} />
+              <Table rowKey={"_id"} columns={columns} dataSource={data} size={isMobile ? "small" : "middle"} />
             </div>
           </div>
         </div>

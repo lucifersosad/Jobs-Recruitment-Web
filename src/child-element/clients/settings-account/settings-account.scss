@@ -136,3 +136,156 @@
     
   }
 }
+
+// Mobile: nội dung trang lên trên, khối cài đặt tài khoản xuống dưới, tất cả 1 cột
+.settings-account--mobile {
+  padding-top: 24px;
+  padding-bottom: 32px;
+
+  > .container {
+    padding-left: 16px;
+    padding-right: 16px;
+    > .row {
+      margin: 0;
+      row-gap: 16px;
+      > [class*="col-"] {
+        width: 100%;
+        padding: 0;
+      }
+    }
+  }
+
+  .box-settings-info__banner {
+    padding: 16px;
+  }
+
+  form .row > .col-6 {
+    width: 100%;
+  }
+
+  input,
+  textarea,
+  .ant-select-selection-search-input {
+    font-size: 16px !important;
+  }
+
+  // Banner đầu trang (Việc làm đã lưu / đã ứng tuyển)
+  .news__job-header {
+    min-height: 0;
+    padding: 4px 16px 0;
+    .box-item {
+      .title {
+        font-size: 18px;
+        line-height: 24px;
+        margin-top: 16px;
+      }
+      .description {
+        width: 100%;
+        font-size: 13px;
+      }
+    }
+    img {
+      display: none;
+    }
+  }
+
+  .job-saves__body {
+    .box-sort,
+    .search-saves {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      .text {
+        margin: 0;
+      }
+    }
+
+    // Việc làm đã lưu
+    .box-items .item {
+      align-items: flex-start;
+      gap: 12px;
+      .image-company {
+        width: 56px;
+        height: 56px;
+        flex-shrink: 0;
+      }
+      .content {
+        min-width: 0;
+        .title-job {
+          flex-direction: column;
+          gap: 2px;
+          a:first-child {
+            font-size: 15px;
+            line-height: 1.35;
+          }
+        }
+        .name-company,
+        .time-created {
+          font-size: 13px;
+        }
+        .box-action {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 10px;
+          .box-tag {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+          }
+          .box-button {
+            > a,
+            > div {
+              flex: 1;
+              height: 40px;
+              display: flex;
+              justify-content: center;
+            }
+          }
+        }
+      }
+    }
+
+    // Việc làm đã ứng tuyển
+    .info-job-save .item-job {
+      align-items: flex-start;
+      gap: 12px;
+      padding-bottom: 28px;
+      .logo-company {
+        width: 56px !important;
+        height: 56px;
+        flex-shrink: 0;
+      }
+      .info {
+        min-width: 0;
+        .box-content,
+        .box-content2,
+        .box-content3 {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+        .box-icon {
+          flex-wrap: wrap;
+        }
+      }
+    }
+  }
+
+  // Quản lý CV
+  .management-cv {
+    .banner img {
+      width: 100%;
+      height: auto;
+    }
+    .label-ok {
+      display: inline-block;
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .box-button {
+      gap: 8px !important;
+    }
+  }
+}

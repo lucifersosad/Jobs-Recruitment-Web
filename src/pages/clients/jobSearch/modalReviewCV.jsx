@@ -12,9 +12,11 @@ import { recruitmentJob } from "../../../services/clients/user-userApi";
 import { Spark } from "../../../components/clients/customIcon";
 import { getMyCvs } from "../../../services/clients/myCvsApi";
 import { checkEvaluate, evaluate } from "../../../services/clients/evaluateApi";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function ModalReviewCV({ record, infoUser, showModel }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isMobile = useIsMobile();
   const [filePdf, setFilePdf] = useState(null);
   const [warning, setWarning] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -236,12 +238,12 @@ function ModalReviewCV({ record, infoUser, showModel }) {
   }
 
   if (initLoading) return (
-    <div style={{ width: "250px" }}>
+    <div style={{ width: isMobile ? "100%" : "250px" }}>
       <Skeleton.Button
         active
         size={35}
         block
-        style={{ width: "100%" }}
+        style={{ width: "100%", ...(isMobile && { height: 44 }) }}
       />
     </div>
   );
@@ -257,7 +259,7 @@ function ModalReviewCV({ record, infoUser, showModel }) {
       </button>
       <Modal
         open={isModalOpen}
-        className="model-job-search"
+        className={`model-job-search${isMobile ? " model-job-search--mobile" : ""}`}
         onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
@@ -346,7 +348,7 @@ function ModalReviewCV({ record, infoUser, showModel }) {
                 </Form.Item>
                 <div className="row">
                   <Form.Item
-                    className="col-6"
+                    className={isMobile ? "col-12" : "col-6"}
                     label="Email"
                     name="email"
                     rules={[
@@ -364,7 +366,7 @@ function ModalReviewCV({ record, infoUser, showModel }) {
                     />
                   </Form.Item>
                   <Form.Item
-                    className="col-6"
+                    className={isMobile ? "col-12" : "col-6"}
                     label="Số điện thoại"
                     name="phone"
                     rules={[

@@ -1,2 +1,259 @@
 .home {}
 
+.home--mobile {
+  overflow-x: hidden;
+
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .cb-section {
+    padding-top: 32px;
+  }
+
+  .title-text {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  // Banner: ảnh thấp lại, ô tìm kiếm nằm dưới ảnh thay vì đè lên
+  .banner__slider {
+    .slick-box-image img {
+      height: 180px;
+    }
+    .slick-dots {
+      bottom: 8px;
+    }
+    &-search {
+      position: relative;
+      z-index: 2;
+      top: auto;
+      left: auto;
+      width: calc(100% - 32px);
+      max-width: 480px;
+      margin: -40px auto 0;
+      box-sizing: border-box;
+      padding: 16px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+      .row {
+        margin: 0;
+      }
+      .search_title {
+        padding: 0;
+        font-size: 15px;
+        strong p {
+          font-size: 18px;
+        }
+      }
+      .search-form {
+        padding: 0;
+        .ant-form-item {
+          margin-bottom: 12px;
+        }
+        .ant-form-item:last-child {
+          margin-bottom: 0;
+        }
+        input {
+          height: 36px;
+          font-size: 16px;
+        }
+        button {
+          width: 100%;
+          height: 44px;
+          padding: 0;
+          font-size: 16px;
+        }
+      }
+      .input-silder {
+        border: 1px solid #e8e8e8 !important;
+      }
+    }
+  }
+
+  // Nhà tuyển dụng hàng đầu
+  .employer__top {
+    padding-bottom: 32px !important;
+    .dir-line {
+      margin: 0;
+    }
+    &-item {
+      padding: 0 4px;
+      img {
+        width: 100%;
+        height: 60px;
+      }
+    }
+  }
+
+  // Công việc được yêu thích
+  .jobs {
+    .ant-tabs-nav {
+      margin-bottom: 8px;
+    }
+    .ant-tabs-tab {
+      padding: 10px 0;
+    }
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin-left: 20px;
+    }
+    .ant-tabs .ant-tabs-tab .ant-tabs-tab-btn,
+    .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+      font-size: 15px;
+      font-weight: 500;
+    }
+  }
+  .job__featured-change {
+    height: auto;
+    margin: 0;
+    > div {
+      padding: 0;
+    }
+  }
+  .job__item {
+    padding-top: 0;
+    &-box {
+      margin: 0;
+      padding: 12px 0;
+      flex-wrap: nowrap;
+      justify-content: flex-start !important;
+      &-icon {
+        width: auto !important;
+        top: 12px;
+        right: 0;
+      }
+    }
+  }
+  .job__featured {
+    &-boxImage {
+      width: 64px;
+      height: 64px;
+      flex: 0 0 64px;
+      padding: 6px;
+      align-items: center;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    &-content {
+      width: auto;
+      flex: 1;
+      min-width: 0;
+      padding: 0 40px 0 12px;
+      h2 {
+        font-size: 15px;
+        -webkit-line-clamp: 2;
+      }
+      h3,
+      h4,
+      h5 {
+        font-size: 13px;
+      }
+    }
+  }
+
+  // Form đăng ký email
+  .cb-section:has(.email) {
+    padding-bottom: 32px !important;
+  }
+  .email {
+    min-height: 0;
+    padding: 40px 0;
+    &__box {
+      &-title h2 {
+        font-size: 1.125rem;
+        margin-bottom: 1rem;
+      }
+      &-form {
+        width: 100%;
+        input {
+          height: 44px;
+          padding-left: 0;
+          font-size: 16px;
+        }
+        .ant-input-group-addon button {
+          height: 44px;
+        }
+      }
+    }
+  }
+
+  // Ngành nghề trọng điểm: cuộn ngang native thay cho slick để vuốt mượt hơn
+  .career-key {
+    &__scroll {
+      display: flex;
+      gap: 10px;
+      margin: 0 -16px;
+      padding: 4px 16px 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0 16px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+    &__background {
+      flex: 0 0 42%;
+      padding: 0;
+      scroll-snap-align: start;
+    }
+    &__card {
+      height: 200px;
+      padding: 12px 8px;
+      &-innerImage {
+        width: 90px;
+        height: 90px;
+        img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
+      &-des h3 {
+        font-size: 13px;
+      }
+    }
+  }
+
+  // Gia tăng cơ hội nghề nghiệp
+  .telent-network {
+    padding-bottom: 32px;
+    .row > .col-5,
+    .row > .col-7 {
+      width: 100%;
+    }
+    &__bg {
+      height: 140px;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      .title h2 {
+        font-size: 20px;
+        span {
+          margin-left: 0;
+          font-size: 14px !important;
+        }
+      }
+    }
+    &__comppany {
+      .row {
+        margin: 0 -4px;
+        > .col-3 {
+          padding: 0 4px;
+        }
+      }
+      .image {
+        margin: 0 0 8px;
+        border-radius: 8px;
+        img {
+          height: 56px;
+        }
+      }
+    }
+  }
+}

@@ -12,7 +12,10 @@ import { forgotPasswordUser } from "../../../services/clients/user-userApi";
 import { useState } from "react";
 
 import NotifyClient from "../../../components/clients/notify";
+import useIsMobile from "../../../hooks/useIsMobile";
+import "../login/authMobile.scss";
 function ForgotPassword() {
+  const isMobile = useIsMobile();
   const [api, contextHolder] = notification.useNotification();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -43,10 +46,10 @@ function ForgotPassword() {
   return (
     <>
       {contextHolder}
-      <div className="cb-section client-login">
+      <div className={`cb-section client-login${isMobile ? " client-login--mobile" : ""}`}>
         <div className="container">
           <div className="row">
-            <div className="col-7">
+            <div className={isMobile ? "col-12" : "col-7"}>
               <div className="client-login__form">
                 <h2 className="title">Quên mật khẩu</h2>
                 {
@@ -153,11 +156,13 @@ function ForgotPassword() {
                 </div>
               </div>
             </div>
-            <div className="col-5">
-              <div className="client-login__image">
-                <img src={banner} alt="" />
+            {!isMobile && (
+              <div className="col-5">
+                <div className="client-login__image">
+                  <img src={banner} alt="" />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

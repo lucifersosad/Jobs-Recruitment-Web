@@ -7,17 +7,20 @@ import {
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import { Skeleton } from "antd";
 import { Fragment } from "react";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const BoxNewSkeleton = ({ colGrid }) => {
+  const isMobile = useIsMobile();
+  const avatarSize = isMobile ? 56 : 100;
   return (
-    <div className={`items-box__news ${colGrid}`}>
+    <div className={`items-box__news ${colGrid}${isMobile ? " items-box__news--mobile" : ""}`}>
       {Array(4)
         .fill(0)
         .map((_, index) => (
           <Fragment key={index}>
             <div className="items-box__news-item ">
               <Skeleton.Image
-                style={{ width: 100, height: 100, borderRadius: 8 }}
+                style={{ width: avatarSize, height: avatarSize, borderRadius: 8 }}
                 active
               />
               <div className="items-box__body">
@@ -39,11 +42,20 @@ const BoxNewSkeleton = ({ colGrid }) => {
                 </div>
                 <div className="info-job">
                   <div className="time-line">
-                    <Skeleton paragraph={false} active style={{ width: 200 }} />
+                    <Skeleton paragraph={false} active style={{ width: isMobile ? "100%" : 200 }} />
                   </div>
                   <div className="button-line">
-                    <Skeleton.Button active style={{ width: 95 }} block />
-                    <Skeleton.Button active style={{ width: 34 }} block />
+                    {isMobile ? (
+                      <>
+                        <Skeleton.Button active block style={{ height: 40 }} />
+                        <Skeleton.Button active style={{ width: 40, minWidth: 40, height: 40 }} />
+                      </>
+                    ) : (
+                      <>
+                        <Skeleton.Button active style={{ width: 95 }} block />
+                        <Skeleton.Button active style={{ width: 34 }} block />
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import DropMenu from "./dropMenu";
+import MobileHeader from "./MobileHeader";
+import useIsMobile from "../../../hooks/useIsMobile";
 import { getCityApi } from "../../../services/clients/user-userApi";
 import { searchCv, searchJob } from "./js/options";
 
@@ -16,6 +18,7 @@ function Header() {
     (status) => status.authenticationReducerClient
   );
   const location = useLocation();
+  const isMobile = useIsMobile();
   const[linkLocation,setLinkLocation] = useState(location.pathname)
   const [isCollapseVisible, setIsCollapseVisible] = useState(0);
 
@@ -91,6 +94,10 @@ function Header() {
     // },
     
   ];
+
+  if (isMobile) {
+    return <MobileHeader authenMainClient={authenMainClient} />;
+  }
 
   return (
     <>

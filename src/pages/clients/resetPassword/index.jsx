@@ -12,7 +12,10 @@ import { useEffect, useState } from "react";
 
 import NotifyClient from "../../../components/clients/notify";
 import NotFound from "../notFound";
+import useIsMobile from "../../../hooks/useIsMobile";
+import "../login/authMobile.scss";
 function ResetPassword() {
+  const isMobile = useIsMobile();
   const { token } = useParams();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -68,7 +71,7 @@ function ResetPassword() {
         <NotFound />
       ) : (
         <>
-          <div className="cb-section client-reset">
+          <div className={`cb-section client-reset${isMobile ? " client-reset--mobile" : ""}`}>
             <div className="container">
               <div className="row">
                 <div className="col-12">

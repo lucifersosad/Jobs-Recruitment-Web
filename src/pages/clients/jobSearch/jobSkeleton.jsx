@@ -9,8 +9,10 @@ import { faFlag } from "@fortawesome/free-regular-svg-icons";
 import { ShareAltOutlined } from "@ant-design/icons";
 import banner from "./images/banner.png";
 import InfoJob from "./infoJob";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const JobSkeleton = () => {
+  const isMobile = useIsMobile();
   const items = [
     {
       key: "1",
@@ -63,7 +65,7 @@ const JobSkeleton = () => {
   );
 
   return (
-    <section className="cb-section cb-section-padding-bottom deltail-job">
+    <section className={`cb-section cb-section-padding-bottom deltail-job${isMobile ? " deltail-job--mobile" : ""}`}>
       <div className="container">
         <div className="row">
           <div className="col-12 mb-15">
@@ -73,10 +75,10 @@ const JobSkeleton = () => {
                   <img src={banner} alt="ok" />
                 </div>
               </div>
-              <div className="job-search-one__content" style={{ maxHeight: "71px"}}>
+              <div className="job-search-one__content" style={isMobile ? undefined : { maxHeight: "71px"}}>
                 <div className="job-search-one__desc">
-                  <Flex vertical >
-                    <Skeleton.Input active size={20} />
+                  <Flex vertical gap={isMobile ? 6 : 0}>
+                    <Skeleton.Input active size={20} block={isMobile} />
                     <Skeleton.Button
                       active
                       size={18}
@@ -85,18 +87,16 @@ const JobSkeleton = () => {
                   </Flex>
                 </div>
                 <div className="job-search-one__apply">
-                  <Flex gap={10}>
+                  <Flex gap={10} vertical={isMobile}>
                     <Skeleton.Button
                       active
-                      size={35}
                       block
-                      style={{ width: "250px" }}
+                      style={{ width: isMobile ? "100%" : "250px", ...(isMobile && { height: 44 }) }}
                     />
                     <Skeleton.Button
                       active
-                      size={35}
                       block
-                      style={{ width: "200px" }}
+                      style={{ width: isMobile ? "100%" : "200px", ...(isMobile && { height: 44 }) }}
                     />
                   </Flex>
                 </div>

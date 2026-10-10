@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 
 import { fetchApi, loadMore } from "./js";
 import { DOMAIN } from "../../../utils/api-domain";
+import useIsMobile from "../../../hooks/useIsMobile";
 const checkTokenClient = getCookie("token-user") || "";
 
 function ChatBoxClient() {
@@ -21,6 +22,7 @@ function ChatBoxClient() {
   const [historyChat, setHistoryChat] = useState([]);
   const [typeRoom, setTypeRoom] = useState("friend");
   const { idUser } = useParams();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
   
@@ -58,29 +60,36 @@ function ChatBoxClient() {
   }, [socketClient, idUser]);
 
   return (
-    <div className="chat-box-client chat-box-layout">
+    <div className={`chat-box-client chat-box-layout${isMobile ? " chat-box-layout--mobile" : ""}`}>
       <div className="row gx-0">
-        <div className="col-3">
-          <LeftChatBox  idUser={idUser}  historyChat = {historyChat}/>
-        </div>
-        <div className="col-6 reset-button-employer">
-          {idUser ? (
-            <MidChatBox
-              loadMore={() => {
-                loadMore(setHistoryChat);
-              }}
-              typeRoom={typeRoom}
-              contentChat={contentChat}
-              userData={userData}
-              socket={socketClient}
-            />
-          ) : (
-            <EmptyChatBox role="client" />
-          )}
-        </div>
-        <div className="col-3 reset-button-employer">
-          <RightChatBox />
-        </div>
+        {/* Mobile: chưa chọn hội thoại thì hiện danh sách, đã chọn thì hiện khung chat */}
+        {(!isMobile || !idUser) && (
+          <div className={isMobile ? "col-12" : "col-3"}>
+            <LeftChatBox  idUser={idUser}  historyChat = {historyChat}/>
+          </div>
+        )}
+        {(!isMobile || idUser) && (
+          <div className={`${isMobile ? "col-12" : "col-6"} reset-button-employer`}>
+            {idUser ? (
+              <MidChatBox
+                loadMore={() => {
+                  loadMore(setHistoryChat);
+                }}
+                typeRoom={typeRoom}
+                contentChat={contentChat}
+                userData={userData}
+                socket={socketClient}
+              />
+            ) : (
+              <EmptyChatBox role="client" />
+            )}
+          </div>
+        )}
+        {!isMobile && (
+          <div className="col-3 reset-button-employer">
+            <RightChatBox />
+          </div>
+        )}
       </div>
     </div>
   );

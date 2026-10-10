@@ -22,11 +22,14 @@ import { userViewJob } from "../../../services/clients/jobsApi";
 import { useQuery } from "../../../helpers/getQuery";
 import JobSkeleton from "./jobSkeleton";
 import ModalReviewCV from "./modalReviewCV";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function JobSearch() {
   const query = useQuery();
   const showModel = query.get("modal");
   const [loading, setLoading] = useState(true)
+  const isMobile = useIsMobile();
+  const linkTarget = isMobile ? undefined : "_blank";
 
   const { slug } = useParams();
   const [recordMain, setRecordMain] = useState({});
@@ -130,7 +133,7 @@ function JobSearch() {
 
   return (
     <>
-      <section className="cb-section cb-section-padding-bottom deltail-job">
+      <section className={`cb-section cb-section-padding-bottom deltail-job${isMobile ? " deltail-job--mobile" : ""}`}>
           <div className="container">
             <div className="row">
               <div className="col-12 mb-15">
@@ -143,7 +146,7 @@ function JobSearch() {
                   <div className="job-search-one__content">
                     <div className="job-search-one__desc">
                       <h1>{recordMain.title}</h1>
-                      <a target="_blank" rel="noreferrer" href={"/cong-ty/" + recordMain?.employerId?.slug}>
+                      <a target={linkTarget} rel="noreferrer" href={"/cong-ty/" + recordMain?.employerId?.slug}>
                         {recordMain.companyName}
                       </a>
                     </div>
@@ -186,7 +189,7 @@ function JobSearch() {
                               <div className="figure row">
                                 <div className="image col-5">
                                   <span title={item.employerId.companyName}>
-                                    <a target="_blank" rel="noreferrer" href={`/tim-viec-lam/${item?.slug}`}>
+                                    <a target={linkTarget} rel="noreferrer" href={`/tim-viec-lam/${item?.slug}`}>
                                       <img
                                       className="lazy-bg"
                                       src={item.employerId.logoCompany}
@@ -199,7 +202,7 @@ function JobSearch() {
                                 <div className="figcaption col-7">
                                   <div className="title">
                                     <a
-                                      target="_blank" rel="noreferrer"
+                                      target={linkTarget} rel="noreferrer"
                                       href={`/tim-viec-lam/${item.slug}`}
                                       className="job_link"
                                       title={item.title}
@@ -209,7 +212,7 @@ function JobSearch() {
                                   </div>
                                   <div className="caption">
                                     <a
-                                      target="_blank" rel="noreferrer"
+                                      target={linkTarget} rel="noreferrer"
                                       className="company-name"
                                       href={`/cong-ty/${item.employerId.slug}`}
                                       title={item.employerId.companyName}

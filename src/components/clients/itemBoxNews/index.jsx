@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { UpdateDataAuthClient } from "../../../update-data-reducer/clients/updateDataClient";
 import BoxNewSkeleton from "./boxNewSkeleton";
 import CustomEmpty from "../../alls/CustomEmpty";
+import useIsMobile from "../../../hooks/useIsMobile";
 function ItemBoxNews({
   colGrid = 'col-md-8',
   recordItem,
@@ -32,6 +33,8 @@ function ItemBoxNews({
 }) {
   console.log("🚀 ~ recordItem:", recordItem)
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
+  const linkTarget = isMobile ? undefined : "_blank";
   const dispatch = useDispatch();
   const [dataUser, setDataUser] = useState({});
   const authenMainClient = useSelector(
@@ -80,13 +83,13 @@ function ItemBoxNews({
   if (loading) return <BoxNewSkeleton colGrid={colGrid}/>
 
   return (
-    <div className={`items-box__news ${colGrid}`}>
+    <div className={`items-box__news ${colGrid}${isMobile ? " items-box__news--mobile" : ""}`}>
       {contextHolder}
       {recordItem.length > 0 ?
         recordItem.map((item, index) => (
           <div key={index} className="items-box__news-item ">
             <div className="items-box__avatar">
-              <a target="_blank" rel="noreferrer" href={`/tim-viec-lam/${item?.slug}`}>
+              <a target={linkTarget} rel="noreferrer" href={`/tim-viec-lam/${item?.slug}`}>
                 <img
                   src={item?.logoCompany}
                   alt={item?.companyName}
@@ -98,7 +101,7 @@ function ItemBoxNews({
             <div className="items-box__body">
               <div className="title_all">
                 <h3 className="title">
-                  <a target="_blank" rel="noreferrer" href={`/tim-viec-lam/${item?.slug}`}>{item.title}</a>
+                  <a target={linkTarget} rel="noreferrer" href={`/tim-viec-lam/${item?.slug}`}>{item.title}</a>
                 </h3>
                 <label className="title-salary">
                   {" "}
@@ -106,7 +109,7 @@ function ItemBoxNews({
                 </label>
               </div>
               <div className="company">
-                <a target="_blank" rel="noreferrer" href={`/cong-ty/${item?.slugCompany}`}>{item?.companyName}</a>
+                <a target={linkTarget} rel="noreferrer" href={`/cong-ty/${item?.slugCompany}`}>{item?.companyName}</a>
               </div>
               <div className="updateAt">
                 Cập nhật {formatTimeDifferenceMongoDb(item.updatedAt)} trước
@@ -172,6 +175,8 @@ function ItemBoxNews({
           }}
           current={defaultValue}
           total={countPagination * 10}
+          size={isMobile ? "small" : "default"}
+          showSizeChanger={false}
         />
       )}
       

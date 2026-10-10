@@ -4,9 +4,11 @@ import "./employerTop.scss";
 
 import Sliders from "../sliders";
 import { memo } from "react";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function EmployerTop(props) {
   const { listEmployers } = props;
+  const isMobile = useIsMobile();
 
   const settingsliders = {
     arrows: true, // Đảm bảo rằng arrows đã được đặt là true
@@ -18,6 +20,12 @@ function EmployerTop(props) {
     autoplaySpeed: 1000,
     prevArrow: true,
     nextArrow: true,
+    ...(isMobile && {
+      arrows: false,
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      autoplaySpeed: 2000,
+    }),
   };
   return (
     <div className="employer__top cb-section" style={{paddingBottom: 60}}>

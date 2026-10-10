@@ -14,8 +14,10 @@ import {
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { uploadMyCv } from "../../../services/clients/myCvsApi";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 function UploadCv() {
+  const isMobile = useIsMobile();
   const [filePdf, setFilePdf] = useState(null); // [1
   const [warning, setWarning] = useState(false); // [2
   const [loading, setLoading] = useState(false); // [3
@@ -105,7 +107,7 @@ function UploadCv() {
     }
   };
   return (
-    <div className="cb-section cb-section-padding-bottom bg-grey2">
+    <div className={`cb-section cb-section-padding-bottom bg-grey2${isMobile ? " upload-cv--mobile" : ""}`}>
         <div className="container">
         {contextHolder}
       <div className="box-settings-info__banner">
