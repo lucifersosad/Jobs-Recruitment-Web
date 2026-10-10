@@ -80,11 +80,33 @@
     .dir-line {
       margin: 0;
     }
+    // cuộn ngang native thay cho slick để vuốt mượt hơn
+    &-scroll.dir-line {
+      display: flex;
+      gap: 10px;
+      margin: 0 -16px;
+      padding: 12px 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0 16px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
     &-item {
-      padding: 0 4px;
+      flex: 0 0 30%;
+      scroll-snap-align: start;
+      .image {
+        padding: 8px;
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 10px;
+      }
       img {
         width: 100%;
-        height: 60px;
+        height: 56px;
       }
     }
   }

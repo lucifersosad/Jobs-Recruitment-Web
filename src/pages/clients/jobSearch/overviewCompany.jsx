@@ -11,8 +11,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { dataNumberOfWorkers } from "./js/options";
 import JobByCompany from "../../../components/clients/jobByCompany";
+import useIsMobile from "../../../hooks/useIsMobile";
 function OverviewCompany({ record }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const isMobile = useIsMobile();
+  const linkTarget = isMobile ? undefined : "_blank";
   const [infoCompany, setInfoCompany] = useState({});
 
   const toggleExpand = () => {
@@ -29,16 +32,25 @@ function OverviewCompany({ record }) {
   }, [record]);
 
   return (
-    <div className="container">
+    <div className={isMobile ? "overview-company--mobile" : "container"}>
       <div className="box-info-company">
         <div className="box-info mt-3 mb-3">
-          <a target="_blank" rel="noreferrer" href={`/cong-ty/${infoCompany?.slug}`}>
-            <h3 className="mb-3  title-all">{infoCompany?.companyName}</h3>
-          </a>
+          {isMobile ? (
+            <a className="overview-head mb-3" href={`/cong-ty/${infoCompany?.slug}`}>
+              <img src={infoCompany?.logoCompany} alt="" style={{objectFit: "contain"}}/>
+              <h3 className="title-all">{infoCompany?.companyName}</h3>
+            </a>
+          ) : (
+            <a target={linkTarget} rel="noreferrer" href={`/cong-ty/${infoCompany?.slug}`}>
+              <h3 className="mb-3  title-all">{infoCompany?.companyName}</h3>
+            </a>
+          )}
           <div className="box-flex">
-            <div className="image-company">
-              <a target="_blank" rel="noreferrer" href={`/cong-ty/${infoCompany?.slug}`}><img src={infoCompany?.logoCompany} alt="" style={{objectFit: "contain"}}/></a>
-            </div>
+            {!isMobile && (
+              <div className="image-company">
+                <a target={linkTarget} rel="noreferrer" href={`/cong-ty/${infoCompany?.slug}`}><img src={infoCompany?.logoCompany} alt="" style={{objectFit: "contain"}}/></a>
+              </div>
+            )}
             <div className="content">
               <div className="address mb-2">
                 <strong>Địa điểm: </strong>
@@ -47,25 +59,25 @@ function OverviewCompany({ record }) {
 
               <div className="title-info mb-2">Thông tin công ty</div>
               <div className="contact-company row gx-0 gy-2">
-                <div className="col-6">
+                <div className={isMobile ? "col-12" : "col-6"}>
                   <div className="item">
                     <FontAwesomeIcon icon={faUser} />
                     <span>Người liên hệ: {infoCompany?.fullName}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                <div className={isMobile ? "col-12" : "col-6"}>
                   <div className="item">
                     <FontAwesomeIcon icon={faUserGroup} />
                     <span>Quy mô công ty: {infoCompany?.numberOfWorkers || "Chưa cập nhật"}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                <div className={isMobile ? "col-12" : "col-6"}>
                   <div className="item">
                     <FontAwesomeIcon icon={faAddressCard} />
                     <span>Loại hình hoạt động: Chưa cập nhật</span>
                   </div>
                 </div>
-                <div className="col-6">
+                <div className={isMobile ? "col-12" : "col-6"}>
                   <div className="item">
                     <FontAwesomeIcon icon={faLink} />
                     <span>Website: {infoCompany?.website || "Chưa cập nhật"}</span>
